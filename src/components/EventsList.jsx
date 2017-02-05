@@ -4,13 +4,11 @@ import ImmutablePropTypes from "react-immutable-proptypes";
 import autoBind from "react-autobind";
 import { connect } from 'react-redux';
 import { getEvents } from "../actions/eventActions";
-import { GridList, GridTile } from 'material-ui/GridList';
+import { GridList } from 'material-ui/GridList';
 import EventCard from "./EventCard";
-import IconButton from 'material-ui/IconButton';
 import Subheader from 'material-ui/Subheader';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
-import { Link } from "react-router";
 import { getUsers } from "../actions/userActions";
+import EventListItem from "./EventListItem";
 
 const styles = {
   root: {
@@ -69,16 +67,7 @@ export class EventsList extends React.Component {
         style={styles.gridList}
       >
         {events && events.map((value, key) => (
-          <Link to={`/event/${key}`}>
-          <GridTile
-            key={value.photo}
-            title={value.title}
-            subtitle={<span>by <b>{value.description}</b></span>}
-            actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
-          >
-            <img src={value.photo || "http://www.tuscanysportholidays.com/media/k2/items/cache/1c0ae2205709722b62e843abc0471a55_XL.jpg"} />
-          </GridTile>
-          </Link>
+          <EventListItem eventUid={key} event={value} />
         ))}
       </GridList>
   </div>;

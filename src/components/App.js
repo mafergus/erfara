@@ -213,7 +213,7 @@ class App extends Component {
 
     return (
       <div>
-        <Title render="Material-UI" />
+        <Title render="Erfara" />
         <AppBarContainer />
         {title !== '' ?
           <div style={prepareStyles(styles.root)}>
