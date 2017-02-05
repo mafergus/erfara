@@ -1,0 +1,169 @@
+.sd-date {
+  width: percentage(1/7);
+  float: left;
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 400;
+  border-radius: 0.25rem;
+  transition: background-color 0.25s ease-in-out;
+
+  // Variants
+  &.past, &.future {
+    opacity: 0.5;
+  }
+
+  // States
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(white, 0.3);
+  }
+}
+
+.hello-sass {
+  color: red;
+}
+
+.actionBarUser {
+  &:hover {
+    background-color: #CCCCCC;
+  }
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.messaging-pane {
+
+  .background-image {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0.3;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    background-image: url("../images/message_window_background.jpg");
+  }
+}
+
+.conversationList {
+  li {
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .title {
+      color: red;
+    }
+
+    .subtitle {
+      color: blue;
+    }
+  }
+
+  li::after {
+    position: absolute;
+    bottom: -1px;
+    width: 100%;
+    height: 0;
+    border-bottom: 1px solid #f4f5f5;
+    content: "";
+  }
+}
+
+.attendeesList {
+  li {
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+
+}
+
+.appBar {
+  h1 {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.userTabs {
+  &:hover {
+    font-weight: 900;
+    cursor: pointer;
+  }
+}
+
+.eventHeroImage {
+  height: 250px;
+  background-image: 
+    linear-gradient(
+      rgba(0, 0, 0, 0.2),
+      rgba(0, 0, 0, 0.5)
+    ),
+    url("../images/event image.jpeg");
+  background-size: contain;
+  background-position: 50% 40%;
+  /*background-blend-mode: multiply;*/
+  /*background-color: #F39C11;*/
+  object-fit: contain;
+}
+
+.googleSignUpButton {
+  border: 0;
+  border-radius: 5%;
+  width: 133px;
+  height: 133px;
+  background-image: url("../images/google-logo.png");
+  background-position: 50% 50%;
+  background-size: contain;
+  object-fit: cover;
+  transition: opacity 0.1s ease-in-out;
+
+  &:active {
+    outline: none;
+    opacity: 0.35;
+  }
+
+  &:hover {
+    opacity: 0.5;
+  }
+
+  &:focus {
+    outline: none;
+    opacity: 0.4;
+  }
+}
+
+.facebookSignUpButton {
+  border: 0;
+  border-radius: 5%;
+  width: 110px;
+  height: 110px;
+  background-image: url("../images/facebook-logo.png");
+  background-position: 50% 50%;
+  background-size: contain;
+  object-fit: cover;
+  transition: opacity 0.1s ease-in-out;
+
+  &:active {
+    outline: none;
+    opacity: 0.35;
+  }
+
+  &:hover {
+    opacity: 0.5;
+  }
+
+  &:focus {
+    outline: none;
+    opacity: 0.4;
+  }
+}
