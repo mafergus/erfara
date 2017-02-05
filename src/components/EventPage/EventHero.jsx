@@ -35,7 +35,7 @@ export default class EventHero extends React.Component {
   render() {
     const { style, event, owner, isRSVPD, onRSVPClick } = this.props;
     const rsvp = isRSVPD ? "RSVP -" : "RSVP +";
-    return <Hero style={style} title={event && event.title} image={event && event.photo}>
+    return <Hero style={style} title={event && event.title} image={event && event.photoURL}>
       <div style={{ position: "absolute", bottom: "0", left: "0", margin: "0.7em" }}>
         <h3 style={H3STYLE}>{event && event.title}</h3>
         <span><img style={IMG_STYLE} src={owner && owner.photo}/>hosted by {owner.name}</span>

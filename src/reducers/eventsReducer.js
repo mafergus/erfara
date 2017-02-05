@@ -8,8 +8,11 @@ export function eventsReducer(state = Immutable.Map(), action) {
       });
       return state;
     }
-    case "GET_EVENT_SUCCESS": {
-      return state.set(action.id, action.event);
+    case "GET_EVENT_SUCCESS": return state.set(action.id, action.event);
+    case "GET_EVENT_PHOTO_SUCCESS": {
+      let event = state.get(action.id);
+      event.photoURL = action.photoURL;
+      return state.set(action.id, event);
     }
     default:
       return state;
