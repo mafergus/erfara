@@ -24,7 +24,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addEvent: () => dispatch(addEvent),
   };
 }
 
@@ -55,7 +54,7 @@ export class CreateEventModal extends React.Component {
   }
 
   addNewEvent() {
-    const { name, description, timestamp } = this;
+    const { name, description, timestamp, uploadFile } = this;
     const { userId, onRequestClose } = this.props;
     const searchTerm = name.split(" ")[0];
     if (!this.props.userId) { return; }
@@ -69,13 +68,67 @@ export class CreateEventModal extends React.Component {
       }
     }).then(function(json) {
       if (json && json.hits && json.hits.length > 0) {
-        store.dispatch(addEvent(name, description, json.hits[0].webformatURL, timestamp, userId));
-        onRequestClose();
+        return fetch(json.hits[0].webformatURL);
       }
-    }).catch(function(error) {
+    }).then(function(response) {
+      if (response.ok) {
+        return response.blob();
+      }
+    }).then(function(blob) {
+      uploadFile(blob, name, description, timestamp, userId);
+    })
+    .catch(function(error) {
       console.log("UH OH SHIT FUCKED UP: ", error);
     });
+  }
 
+  uploadFile(file, name, description, timestamp, userId) {
+    const { onRequestClose } = this.props;
+    var storageRef = firebase.storage().ref();
+    // Create the file metadata
+    var metadata = {
+      contentType: 'image/jpeg'
+    };
+
+    // Upload file and metadata to the object 'images/mountains.jpg'
+    var uploadTask = storageRef.child('images/' + new Date().getTime()).put(file, metadata);
+
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+      function(snapshot) {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED: // or 'paused'
+            console.log('Upload is paused');
+            break;
+          case firebase.storage.TaskState.RUNNING: // or 'running'
+            console.log('Upload is running');
+            break;
+        }
+      }, function(error) {
+      switch (error.code) {
+        case 'storage/unauthorized':
+          // User doesn't have permission to access the object
+          break;
+
+        case 'storage/canceled':
+          // User canceled the upload
+          break;
+
+        case 'storage/unknown':
+          // Unknown error occurred, inspect error.serverResponse
+          break;
+      }
+      store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, timestamp, userId));
+      onRequestClose();
+    }, function() {
+      // Upload completed successfully, now we can get the download URL
+      const downloadURL = uploadTask.snapshot.downloadURL;
+      store.dispatch(addEvent(name, description, downloadURL, timestamp, userId));
+      onRequestClose();
+    });
   }
 
   dateChange(placeholder, date) {
