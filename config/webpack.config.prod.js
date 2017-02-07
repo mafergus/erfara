@@ -9,7 +9,6 @@ var paths = require('./paths');
 var getClientEnvironment = require('./env');
 
 
-
 function ensureSlash(path, needsSlash) {
   var hasSlash = path.endsWith('/');
   if (hasSlash && !needsSlash) {
