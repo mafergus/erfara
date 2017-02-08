@@ -22,11 +22,6 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-  };
-}
-
 /**
  * A modal dialog can only be closed by selecting one of the actions.
  */
@@ -54,7 +49,7 @@ export class CreateEventModal extends React.Component {
   }
 
   addNewEvent() {
-    const { name, description, timestamp, uploadFile } = this;
+    const { name, description, timestamp, locationString, uploadFile } = this;
     const { userId, onRequestClose } = this.props;
     const searchTerm = name.split(" ")[0];
     if (!this.props.userId) { return; }
@@ -62,7 +57,7 @@ export class CreateEventModal extends React.Component {
       if (response.ok) {
         return response.json();
       } else {
-        store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, timestamp, userId));
+        store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, timestamp, locationString, userId));
         onRequestClose();
         return null;
       }
@@ -75,14 +70,14 @@ export class CreateEventModal extends React.Component {
         return response.blob();
       }
     }).then(function(blob) {
-      uploadFile(blob, name, description, timestamp, userId);
+      uploadFile(blob, name, description, timestamp, locationString, userId);
     })
     .catch(function(error) {
       console.log("UH OH SHIT FUCKED UP: ", error);
     });
   }
 
-  uploadFile(file, name, description, timestamp, userId) {
+  uploadFile(file, name, description, timestamp, locationString, userId) {
     const { onRequestClose } = this.props;
     var storageRef = firebase.storage().ref();
     // Create the file metadata
@@ -121,12 +116,12 @@ export class CreateEventModal extends React.Component {
           // Unknown error occurred, inspect error.serverResponse
           break;
       }
-      store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, timestamp, userId));
+      store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, timestamp, locationString, userId));
       onRequestClose();
     }, function() {
       // Upload completed successfully, now we can get the download URL
       const downloadURL = uploadTask.snapshot.downloadURL;
-      store.dispatch(addEvent(name, description, downloadURL, timestamp, userId));
+      store.dispatch(addEvent(name, description, downloadURL, timestamp, locationString, userId));
       onRequestClose();
     });
   }
@@ -180,10 +175,15 @@ export class CreateEventModal extends React.Component {
             />
             <DatePicker hintText="Date" onChange={this.dateChange} />
             <TimePicker hintText="12hr Format" onChange={this.timeChange} />
+            <TextField
+              hintText="Location"
+              floatingLabelText="Location"
+              onChange={(event, value) => { this.locationString = value; }}
+            />
           </div>
         </Dialog>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateEventModal);
+export default connect(mapStateToProps)(CreateEventModal);
