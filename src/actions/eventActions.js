@@ -24,13 +24,14 @@ export function getEvent(id) {
   }
 }
 
-export function addEvent(title, description, photo, date, userId) {
+export function addEvent(title, description, photo, date, locationString, userId) {
   return dispatch => {
     var eventData = {
       title,
       description,
       photo,
       date,
+      locationString,
       userId,
       attendees: [userId],
     };

@@ -20,7 +20,7 @@ export default class Hero extends React.Component {
     const STYLE = {
       position: "relative",
       height: "250px",
-      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6)), url('${image}')`,
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url('${image}')`,
       backgroundSize: "cover",
       backgroundPosition: "50% 40%",
       /*background-blend-mode: multiply;*/

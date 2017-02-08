@@ -15,7 +15,7 @@ const DEV_USER = {
     "asdas" : "7hJGDkRieEfhPiMnu1HGDF8w89V2",
     "mlka3p12" : "9hJGDkRieEfhPiMnu1HGDF8w59V2"
   },
-  "name" : "Amy Smith",
+  "name" : "Matt Ferguson",
   "photo" : "https://scontent.xx.fbcdn.net/v/t1.0-1/p100x100/11009152_10105063465546270_5215382255678934863_n.jpg?oh=185a667a757d3d5f38824901c1c1d3ab&oe=5923891C",
   "wall" : {
     "123asd" : {
@@ -31,7 +31,7 @@ const DEV_USER = {
   }
 };
 
-export function authedUserReducer(state = {}, action) {
+export function authedUserReducer(state = DEV_USER, action) {
   switch (action.type) {
     case "ADD_AUTHED_USER_SUCCESS": {
       return action.user;

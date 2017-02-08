@@ -28,12 +28,12 @@ export default class EventDetails extends React.Component {
     const dateStr = getDateString(new Date(event.date));
     return <div style={{ backgroundColor: "white", border: "10px black", padding: "1em 0 1em 1em" }}>
       <span style={{ display: "block", marginBottom: "0.5em" }}>
-        <MapsPlace color={minBlack} style={{ display: "inline-block", verticalAlign: "middle", marginRight: "0.8em" }}/>
+        <ActionSchedule color={minBlack} style={{ display: "inline-block", verticalAlign: "middle", marginRight: "0.8em" }}/>
         <a style={STYLE}>{dateStr}</a>
       </span>
       <span style={{ display: "block" }}>
-        <ActionSchedule color={minBlack} style={{ display: "inline-block", verticalAlign: "middle", marginRight: "0.8em" }}/>
-        <a style={STYLE}>The Old Pro, 541 Ramona St, Palo Alto, CA 94301, USA</a>
+        <MapsPlace color={minBlack} style={{ display: "inline-block", verticalAlign: "middle", marginRight: "0.8em" }}/>
+        <a style={STYLE}>{event.locationString}</a>
       </span>
     </div>;
   }

@@ -7,6 +7,7 @@ const H3STYLE = {
   fontSize: "1.8em",
   fontWeight: "normal",
   margin: "0 auto",
+  marginBottom: "0.3em",
 };
 
 const IMG_STYLE = {
@@ -14,7 +15,9 @@ const IMG_STYLE = {
   height: "30px",
   width: "30px",
   margin: "0 auto",
+  marginRight: "0.6em",
   objectFit: "cover",
+  verticalAlign: "middle",
 };
 
 export default class EventHero extends React.Component {
@@ -36,9 +39,12 @@ export default class EventHero extends React.Component {
     const { style, event, owner, isRSVPD, onRSVPClick } = this.props;
     const rsvp = isRSVPD ? "RSVP -" : "RSVP +";
     return <Hero style={style} title={event && event.title} image={event && event.photo}>
-      <div style={{ position: "absolute", bottom: "0", left: "0", margin: "0.7em" }}>
+      <div style={{ position: "absolute", bottom: "0px", left: "3px", margin: "0.7em" }}>
         <h3 style={H3STYLE}>{event && event.title}</h3>
-        <span><img style={IMG_STYLE} src={owner && owner.photo}/>hosted by {owner.name}</span>
+        <div>
+          <img style={IMG_STYLE} src={owner && owner.photo}/>
+          <a style={{ display: "inline-block", height: "100%", verticalAlign: "middle" }}>hosted by {owner.name}</a>
+        </div>
       </div>
       <RaisedButton label={rsvp} style={{ position: "absolute", right: 10, bottom: 10 }} onClick={onRSVPClick}/>
     </Hero>;
