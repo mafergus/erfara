@@ -24,6 +24,14 @@ firebase.database().ref('/users').on('value', function(snapshot) {
   store.dispatch({ type: "GET_USERS_SUCCESS", users });
 });
 
+firebase.database().ref('/feed').on('value', function(snapshot) {
+  const feed = snapshot.val();
+  console.log("Update feed: ", feed);
+  if (feed) {
+    store.dispatch({ type: "GET_FEED_SUCCESS", feed });
+  }
+});
+
 firebase.onAuthSuccess = (userId) => {
   firebase.database().ref("/users/" + userId + "/conversations").on('value', function(snapshot) {
     const conversations = snapshot.val();

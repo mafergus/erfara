@@ -10,6 +10,7 @@ import EventDetails from "./EventDetails";
 import UserList from "../UserList";
 import { getEvent, rsvp } from "../../actions/eventActions";
 import EventHero from "./EventHero";
+import Feed from "../Feed/Feed";
 import store from "../../store/store";
 
 const ATTENDEES_LIST = {
@@ -85,6 +86,7 @@ export class EventPage extends React.Component {
         <EventHero event={event} owner={owner} onRSVPClick={this.onRSVP} isRSVPD={isRSVPD} />
         <EventDetails event={event}/>
         <EventDescription event={event} />
+        <Feed style={{ width: "100%", backgroundColor: "white" }}/>
       </div>
     </FullWidthSection>;
   }
