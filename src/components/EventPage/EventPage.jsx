@@ -86,7 +86,7 @@ export class EventPage extends React.Component {
         <EventHero event={event} owner={owner} onRSVPClick={this.onRSVP} isRSVPD={isRSVPD} />
         <EventDetails event={event}/>
         <EventDescription event={event} />
-        <Feed style={{ width: "100%", backgroundColor: "white" }}/>
+        <Feed style={{ width: "100%", backgroundColor: "white" }} eventId={this.props.params.id}/>
       </div>
     </FullWidthSection>;
   }

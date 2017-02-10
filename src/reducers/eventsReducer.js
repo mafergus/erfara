@@ -14,6 +14,10 @@ export function eventsReducer(state = Immutable.Map(), action) {
       event.photoURL = action.photoURL;
       return state.set(action.id, event);
     }
+    case "GET_EVENT_FEED_SUCCESS": {
+      debugger;
+      return state.setIn([action.eventId, "feed"], action.feed);
+    }
     default:
       return state;
   }

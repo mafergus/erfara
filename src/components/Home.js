@@ -96,7 +96,7 @@ class HomePage extends React.Component {
         <div style={styles.tagline}>
           <h1 style={styles.h1}>Learn. Teach. Experience.</h1>
           <h2 style={styles.h2}>
-            Erfara is the world's first community built around sharing skills. You share something you're good at, and in return people share with you
+            Life is about the people you meet, and the experiences you share
           </h2>
           <RaisedButton
             className="demo-button"
