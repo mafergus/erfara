@@ -44,7 +44,7 @@ export default class MessageBar extends React.Component {
     };
     return <div style={STYLE}>
       <div style={{ flexGrow: "1", height: "100%", width: "100%", backgroundColor: {orange500} }}>
-        <div style={{ height: "90px", width: "80%", border: `1px solid" ${faintBlack}`, backgroundColor: "white", borderRadius: "3%" }}>
+        <div style={{ height: "90px", border: `1px solid" ${faintBlack}`, backgroundColor: "white", borderRadius: "3%" }}>
           <TextField 
             hintText="Message"
             value={this.state.message}
