@@ -31,7 +31,7 @@ const DEV_USER = {
   }
 };
 
-export function authedUserReducer(state = DEV_USER, action) {
+export function authedUserReducer(state = {}, action) {
   switch (action.type) {
     case "ADD_AUTHED_USER_SUCCESS": {
       return action.user;
