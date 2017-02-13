@@ -27,10 +27,17 @@ const IMG_STYLE = {
 };
 
 function mapStateToProps(state, props) {
+  const user = state.users.get(props.params.id);
+  let buddies = [];
+  const leBuddies = user && user.buddies && state.users.filter(aUser => user.buddies.hasOwnProperty(aUser.uid));
+  leBuddies && leBuddies.forEach((item, key) => {
+    buddies.push(item);
+  });
   return {
     authedUser: state.authedUser,
-    user: state.users.get(props.params.id),
+    user,
     users: state.users,
+    buddies,
   };
 }
 
@@ -44,12 +51,13 @@ export class UserPage extends React.Component {
 
   static propTypes = {
     getUser: PropTypes.func.isRequired,
+    isFriend: PropTypes.bool.isRequired,
     user: PropTypes.object,
   };
 
   constructor() {
     super();
-    autoBind(this);
+    autoBind(this); 
   }
 
   getFollowers() {
@@ -63,11 +71,11 @@ export class UserPage extends React.Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { user, buddies } = this.props;
     if (!user) { return <div/>; }
     return <FullWidthSection>
       <div style={{ width: "40%", margin: "0 auto", position: "relative" }}>
-        <UserList users={user.buddies} title="Buddies" style={{ position: "absolute", top: "0", width: "200px", marginLeft: "-210px", backgroundColor: "white" }}/>
+        <UserList users={buddies} title="Buddies" style={{ position: "absolute", top: "0", width: "200px", marginLeft: "-210px", backgroundColor: "white" }}/>
         <Hero image={user.coverPhoto}>
           <div style={{ position: "absolute", bottom: "12px", left: "12px" }}>
             <img style={IMG_STYLE} src={user.photo}/>

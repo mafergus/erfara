@@ -8,6 +8,7 @@ import SendIcon from 'material-ui/svg-icons/content/send';
 import IconButton from 'material-ui/IconButton';
 import { addEventMessage } from "../../actions/eventActions";
 import store from "../../store/store";
+import FeedItem from "./FeedItem";
 
 function mapStateToProps(state, props) {
   return {
@@ -50,7 +51,7 @@ export class Feed extends React.Component {
 
   onSendClicked() {
     // this.props.onSend(this.state.message);
-    store.dispatch(addEventMessage(this.props.eventId, this.props.authedUser.uid, this.state.message));
+    store.dispatch(addEventMessage(this.props.eventId, this.props.authedUser.uid, this.state.message, new Date()));
     this.setState({ message: "" });
   }
 
@@ -66,19 +67,7 @@ export class Feed extends React.Component {
 
   renderFeedItem(key, item) {
     const { message, userId } = item;
-    return <div key={key} style={{ display: "flex", padding: "0px 20px 60px 20px", width: "100%" }}>
-      <div style={{ width: "80px" }}>
-        <img style={{ height: "40px", width: "40px", borderRadius: "50%", verticalAlign: "top" }} src="https://scontent.xx.fbcdn.net/v/t1.0-1/p100x100/11009152_10105063465546270_5215382255678934863_n.jpg?oh=185a667a757d3d5f38824901c1c1d3ab&oe=5923891C"/>
-      </div>
-      <div style={{ height: "100%", flexGrow: "1" }}>
-        <div style={{ marginBottom: "1em" }}>
-          <span style={{ color: darkBlack, fontSize: "0.9em", fontWeight: "500" }}>{userId}</span>
-          <span style={{ float: "right", color: minBlack, fontWeight: "500", fontSize: "0.75em" }}>9:45pm</span>
-        </div>
-        <span style={{ color: lightBlack }}>{message}</span>
-      </div>
-      <hr/>
-    </div>;
+    return <FeedItem key={key} userId={userId} feedItem={item} />;
   }
 
   renderMessageBar() {

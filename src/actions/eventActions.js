@@ -47,12 +47,13 @@ export function addEvent(title, description, photo, date, locationString, userId
   }
 }
 
-export function addEventMessage(eventId, userId, message) {
+export function addEventMessage(eventId, userId, message, timestamp) {
   return dispatch => {
     const url = `/events/${eventId}/feed/`;
     const messageData = {
       message,
       userId,
+      timestamp,
     };
     const newEventMessageKey = firebase.database().ref().child(url).push().key;
 
