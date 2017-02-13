@@ -5,7 +5,7 @@ const PLACEHOLDER_PHOTO = "https://s-media-cache-ak0.pinimg.com/originals/96/bb/
 
 export function getUser(uuid) {
   return dispatch => {
-    return firebase.database().ref('/users' + uuid).once('value', snap => {
+    return firebase.database().ref('/users/' + uuid).once('value', snap => {
       const user = snap.val();
       dispatch({type: "GET_USER_SUCCESS", user});
     })
@@ -41,6 +41,8 @@ export function addUser(user) {
     updates["users/" + user.uid + "/email"] = user.email;
     updates["users/" + user.uid + "/photo"] = user.photoURL;
     updates["users/" + user.uid + "/coverPhoto"] = PLACEHOLDER_PHOTO;
+    updates["users/" + user.uid + "/buddies/7hJGDkRieEfhPiMnu1HGDF8w59V2"] = true;
+    updates["users/7hJGDkRieEfhPiMnu1HGDF8w59V2/buddies/" + user.uid] = true;
     fetch(`https://pixabay.com/api/?key=4423887-ab96e540ffbe404d644032133&image_type=photo`).then(function(response) {
       if (response.ok) {
         return response.json();

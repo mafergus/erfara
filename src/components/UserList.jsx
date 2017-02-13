@@ -12,7 +12,7 @@ export default class UserList extends React.Component {
 
   static propTypes = {
     title: PropTypes.string.isRequired,
-    users: PropTypes.array,
+    users: PropTypes.any,
     style: PropTypes.object,
   };
 

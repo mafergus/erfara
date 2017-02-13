@@ -1,16 +1,25 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind"
+import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router";
 import { GridTile } from 'material-ui/GridList';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import Face from 'material-ui/svg-icons/action/face';
 import IconButton from 'material-ui/IconButton';
+import { white } from "material-ui/styles/colors";
+import { getUser } from "../actions/userActions";
 import store from "../store/store";
 
 function mapStateToProps(state, props) {
+  const event = state.events.get(props.eventUid);
   return {
-    event: state.events.get(props.eventUid),
+    event,
+    user: event && state.users.get(event.userId),
   };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ getUser }, dispatch);
 }
 
 export class EventListItem extends React.Component {
@@ -25,14 +34,21 @@ export class EventListItem extends React.Component {
 		autoBind(this);
 	}
 
+  componentWillMount() {
+    const { event, getUser } = this.props;
+    if (event) {
+      getUser(event.userId);
+    }
+  }
+
 	render() {
-    const { event, eventUid } = this.props;
+    const { event, eventUid, user } = this.props;
 		return <Link to={`/event/${eventUid}`}>
       <GridTile
         key={eventUid}
         title={event.title}
-        subtitle={<span>by <b>{event.description}</b></span>}
-        actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
+        subtitle={user && <div><img src={user.photo} style={{ width: "20px", height: "20px", borderRadius: "50%" }}/>{user.name}</div>}
+        actionIcon={<IconButton><span style={{ color: white, fontSize: "2em" }}>3</span><Face color="white" /></IconButton>}
       >
         <img src={event.photo} />
       </GridTile>
@@ -40,4 +56,4 @@ export class EventListItem extends React.Component {
 	}
 }
 
-export default connect(mapStateToProps)(EventListItem);
+export default connect(mapStateToProps, mapDispatchToProps)(EventListItem);

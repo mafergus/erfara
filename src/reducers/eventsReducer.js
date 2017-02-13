@@ -15,7 +15,6 @@ export function eventsReducer(state = Immutable.Map(), action) {
       return state.set(action.id, event);
     }
     case "GET_EVENT_FEED_SUCCESS": {
-      debugger;
       return state.setIn([action.eventId, "feed"], action.feed);
     }
     default:
