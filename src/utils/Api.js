@@ -3,8 +3,10 @@ import firebase from '../actions/database';
 const PIXABAY_KEY = "4423887-ab96e540ffbe404d644032133";
 
 export function getPhoto(searchTerm) {
+  debugger;
+  const photoParam = searchTerm ? `&q=${searchTerm}` : ""; 
   return new Promise((resolve, reject) => {
-    fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}&q=${searchTerm}&image_type=photo`).then(response => {
+    fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}${photoParam}&image_type=photo`).then(response => {
       if (response.ok) {
         return response.json();
       } else {
@@ -28,7 +30,7 @@ export function getPhoto(searchTerm) {
   });
 }
 
-export function uploadFile(file, name, description, timestamp, locationString, userId) {
+export function uploadFile(file) {
   return new Promise((resolve, reject) => {
     var storageRef = firebase.storage().ref();
     // Create the file metadata
