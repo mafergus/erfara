@@ -15,12 +15,11 @@ const styles = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
+    marginBottom: 70,
   },
   gridList: {
     marginTop: "1em",
     width: "70%",
-    height: 450,
-    overflowY: 'auto',
   },
 };
 
