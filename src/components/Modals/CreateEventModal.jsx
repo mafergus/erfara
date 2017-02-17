@@ -12,7 +12,7 @@ import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import store from "../../store/store";
 import { addEvent } from "../../actions/eventActions";
-import { getPhoto } from "../../utils/Api";
+import { getPhoto, uploadFile } from "../../utils/Api";
 
 const PLACEHOLDER_PHOTO = "http://files.parsetfss.com/a5e80e30-a275-49f2-989e-e218e12017db/tfss-02ed6157-7aa6-4ffa-b530-16f711fb8f59-muir-woods.jpg";
 
@@ -49,69 +49,21 @@ export class CreateEventModal extends React.Component {
   }
 
   addNewEvent() {
-    const { name, description, timestamp, locationString, uploadFile } = this;
+    const { name, description, timestamp, locationString } = this;
     const { userId, onRequestClose } = this.props;
     const searchTerm = name.split(" ")[0];
-    debugger;
     if (!this.props.userId) { return; }
-    getPhoto(searchTerm, 
-      blob => {
-        debugger;
-        uploadFile(blob, name, description, timestamp, locationString, userId);
-      }, 
-      () => {
-        debugger;
-        store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, timestamp, locationString, userId));
-        onRequestClose();
-      }
-    );
-  }
 
-  uploadFile(file, name, description, timestamp, locationString, userId) {
-    const { onRequestClose } = this.props;
-    var storageRef = firebase.storage().ref();
-    // Create the file metadata
-    var metadata = {
-      contentType: 'image/jpeg'
-    };
-
-    // Upload file and metadata to the object 'images/mountains.jpg'
-    var uploadTask = storageRef.child('images/' + new Date().getTime()).put(file, metadata);
-
-    // Listen for state changes, errors, and completion of the upload.
-    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
-      function(snapshot) {
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-        switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED: // or 'paused'
-            console.log('Upload is paused');
-            break;
-          case firebase.storage.TaskState.RUNNING: // or 'running'
-            console.log('Upload is running');
-            break;
-        }
-      }, function(error) {
-      switch (error.code) {
-        case 'storage/unauthorized':
-          // User doesn't have permission to access the object
-          break;
-
-        case 'storage/canceled':
-          // User canceled the upload
-          break;
-
-        case 'storage/unknown':
-          // Unknown error occurred, inspect error.serverResponse
-          break;
-      }
-      store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, timestamp, locationString, userId));
+    getPhoto(searchTerm)
+    .then(blob => {
+      return uploadFile(blob, name, description, timestamp, locationString, userId);
+    })
+    .then(url => {
+      store.dispatch(addEvent(name, description, url, timestamp, locationString, userId));
       onRequestClose();
-    }, function() {
-      // Upload completed successfully, now we can get the download URL
-      const downloadURL = uploadTask.snapshot.downloadURL;
-      store.dispatch(addEvent(name, description, downloadURL, timestamp, locationString, userId));
+    })
+    .catch(error => {
+      store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, timestamp, locationString, userId));
       onRequestClose();
     });
   }

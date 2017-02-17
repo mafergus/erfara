@@ -3,16 +3,31 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import HomeFeature from './HomeFeature';
 import FullWidthSection from './FullWidthSection';
+import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
+import Share from 'material-ui/svg-icons/notification/wc';
+import Learn from 'material-ui/svg-icons/social/sentiment-very-satisfied';
+import Experience from 'material-ui/svg-icons/image/brightness-7';
 import FlatButton from "material-ui/FlatButton";
 import withWidth, {LARGE} from 'material-ui/utils/withWidth';
 import spacing from 'material-ui/styles/spacing';
 import typography from 'material-ui/styles/typography';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import { cyan500, grey200, darkWhite, orange500, lightBlack } from 'material-ui/styles/colors';
+import { cyan500, grey200, darkWhite, orange500, orange50, lightBlack, darkBlack } from 'material-ui/styles/colors';
 import EventsList from "./EventsList";
 
-class SplashPage extends React.Component {
+function mapStateToProps(state, props) {
+  return {
+    authedUser: state.authedUser,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+  };
+}
+
+export class SplashPage extends React.Component {
 
   static propTypes = {
     width: PropTypes.number.isRequired,
@@ -28,6 +43,7 @@ class SplashPage extends React.Component {
 
     this.state = {
       showEvents: true,
+      isJoinOpen: false,
     }
   }
 
@@ -103,7 +119,7 @@ class SplashPage extends React.Component {
             style={{marginTop: '100px'}}
             primary={true}
             label="Join"
-            onTouchTap={this.handleTouchTapDemo}
+            onTouchTap={() => this.setState({ isJoinOpen: true })}
             buttonStyle={{width: '10em'}}
           />
         </div>
@@ -137,24 +153,58 @@ class SplashPage extends React.Component {
     );
   }
 
-  handleTouchTapDemo = () => {
-    alert("PLEASEEE");
-    this.context.router.push('/components');
-  };
+  renderJoinModal() {
+    return <Dialog
+      contentStyle={{textAlign: "center", width: "40%", marginBottom: "300px"}}
+      title="Sign Up"
+      titleStyle={{ fontSize: "1.1em", textAlign: "left", padding: "12px 0px 12px 25px", color: lightBlack }}
+      modal={false}
+      onRequestClose={() => this.setState({ isJoinOpen: false })}
+      open={this.state.isJoinOpen}>
+      <button
+        style={{margin: "3em 8em 3em 0em", verticalAlign: "middle"}}
+        className="googleSignUpButton"
+        onClick={this.handleSignUpGoogle} />
+      <button
+        style={{verticalAlign: "middle"}}
+        className="facebookSignUpButton"
+        onClick={this.handleSignUpFacebook} />
+    </Dialog>
+  }
 
-  componentWillMount() {
+  renderDescriptionItem(image, title, text) {
+    return <div style={{ display: "inline-block", margin: "0px 50px", verticalAlign: "text-top" }}>
+      <div style={{ textAlign: "center" }}>{image}</div>
+      <h2 style={{ textAlign: "center", color: darkBlack, fontWeight: "300" }}>{title}</h2>
+      <h4 style={{ width: "200px", textAlign: "center", fontWeight: "200", color: darkBlack }}>{text}</h4>
+    </div>;
+  }
+
+  renderDescription() {
+    const style = {
+      color: lightBlack,
+      height: "36px",
+      width: "36px",
+    }
+    return <div style={{ height: "300px", backgroundColor: orange50, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      {this.renderDescriptionItem(<Learn style={style} />, "Learn", "Learn new, unique skills and talents from thousands of passionate community members")}
+      {this.renderDescriptionItem(<Share style={style} />, "Share", "Share a unique skill or ability with the community")}
+      {this.renderDescriptionItem(<Experience style={style} />, "Connect", "Build amazing friendships with people in your community")}
+    </div>
   }
 
   render() {
     const style = {
       paddingTop: spacing.desktopKeylineIncrement,
     };
-
+    const { authedUser } = this.props;
+    const isAuthed = authedUser && Object.keys(authedUser).length > 0;
     const list = this.state.showEvents ? <EventsList /> : this.renderFeatures();
 
     return (
       <div style={style}>
-        {this.renderHero()}
+        {this.renderJoinModal()}
+        {!isAuthed && this.renderHero()}
         <div style={{ float: "right", marginTop: "1em", marginRight: "1em" }}>
           <FlatButton label="Events" style={{ marginRight: "1em" }} onTouchTap={ () => this.setState({ showEvents: true }) } />
           <FlatButton label="Categories" onTouchTap={ () => this.setState({ showEvents: false }) }/>
@@ -162,9 +212,10 @@ class SplashPage extends React.Component {
         <span style={{ float: "clear" }} />
         <a style={{ width: "100%", textAlign: "center", fontSize: "1.3em", color: lightBlack, fontWeight: "bold", lineHeight: "3em" }}>Check out some events near you:</a>
         {list}
+        {!isAuthed && this.renderDescription()}
       </div>
     );
   }
 }
 
-export default withWidth()(SplashPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withWidth()(SplashPage));
