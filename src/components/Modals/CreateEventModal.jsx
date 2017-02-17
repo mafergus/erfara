@@ -7,7 +7,6 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import { grey100, lightBlack, darkBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
-import { addAuthedUser, addUser } from "../../actions/userActions";
 import TextField from "material-ui/TextField";
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
