@@ -76,36 +76,24 @@ export class Feed extends React.Component {
       justifyContent: "center",
       borderTop: `1px solid ${faintBlack}`,
       borderBottom: `1px solid ${faintBlack}`,
-      backgroundColor: orange50,
-      zIndex: "30",
     };
     return <div style={STYLE}>
-      <div style={{ flexGrow: "1", height: "100%", width: "100%", backgroundColor: {orange500} }}>
-        <div style={{ height: "90px", borderTop: `1px solid" ${faintBlack}`, backgroundColor: "white", borderRadius: "3%" }}>
-          <TextField 
-            hintText="Message"
-            value={this.state.message}
-            onKeyPress={this.onKeyPress}
-            style={{ width: "100%" }}
-            onKeyPress={this.onKeyPress}
-            onChange={ (event, value) => { this.setState({ message: value }) }} />
-        </div>
-      </div>
-      <div style={{ padding: "21px" }}>
-        <IconButton
-          style={{ height: "50px", width: "50px", padding: "10px", paddingLeft: "15px" }}
-          iconStyle={{ height: "30px", width: "30px", margin: "auto", color: lightBlack }}
-          onClick={this.onSendClicked}
-        >
-          <SendIcon hoverColor={orange200} />
-        </IconButton>
+      <img src={this.props.authedUser.photo} style={{ height: "40px", width: "40px", margin: "10px", borderRadius: "50%" }} />
+      <div style={{ flexGrow: "1", height: "100%", alignSelf: "center" }}>
+        <TextField 
+          hintText="Message"
+          value={this.state.message}
+          onKeyPress={this.onKeyPress}
+          style={{ width: "90%", marginLeft: "10px", marginRight: "10px" }}
+          onKeyPress={this.onKeyPress}
+          onChange={ (event, value) => { this.setState({ message: value }) }} />
       </div>
     </div>;
   }
 
   render() {
     const { style, items } = this.props;
-    return <div style={{ ...style, paddingLeft: "10px", paddingTop: "30px", borderTop: `1px solid ${faintBlack}` }}>
+    return <div style={{ ...style, borderTop: `1px solid ${faintBlack}` }}>
       {items && Object.entries(items).map(item => this.renderFeedItem(item[0], item[1]))}
       {this.renderMessageBar()}
     </div>;

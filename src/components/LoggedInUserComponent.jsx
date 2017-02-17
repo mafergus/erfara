@@ -55,6 +55,8 @@ export default class LoggedInUserComponent extends React.Component {
     }, function(error) {
       alert("oops");
     });
+    const emptyUser = {};
+    localStorage.setItem("authedUser", JSON.stringify(emptyUser));
   }
 
   render() {

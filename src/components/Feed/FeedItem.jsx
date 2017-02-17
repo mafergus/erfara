@@ -38,12 +38,12 @@ export class FeedItem extends React.Component {
   render() {
     const { feedItem, user } = this.props;
     const timeStr = formatDate(feedItem.timestamp, false);
-    return <div style={{ display: "flex", padding: "0px 20px 60px 20px", width: "100%" }} className="hover">
-      <div style={{ width: "80px" }}>
-        <img style={{ height: "40px", width: "40px", borderRadius: "50%", verticalAlign: "top" }} src={user.photo}/>
+    return <div style={{ display: "flex", padding: "15px 0px 15px 0px", width: "100%" }} className="hover">
+      <div>
+        <img style={{ height: "40px", width: "40px", margin: "10px", marginRight: "20px", borderRadius: "50%", verticalAlign: "top" }} src={user.photo}/>
       </div>
       <div style={{ height: "100%", flexGrow: "1" }}>
-        <div style={{ marginBottom: "1em" }}>
+        <div style={{ marginBottom: "0.6em" }}>
           <span style={{ color: darkBlack, fontSize: "0.9em", fontWeight: "500" }}>{user.name}</span>
           <span style={{ float: "right", color: minBlack, fontWeight: "500", fontSize: "0.75em" }}>{timeStr}</span>
         </div>
