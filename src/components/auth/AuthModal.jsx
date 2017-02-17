@@ -8,6 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { grey100, lightBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
 import { addAuthedUser, addUser } from "../../actions/userActions";
+import { getPhoto, uploadFile } from "../../utils/Api";
 import store from "../../store/store";
 
 /**
@@ -39,14 +40,24 @@ export default class AuthModal extends React.Component {
   onSuccess(result) {
     const token = result.credential.accessToken;
     const user = result.user;
-    const userData = {
+    let userData = {
       name: user.displayName,
       uid: user.uid,
       email: user.email,
       photo: user.photoURL,
     };
-    store.dispatch(addUser(userData));
-    firebase.onAuthSuccess(user.uid);
+    getPhoto()
+    .then(blob => {
+      return uploadFile(blob);
+    })
+    .then(url => {
+      userData.coverPhoto = url;
+      store.dispatch(addUser(userData));
+      firebase.onAuthSuccess(user.uid);
+    })
+    .catch(error => {
+      alert("oops!");
+    });
   }
 
   handleSignUpFacebook() {

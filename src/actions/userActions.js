@@ -29,36 +29,21 @@ export function getUsers() {
 
 export function addUser(user) {
   return dispatch => {
+    if (Object.keys(user).length === 0) { return dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user }); }
+
     let updates = {};
     updates["users/" + user.uid + "/name"] = user.name;
     updates["users/" + user.uid + "/uid"] = user.uid;
     updates["users/" + user.uid + "/email"] = user.email;
     updates["users/" + user.uid + "/photo"] = user.photo;
-    updates["users/" + user.uid + "/coverPhoto"] = PLACEHOLDER_PHOTO;
+    updates["users/" + user.uid + "/coverPhoto"] = user.coverPhoto || PLACEHOLDER_PHOTO;
     updates["users/" + user.uid + "/buddies/7hJGDkRieEfhPiMnu1HGDF8w59V2"] = true;
     updates["users/7hJGDkRieEfhPiMnu1HGDF8w59V2/buddies/" + user.uid] = true;
-    fetch(`https://pixabay.com/api/?key=4423887-ab96e540ffbe404d644032133&image_type=photo`).then(function(response) {
-      if (response.ok) {
-        return response.json();
-      } else {
-        return doAddUser(dispatch, user, updates);
-      }
-    }).then(function(json) {
-      if (json && json.hits && json.hits.length > 0) {
-        const index = getRandomInt(0, json.hits.length);
-        updates["users/" + user.uid + "/coverPhoto"] = json.hits[index].webformatURL;
-      }
-      doAddUser(dispatch, user, updates);
-    }).catch(function(error) {
-      console.log("UH OH SHIT FUCKED UP: ", error);
+
+    firebase.database().ref().update(updates).then(snap => {
+      dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user });
     });
   }
-}
-
-function doAddUser(dispatch, userData, updates) {
-  return firebase.database().ref().update(updates).then(snap => {
-    dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user: userData });
-  });
 }
 
 function getRandomInt(min, max) {

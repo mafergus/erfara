@@ -56,7 +56,7 @@ export class CreateEventModal extends React.Component {
 
     getPhoto(searchTerm)
     .then(blob => {
-      return uploadFile(blob, name, description, timestamp, locationString, userId);
+      return uploadFile(blob);
     })
     .then(url => {
       store.dispatch(addEvent(name, description, url, timestamp, locationString, userId));
