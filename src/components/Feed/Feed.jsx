@@ -75,12 +75,13 @@ export class Feed extends React.Component {
       display: "flex",
       justifyContent: "center",
       borderTop: `1px solid ${faintBlack}`,
+      borderBottom: `1px solid ${faintBlack}`,
       backgroundColor: orange50,
       zIndex: "30",
     };
     return <div style={STYLE}>
       <div style={{ flexGrow: "1", height: "100%", width: "100%", backgroundColor: {orange500} }}>
-        <div style={{ height: "90px", border: `1px solid" ${faintBlack}`, backgroundColor: "white", borderRadius: "3%" }}>
+        <div style={{ height: "90px", borderTop: `1px solid" ${faintBlack}`, backgroundColor: "white", borderRadius: "3%" }}>
           <TextField 
             hintText="Message"
             value={this.state.message}
@@ -104,10 +105,8 @@ export class Feed extends React.Component {
 
   render() {
     const { style, items } = this.props;
-    return <div style={{ ...style, paddingLeft: "10px" }} className="border">
-      <hr style={{ paddingTop: "8px" }}/>
+    return <div style={{ ...style, paddingLeft: "10px", paddingTop: "30px", borderTop: `1px solid ${faintBlack}` }}>
       {items && Object.entries(items).map(item => this.renderFeedItem(item[0], item[1]))}
-      <hr/>
       {this.renderMessageBar()}
     </div>;
   }
