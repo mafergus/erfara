@@ -39,8 +39,13 @@ export default class AuthModal extends React.Component {
   onSuccess(result) {
     const token = result.credential.accessToken;
     const user = result.user;
-    console.log("USER ", result.user);
-    store.dispatch(addUser(user));
+    const userData = {
+      name: user.displayName,
+      uid: user.uid,
+      email: user.email,
+      photo: user.photoURL,
+    };
+    store.dispatch(addUser(userData));
     firebase.onAuthSuccess(user.uid);
   }
 

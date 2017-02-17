@@ -1,4 +1,5 @@
 import React, { PropTypes } from "react";
+import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import AppBar from 'material-ui/AppBar';
@@ -8,6 +9,7 @@ import { white, lightBlack, orange500, orange200 } from 'material-ui/styles/colo
 import ErfaraIcon from '../components/ErfaraIcon';
 import AuthModal from '../components/auth/AuthModal';
 import LoggedInUserComponent from "../components/LoggedInUserComponent";
+import { addUser } from "../actions/userActions";
 
 const STYLE = {
   position: 'fixed',
@@ -18,9 +20,17 @@ const STYLE = {
 }
 
 function mapStateToProps(state) {
+  const user = state.authedUser;
+  if (Object.keys(user).length > 0) {
+    localStorage.setItem("authedUser", JSON.stringify(user));
+  }
   return {
-    user: state.authedUser,
+    user,
   };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ addUser }, dispatch);
 }
 
 export class AppBarContainer extends React.Component {
@@ -28,10 +38,18 @@ export class AppBarContainer extends React.Component {
   static contextTypes = {
     router: PropTypes.object.isRequired
   };
-  
+
   constructor() {
     super();
     autoBind(this);
+  }
+
+  componentWillMount() {
+    const authedUser = JSON.parse(localStorage.getItem("authedUser"));
+    if (authedUser) {
+      this.props.addUser(authedUser);
+    }
+    var blah;
   }
 
   onTitleTouchTap() {
@@ -83,4 +101,4 @@ export class AppBarContainer extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(AppBarContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(AppBarContainer);

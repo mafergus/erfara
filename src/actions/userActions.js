@@ -29,17 +29,11 @@ export function getUsers() {
 
 export function addUser(user) {
   return dispatch => {
-    const userData = {
-      name: user.displayName,
-      uid: user.uid,
-      email: user.email,
-      photo: user.photoURL,
-    };
     let updates = {};
-    updates["users/" + user.uid + "/name"] = user.displayName;
+    updates["users/" + user.uid + "/name"] = user.name;
     updates["users/" + user.uid + "/uid"] = user.uid;
     updates["users/" + user.uid + "/email"] = user.email;
-    updates["users/" + user.uid + "/photo"] = user.photoURL;
+    updates["users/" + user.uid + "/photo"] = user.photo;
     updates["users/" + user.uid + "/coverPhoto"] = PLACEHOLDER_PHOTO;
     updates["users/" + user.uid + "/buddies/7hJGDkRieEfhPiMnu1HGDF8w59V2"] = true;
     updates["users/7hJGDkRieEfhPiMnu1HGDF8w59V2/buddies/" + user.uid] = true;
@@ -47,14 +41,14 @@ export function addUser(user) {
       if (response.ok) {
         return response.json();
       } else {
-        return doAddUser(dispatch, userData, updates);
+        return doAddUser(dispatch, user, updates);
       }
     }).then(function(json) {
       if (json && json.hits && json.hits.length > 0) {
         const index = getRandomInt(0, json.hits.length);
         updates["users/" + user.uid + "/coverPhoto"] = json.hits[index].webformatURL;
       }
-      doAddUser(dispatch, userData, updates);
+      doAddUser(dispatch, user, updates);
     }).catch(function(error) {
       console.log("UH OH SHIT FUCKED UP: ", error);
     });
