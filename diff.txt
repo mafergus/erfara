@@ -1,0 +1,800 @@
+diff --git a/src/actions/database.js b/src/actions/database.js
+index ccde092..12b10b6 100644
+--- a/src/actions/database.js
++++ b/src/actions/database.js
+@@ -25,15 +25,14 @@ firebase.database().ref('/users').on('value', function(snapshot) {
+ });
+ 
+ firebase.onAuthSuccess = (userId) => {
+-  firebase.database().ref("/users/" + userId + "/conversations").on('value', function(snapshot) {
+-    const conversations = snapshot.val();
+-    console.log("Update conversations: ", snapshot.val());
+-    if (conversations) {
+-      store.dispatch({ type: "GET_CONVERSATIONS_SUCCESS", conversations });
++  authedUserId = userId;
++  firebase.database().ref("/users/" + userId).on('value', function(snapshot) {
++    const user = snapshot.val();
++    console.log("Update authed user: ", user);
++    if (user) {
++      store.dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user });
+     }
+   });
+ };
+ 
+-firebase.onAuthSuccess("8hJGDkRieEfhPiMnu1HGDF8w59V2");
+-
+ export default firebase;
+\ No newline at end of file
+diff --git a/src/actions/messageActions.js b/src/actions/messageActions.js
+index 8b5f6b1..edca5eb 100644
+--- a/src/actions/messageActions.js
++++ b/src/actions/messageActions.js
+@@ -11,11 +11,12 @@ export function addMessage(recipientId, senderId, message, date) {
+ 
+     var newMessageKey = firebase.database().ref().child("/users/" + recipientId + "/conversations/" + senderId + "/messages").push().key;
+ 
+-    // Write the new post's data simultaneously in the posts list and the user's post list.
+     var updates = {};
+     updates["/users/" + recipientId + "/conversations/" + senderId + "/messages/" + newMessageKey] = messageData;
+     updates["/users/" + senderId + "/conversations/" + recipientId + "/messages/" + newMessageKey] = messageData;
+ 
+-    return firebase.database().ref().update(updates);
++    return firebase.database().ref().update(updates).then(snap => {
++      dispatch({ type: "ADD_MESSAGE_SUCCESS", messageData });
++    });
+   }
+ }
+diff --git a/src/actions/userActions.js b/src/actions/userActions.js
+index 61e99df..1463c41 100644
+--- a/src/actions/userActions.js
++++ b/src/actions/userActions.js
+@@ -37,11 +37,23 @@ export function addUser(user) {
+     updates["users/" + user.uid + "/email"] = user.email;
+     updates["users/" + user.uid + "/photo"] = user.photo;
+     updates["users/" + user.uid + "/coverPhoto"] = user.coverPhoto || PLACEHOLDER_PHOTO;
+-    updates["users/" + user.uid + "/buddies/7hJGDkRieEfhPiMnu1HGDF8w59V2"] = true;
+-    updates["users/7hJGDkRieEfhPiMnu1HGDF8w59V2/buddies/" + user.uid] = true;
+ 
+     firebase.database().ref().update(updates).then(snap => {
+       dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user });
++      firebase.onAuthSuccess(user.uid);
++    });
++  }
++}
++
++export function addBuddy(userId1, userId2) {
++  return dispatch => {
++
++    let updates = {};
++    updates["users/" + userId1 + "/buddies/" + userId2] = true;
++    updates["users/" + userId2 + "/buddies/" + userId1] = true;
++
++    firebase.database().ref().update(updates).then(snap => {
++      dispatch({ type: "ADD_BUDDY_SUCCESS", userId1, userId2 });
+     });
+   }
+ }
+diff --git a/src/components/App.js b/src/components/App.js
+index 4f07950..28bc05f 100644
+--- a/src/components/App.js
++++ b/src/components/App.js
+@@ -1,17 +1,30 @@
+ import React, { Component, PropTypes } from 'react';
++import { connect } from "react-redux";
+ import autoBind from "react-autobind";
+ import Title from 'react-title-component';
+ import IconButton from 'material-ui/IconButton';
+ import spacing from 'material-ui/styles/spacing';
+ import ContentAdd from 'material-ui/svg-icons/content/add';
+ import getMuiTheme from 'material-ui/styles/getMuiTheme';
+-import { darkWhite, white, lightWhite, grey900, orange500,   orange700 } from 'material-ui/styles/colors';
++import { darkWhite, white, lightWhite, grey900, orange500, orange700 } from 'material-ui/styles/colors';
+ import FloatingActionButton from 'material-ui/FloatingActionButton';
+-import AppNavDrawer from './AppNavDrawer';
+ import FullWidthSection from './FullWidthSection';
+ import withWidth, { MEDIUM, LARGE } from 'material-ui/utils/withWidth';
+ import AppBarContainer from "../containers/AppBarContainer";
+ import CreateEventModal from "./Modals/CreateEventModal";
++import { getUnreadMessages } from "../utils/helpers";
++
++function mapStateToProps(state, props) {
++  return {
++    authedUser: state.authedUser,
++    unreadMessages: getUnreadMessages(state),
++  };
++}
++
++function mapDispatchToProps(dispatch) {
++  return {
++  };
++}
+ 
+ class App extends Component {
+   static propTypes = {
+@@ -138,10 +151,7 @@ class App extends Component {
+   };
+ 
+   createEvent() {
+-    this.setState({
+-      ...this.state,
+-      eventModalOpen: true,
+-    });
++    this.setState({ eventModalOpen: true });
+   }
+ 
+   onRequestClose() {
+@@ -211,9 +221,11 @@ class App extends Component {
+       styles.footer.paddingLeft = 256;
+     }
+ 
++    const unreadMessages = this.props.unreadMessages && this.props.unreadMessages > 0 ? `(${this.props.unreadMessages}) Erfara` : "Erfara";
++
+     return (
+       <div>
+-        <Title render="Erfara" />
++        <Title render={unreadMessages} />
+         <AppBarContainer />
+         {title !== '' ?
+           <div style={prepareStyles(styles.root)}>
+@@ -225,14 +237,6 @@ class App extends Component {
+           </div> :
+           children
+         }
+-        <AppNavDrawer
+-          style={styles.navDrawer}
+-          location={location}
+-          docked={docked}
+-          onRequestChangeNavDrawer={this.handleChangeRequestNavDrawer}
+-          onChangeList={this.handleChangeList}
+-          open={navDrawerOpen}
+-        />
+         {!hideFooter && this.renderFooter()}
+         {!hideFab && 
+           <FloatingActionButton
+@@ -248,4 +252,4 @@ class App extends Component {
+   }
+ }
+ 
+-export default withWidth()(App);
++export default connect(mapStateToProps, mapDispatchToProps)(withWidth()(App));
+diff --git a/src/components/AppNavDrawer.js b/src/components/AppNavDrawer.js
+deleted file mode 100644
+index f291b42..0000000
+--- a/src/components/AppNavDrawer.js
++++ /dev/null
+@@ -1,430 +0,0 @@
+-import React, {Component, PropTypes} from 'react';
+-import Drawer from 'material-ui/Drawer';
+-import {List, ListItem, makeSelectable} from 'material-ui/List';
+-import Divider from 'material-ui/Divider';
+-import Subheader from 'material-ui/Subheader';
+-import DropDownMenu from 'material-ui/DropDownMenu';
+-import MenuItem from 'material-ui/MenuItem';
+-import {spacing, typography, zIndex} from 'material-ui/styles';
+-import {cyan500} from 'material-ui/styles/colors';
+-
+-const SelectableList = makeSelectable(List);
+-
+-const styles = {
+-  logo: {
+-    cursor: 'pointer',
+-    fontSize: 24,
+-    color: typography.textFullWhite,
+-    lineHeight: `${spacing.desktopKeylineIncrement}px`,
+-    fontWeight: typography.fontWeightLight,
+-    backgroundColor: cyan500,
+-    paddingLeft: spacing.desktopGutter,
+-    marginBottom: 8,
+-  },
+-  version: {
+-    paddingLeft: spacing.desktopGutterLess,
+-    fontSize: 16,
+-  },
+-};
+-
+-class AppNavDrawer extends Component {
+-  static propTypes = {
+-    docked: PropTypes.bool.isRequired,
+-    location: PropTypes.object.isRequired,
+-    onChangeList: PropTypes.func.isRequired,
+-    onRequestChangeNavDrawer: PropTypes.func.isRequired,
+-    open: PropTypes.bool.isRequired,
+-    style: PropTypes.object,
+-  };
+-
+-  static contextTypes = {
+-    muiTheme: PropTypes.object.isRequired,
+-    router: PropTypes.object.isRequired,
+-  };
+-
+-  state = {
+-    muiVersions: [],
+-  };
+-
+-  componentDidMount() {
+-    const self = this;
+-    const url = '/versions.json';
+-    const request = new XMLHttpRequest();
+-
+-    request.onreadystatechange = function() {
+-      if (request.readyState === 4 && request.status === 200) {
+-        self.setState({
+-          muiVersions: JSON.parse(request.responseText),
+-          version: JSON.parse(request.responseText)[0],
+-        });
+-      }
+-    };
+-
+-    request.open('GET', url, true);
+-    request.send();
+-  }
+-
+-  firstNonPreReleaseVersion() {
+-    let version;
+-    for (let i = 0; i < this.state.muiVersions.length; i++) {
+-      version = this.state.muiVersions[i];
+-      // If the version doesn't contain '-' and isn't 'HEAD'
+-      if (!/-/.test(version) && version !== 'HEAD') {
+-        break;
+-      }
+-    }
+-    return version;
+-  }
+-
+-  handleVersionChange = (event, index, value) => {
+-    if (value === this.firstNonPreReleaseVersion()) {
+-      window.location = 'http://www.material-ui.com/';
+-    } else {
+-      window.location = `http://www.material-ui.com/${value}`;
+-    }
+-  };
+-
+-  currentVersion() {
+-    if (window.location.hostname === 'localhost') return this.state.muiVersions[0];
+-    if (window.location.pathname === '/') {
+-      return this.firstNonPreReleaseVersion();
+-    } else {
+-      return window.location.pathname.replace(/\//g, '');
+-    }
+-  }
+-
+-  handleRequestChangeLink = (event, value) => {
+-    window.location = value;
+-  };
+-
+-  handleTouchTapHeader = () => {
+-    this.context.router.push('/');
+-    this.props.onRequestChangeNavDrawer(false);
+-  };
+-
+-  render() {
+-    const {
+-      location,
+-      docked,
+-      onRequestChangeNavDrawer,
+-      onChangeList,
+-      open,
+-      style,
+-    } = this.props;
+-
+-    return (
+-      <Drawer
+-        style={style}
+-        docked={docked}
+-        open={open}
+-        onRequestChange={onRequestChangeNavDrawer}
+-        containerStyle={{zIndex: zIndex.drawer - 100}}
+-      >
+-        <div style={styles.logo} onTouchTap={this.handleTouchTapHeader}>
+-          Material-UI
+-        </div>
+-        <span style={styles.version}>Version:</span>
+-        <DropDownMenu
+-          value={this.currentVersion()}
+-          onChange={this.handleVersionChange}
+-          maxHeight={300}
+-          style={{width: 181}}
+-        >
+-          {this.state.muiVersions.map((version) => (
+-            <MenuItem
+-              key={version}
+-              value={version}
+-              primaryText={version}
+-            />
+-          ))}
+-        </DropDownMenu>
+-        <SelectableList
+-          value={location.pathname}
+-          onChange={onChangeList}
+-        >
+-          <ListItem
+-            primaryText="Get Started"
+-            primaryTogglesNestedList={true}
+-            nestedItems={[
+-              <ListItem primaryText="Required Knowledge" value="/get-started/required-knowledge" />,
+-              <ListItem primaryText="Installation" value="/get-started/installation" />,
+-              <ListItem primaryText="Usage" value="/get-started/usage" />,
+-              <ListItem primaryText="Server Rendering" value="/get-started/server-rendering" />,
+-              <ListItem primaryText="Examples" value="/get-started/examples" />,
+-            ]}
+-          />
+-          <ListItem
+-            primaryText="Customization"
+-            primaryTogglesNestedList={true}
+-            nestedItems={[
+-              <ListItem primaryText="Themes" value="/customization/themes" />,
+-              <ListItem primaryText="Styles" value="/customization/styles" />,
+-              <ListItem primaryText="Colors" value="/customization/colors" />,
+-            ]}
+-          />
+-          <ListItem
+-            primaryText="Components"
+-            primaryTogglesNestedList={true}
+-            nestedItems={[
+-              <ListItem
+-                primaryText="App Bar"
+-                value="/components/app-bar"
+-                href="#/components/app-bar"
+-              />,
+-              <ListItem
+-                primaryText="Auto Complete"
+-                value="/components/auto-complete"
+-                href="#/components/auto-complete"
+-              />,
+-              <ListItem
+-                primaryText="Avatar"
+-                value="/components/avatar"
+-                href="#/components/avatar"
+-              />,
+-              <ListItem
+-                primaryText="Badge"
+-                value="/components/badge"
+-                href="#/components/badge"
+-              />,
+-              <ListItem
+-                primaryText="Bottom Navigation"
+-                value="/components/bottom-navigation"
+-                href="#/components/bottom-navigation"
+-              />,
+-              <ListItem
+-                primaryText="Buttons"
+-                primaryTogglesNestedList={true}
+-                nestedItems={[
+-                  <ListItem
+-                    primaryText="Flat Button"
+-                    value="/components/flat-button"
+-                    href="#/components/flat-button"
+-                  />,
+-                  <ListItem
+-                    primaryText="Raised Button"
+-                    value="/components/raised-button"
+-                    href="#/components/raised-button"
+-                  />,
+-                  <ListItem
+-                    primaryText="Floating Action Button"
+-                    value="/components/floating-action-button"
+-                    href="#/components/floating-action-button"
+-                  />,
+-                  <ListItem
+-                    primaryText="Icon Button"
+-                    value="/components/icon-button"
+-                    href="#/components/icon-button"
+-                  />,
+-                ]}
+-              />,
+-              <ListItem
+-                primaryText="Card"
+-                value="/components/card"
+-                href="#/components/card"
+-              />,
+-              <ListItem
+-                primaryText="Chip"
+-                value="/components/chip"
+-                href="#/components/chip"
+-              />,
+-              <ListItem
+-                primaryText="Date Picker"
+-                value="/components/date-picker"
+-                href="#/components/date-picker"
+-              />,
+-              <ListItem
+-                primaryText="Dialog"
+-                value="/components/dialog"
+-                href="#/components/dialog"
+-              />,
+-              <ListItem
+-                primaryText="Divider"
+-                value="/components/divider"
+-                href="#/components/divider"
+-              />,
+-              <ListItem
+-                primaryText="Drawer"
+-                value="/components/drawer"
+-                href="#/components/drawer"
+-              />,
+-              <ListItem
+-                primaryText="Grid List"
+-                value="/components/grid-list"
+-                href="#/components/grid-list"
+-              />,
+-              <ListItem
+-                primaryText="Icons"
+-                primaryTogglesNestedList={true}
+-                nestedItems={[
+-                  <ListItem
+-                    primaryText="Font Icon"
+-                    value="/components/font-icon"
+-                    href="#/components/font-icon"
+-                  />,
+-                  <ListItem
+-                    primaryText="SVG Icon"
+-                    value="/components/svg-icon"
+-                    href="#/components/svg-icon"
+-                  />,
+-                ]}
+-              />,
+-              <ListItem
+-                primaryText="List"
+-                value="/components/list"
+-                href="#/components/list"
+-              />,
+-              <ListItem
+-                primaryText="Menus"
+-                primaryTogglesNestedList={true}
+-                nestedItems={[
+-                  <ListItem
+-                    primaryText="Menu"
+-                    value="/components/menu"
+-                    href="#/components/menu"
+-                  />,
+-                  <ListItem
+-                    primaryText="Icon Menu"
+-                    value="/components/icon-menu"
+-                    href="#/components/icon-menu"
+-                  />,
+-                  <ListItem
+-                    primaryText="DropDown Menu"
+-                    value="/components/dropdown-menu"
+-                    href="#/components/dropdown-menu"
+-                  />,
+-                ]}
+-              />,
+-              <ListItem
+-                primaryText="Paper"
+-                value="/components/paper"
+-                href="#/components/paper"
+-              />,
+-              <ListItem
+-                primaryText="Popover"
+-                value="/components/popover"
+-                href="#/components/popover"
+-              />,
+-              <ListItem
+-                primaryText="Progress"
+-                primaryTogglesNestedList={true}
+-                nestedItems={[
+-                  <ListItem
+-                    primaryText="Circular Progress"
+-                    value="/components/circular-progress"
+-                    href="#/components/circular-progress"
+-                  />,
+-                  <ListItem
+-                    primaryText="Linear Progress"
+-                    value="/components/linear-progress"
+-                    href="#/components/linear-progress"
+-                  />,
+-                  <ListItem
+-                    primaryText="Refresh Indicator"
+-                    value="/components/refresh-indicator"
+-                    href="#/components/refresh-indicator"
+-                  />,
+-                ]}
+-              />,
+-              <ListItem
+-                primaryText="Select Field"
+-                value="/components/select-field"
+-                href="#/components/select-field"
+-              />,
+-              <ListItem
+-                primaryText="Slider"
+-                value="/components/slider"
+-                href="#/components/slider"
+-              />,
+-              <ListItem
+-                primaryText="Switches"
+-                primaryTogglesNestedList={true}
+-                nestedItems={[
+-                  <ListItem
+-                    primaryText="Checkbox"
+-                    value="/components/checkbox"
+-                    href="#/components/checkbox"
+-                  />,
+-                  <ListItem
+-                    primaryText="Radio Button"
+-                    value="/components/radio-button"
+-                    href="#/components/radio-button"
+-                  />,
+-                  <ListItem
+-                    primaryText="Toggle"
+-                    value="/components/toggle"
+-                    href="#/components/toggle"
+-                  />,
+-                ]}
+-              />,
+-              <ListItem
+-                primaryText="Snackbar"
+-                value="/components/snackbar"
+-                href="#/components/snackbar"
+-              />,
+-              <ListItem
+-                primaryText="Stepper"
+-                value="/components/stepper"
+-                href="#/components/stepper"
+-              />,
+-              <ListItem
+-                primaryText="Subheader"
+-                value="/components/subheader"
+-                href="#/components/subheader"
+-              />,
+-              <ListItem
+-                primaryText="Table"
+-                value="/components/table"
+-                href="#/components/table"
+-              />,
+-              <ListItem
+-                primaryText="Tabs"
+-                value="/components/tabs"
+-                href="#/components/tabs"
+-              />,
+-              <ListItem
+-                primaryText="Text Field"
+-                value="/components/text-field"
+-                href="#/components/text-field"
+-              />,
+-              <ListItem
+-                primaryText="Time Picker"
+-                value="/components/time-picker"
+-                href="#/components/time-picker"
+-              />,
+-              <ListItem
+-                primaryText="Toolbar"
+-                value="/components/toolbar"
+-                href="#/components/toolbar"
+-              />,
+-            ]}
+-          />
+-          <ListItem
+-            primaryText="Discover More"
+-            primaryTogglesNestedList={true}
+-            nestedItems={[
+-              <ListItem primaryText="Community" value="/discover-more/community" />,
+-              <ListItem primaryText="Contributing" value="/discover-more/contributing" />,
+-              <ListItem primaryText="Showcase" value="/discover-more/showcase" />,
+-              <ListItem primaryText="Related projects" value="/discover-more/related-projects" />,
+-            ]}
+-          />
+-        </SelectableList>
+-        <Divider />
+-        <SelectableList
+-          value=""
+-          onChange={this.handleRequestChangeLink}
+-        >
+-          <Subheader>Resources</Subheader>
+-          <ListItem primaryText="GitHub" value="https://github.com/callemall/material-ui" />
+-          <ListItem primaryText="React" value="http://facebook.github.io/react" />
+-          <ListItem
+-            primaryText="Material Design"
+-            value="https://www.google.com/design/spec/material-design/introduction.html"
+-          />
+-        </SelectableList>
+-      </Drawer>
+-    );
+-  }
+-}
+-
+-export default AppNavDrawer;
+diff --git a/src/components/Feed/Feed.jsx b/src/components/Feed/Feed.jsx
+index 9d85eae..bf2bee3 100644
+--- a/src/components/Feed/Feed.jsx
++++ b/src/components/Feed/Feed.jsx
+@@ -40,7 +40,6 @@ export class Feed extends React.Component {
+   componentWillMount() {
+     // const { eventId } = this.props;
+     // firebase.database().ref(`/events/${eventId}/feed/`).on('value', function(snapshot) {
+-    //   debugger;
+     //   const feed = snapshot.val();
+     //   console.log("Got event feed feed: ", feed);
+     //   if (feed) {
+diff --git a/src/components/Messaging/ConversationList.jsx b/src/components/Messaging/ConversationList.jsx
+index bf1141f..18dcf20 100644
+--- a/src/components/Messaging/ConversationList.jsx
++++ b/src/components/Messaging/ConversationList.jsx
+@@ -7,7 +7,7 @@ import { faintBlack } from "material-ui/styles/colors";
+ export default class ConversationList extends React.Component {
+ 
+   static propTypes = {
+-    conversations: ImmutablePropTypes.map,
++    conversations: PropTypes.object,
+     style: PropTypes.object,
+     onConversationSelected: PropTypes.func.isRequired,
+   };
+@@ -27,8 +27,8 @@ export default class ConversationList extends React.Component {
+       backgroundColor: "white",
+     }
+     return <ul style={STYLE} className="conversationList">
+-      {conversations && conversations.map((item, key) => {
+-        return <ConversationListItem conversationId={key} conversation={item} onConversationClick={this.props.onConversationSelected} />
++      {conversations && Object.entries(conversations).map(item => {
++        return <ConversationListItem key={item[0]} conversationId={item[0]} conversation={item[1]} onConversationClick={this.props.onConversationSelected} />
+       })}
+     </ul>;
+   }  
+diff --git a/src/components/Messaging/ConversationListItem.jsx b/src/components/Messaging/ConversationListItem.jsx
+index d9a9cd0..4b21b0c 100644
+--- a/src/components/Messaging/ConversationListItem.jsx
++++ b/src/components/Messaging/ConversationListItem.jsx
+@@ -43,8 +43,9 @@ export class ConversationListItem extends React.Component {
+   }
+ 
+   componentWillMount() {
+-    if (this.props.conversation && this.props.conversation.messages.length > 0) {
+-      this.props.getUser(this.props.conversation.messages[0].from);
++    const messageEntries = this.props.conversation && Object.values(this.props.conversation.messages);
++    if (this.props.conversation && messageEntries.length > 0) {
++      this.props.getUser(this.props.conversationId);
+     }
+   }
+ 
+diff --git a/src/components/Messaging/MessagingPage.jsx b/src/components/Messaging/MessagingPage.jsx
+index 86e5381..625ee1c 100644
+--- a/src/components/Messaging/MessagingPage.jsx
++++ b/src/components/Messaging/MessagingPage.jsx
+@@ -7,11 +7,12 @@ import MessagesWindow from "./MessagesWindow";
+ import store from "../../store/store";
+ import { addMessage } from "../../actions/messageActions";
+ import Resizable from "react-resizable-box";
++import Title from 'react-title-component';
+ 
+ function mapStateToProps(state, props) {
+   return {
+-    conversations: state.conversations,
+     authedUser: state.authedUser,
++    conversations: state.authedUser.hasOwnProperty("conversations") && state.authedUser.conversations,
+   };
+ }
+ 
+@@ -39,14 +40,8 @@ export class MessagingPage extends React.Component {
+     store.dispatch(addMessage(this.state.conversationId, this.props.authedUser.uid, text, new Date()));
+   }
+ 
+-  componentWillMount() {
+-    const { conversations } = this.props;
+-    if (conversations && conversations.length > 0) {
+-      this.setState({ conversationId: conversations[0] });
+-    }
+-  }
+-
+   render() {
++    if (!this.props.authedUser || !this.props.authedUser.conversations) { return null; }
+     return <div style={{ width: "100%", height: "100%", position: "fixed", maxWidth: "1440px", top: "64px", left: "0", display: "flex" }}>
+       <Resizable
+         customClass="item"
+@@ -63,9 +58,9 @@ export class MessagingPage extends React.Component {
+         />
+       </Resizable>
+       <MessagesWindow 
+-        conversation={this.props.conversations.get(this.state.conversationId)}
++        conversation={this.state.conversationId ? this.props.conversations[this.state.conversationId] : Object.values(this.props.conversations)[0]}
+         onSendMessage={this.sendMessage}
+-        style={{ width: "70%", height: "100%", display: "inline-block" }}
++        style={{ width: "100%", height: "100%", display: "inline-block" }}
+       />
+     </div>
+   }
+diff --git a/src/components/auth/AuthModal.jsx b/src/components/auth/AuthModal.jsx
+index 7a33f7b..5c60229 100644
+--- a/src/components/auth/AuthModal.jsx
++++ b/src/components/auth/AuthModal.jsx
+@@ -7,7 +7,8 @@ import FlatButton from 'material-ui/FlatButton';
+ import RaisedButton from 'material-ui/RaisedButton';
+ import { grey100, lightBlack } from 'material-ui/styles/colors';
+ import autoBind from 'react-autobind';
+-import { addAuthedUser, addUser } from "../../actions/userActions";
++import { addAuthedUser, addUser, addBuddy } from "../../actions/userActions";
++import { addMessage } from "../../actions/messageActions";
+ import { getPhoto, uploadFile } from "../../utils/Api";
+ import store from "../../store/store";
+ 
+@@ -53,6 +54,8 @@ export default class AuthModal extends React.Component {
+     .then(url => {
+       userData.coverPhoto = url;
+       store.dispatch(addUser(userData));
++      store.dispatch(addMessage(userData.uid, "7hJGDkRieEfhPiMnu1HGDF8w59V2", "Welcome to Erfara!", new Date()));
++      store.dispatch(addBuddy(userData.uid, "7hJGDkRieEfhPiMnu1HGDF8w59V2"));
+       firebase.onAuthSuccess(user.uid);
+     })
+     .catch(error => {
+diff --git a/src/containers/AppBarContainer.jsx b/src/containers/AppBarContainer.jsx
+index 4b89aa0..1c36e3c 100644
+--- a/src/containers/AppBarContainer.jsx
++++ b/src/containers/AppBarContainer.jsx
+@@ -3,6 +3,7 @@ import { bindActionCreators } from "redux";
+ import { connect } from "react-redux";
+ import autoBind from "react-autobind";
+ import AppBar from 'material-ui/AppBar';
++import Badge from 'material-ui/Badge';
+ import IconButton from 'material-ui/IconButton';
+ import MailIcon from 'material-ui/svg-icons/content/mail';
+ import { white, lightBlack, orange500, orange200 } from 'material-ui/styles/colors';
+@@ -10,6 +11,7 @@ import ErfaraIcon from '../components/ErfaraIcon';
+ import AuthModal from '../components/auth/AuthModal';
+ import LoggedInUserComponent from "../components/LoggedInUserComponent";
+ import { addUser } from "../actions/userActions";
++import { getUnreadMessages } from "../utils/helpers";
+ 
+ const STYLE = {
+   position: 'fixed',
+@@ -26,6 +28,7 @@ function mapStateToProps(state) {
+   }
+   return {
+     user,
++    unreadCount: getUnreadMessages(state),
+   };
+ }
+ 
+@@ -72,13 +75,20 @@ export class AppBarContainer extends React.Component {
+ 
+   renderLoggedInUser(user) {
+     return <div>
+-      <IconButton
+-        style={{ height: "50px", width: "50px", padding: "10px" }}
+-        iconStyle={{ height: "30px", width: "30px", margin: "auto", color: lightBlack }}
+-        onClick={() => this.context.router.push("/messages")}
++      <Badge
++        style={{ padding: 0 }}
++        badgeContent={this.props.unreadCount}
++        secondary={true}
++        badgeStyle={{ top: 2, right: 2 }}
+       >
+-        <MailIcon color={orange500} hoverColor={orange200} />
+-      </IconButton>
++        <IconButton
++          style={{ height: "50px", width: "50px", padding: "10px" }}
++          iconStyle={{ height: "30px", width: "30px", margin: "auto", color: lightBlack }}
++          onClick={() => this.context.router.push("/messages")}
++        >
++          <MailIcon color={orange500} hoverColor={orange200} />
++        </IconButton>
++      </Badge>
+       <LoggedInUserComponent 
+         name={user.name.split(" ")[0]}
+         image={user.photo}
+diff --git a/src/utils/Api.js b/src/utils/Api.js
+index 8919a1f..1f8a729 100644
+--- a/src/utils/Api.js
++++ b/src/utils/Api.js
+@@ -3,7 +3,6 @@ import firebase from '../actions/database';
+ const PIXABAY_KEY = "4423887-ab96e540ffbe404d644032133";
+ 
+ export function getPhoto(searchTerm) {
+-  debugger;
+   const photoParam = searchTerm ? `&q=${searchTerm}` : ""; 
+   return new Promise((resolve, reject) => {
+     fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}${photoParam}&image_type=photo`).then(response => {
+diff --git a/src/utils/helpers.js b/src/utils/helpers.js
+index e69de29..8beba3e 100644
+--- a/src/utils/helpers.js
++++ b/src/utils/helpers.js
+@@ -0,0 +1,11 @@
++export function getUnreadMessages(state) {
++  const { authedUser } = state;
++  const messages = [];
++  if (authedUser.hasOwnProperty("conversations")) {
++    Object.entries(authedUser.conversations).map(conversationItem => {
++      const values = Object.values(conversationItem[1].messages);
++      messages.push(...values);
++    });
++  }
++  return messages && messages.reduce((acc, item) => item.isRead ? acc : acc+1, 0);
++}
+\ No newline at end of file

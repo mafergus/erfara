@@ -1,17 +1,30 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import Title from 'react-title-component';
 import IconButton from 'material-ui/IconButton';
 import spacing from 'material-ui/styles/spacing';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { darkWhite, white, lightWhite, grey900, orange500,   orange700 } from 'material-ui/styles/colors';
+import { darkWhite, white, lightWhite, grey900, orange500, orange700 } from 'material-ui/styles/colors';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import AppNavDrawer from './AppNavDrawer';
 import FullWidthSection from './FullWidthSection';
 import withWidth, { MEDIUM, LARGE } from 'material-ui/utils/withWidth';
 import AppBarContainer from "../containers/AppBarContainer";
 import CreateEventModal from "./Modals/CreateEventModal";
+import { getUnreadMessages } from "../utils/helpers";
+
+function mapStateToProps(state, props) {
+  return {
+    authedUser: state.authedUser,
+    unreadMessages: getUnreadMessages(state),
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+  };
+}
 
 class App extends Component {
   static propTypes = {
@@ -138,10 +151,7 @@ class App extends Component {
   };
 
   createEvent() {
-    this.setState({
-      ...this.state,
-      eventModalOpen: true,
-    });
+    this.setState({ eventModalOpen: true });
   }
 
   onRequestClose() {
@@ -211,9 +221,11 @@ class App extends Component {
       styles.footer.paddingLeft = 256;
     }
 
+    const unreadMessages = this.props.unreadMessages && this.props.unreadMessages > 0 ? `(${this.props.unreadMessages}) Erfara` : "Erfara";
+
     return (
       <div>
-        <Title render="Erfara" />
+        <Title render={unreadMessages} />
         <AppBarContainer />
         {title !== '' ?
           <div style={prepareStyles(styles.root)}>
@@ -225,14 +237,6 @@ class App extends Component {
           </div> :
           children
         }
-        <AppNavDrawer
-          style={styles.navDrawer}
-          location={location}
-          docked={docked}
-          onRequestChangeNavDrawer={this.handleChangeRequestNavDrawer}
-          onChangeList={this.handleChangeList}
-          open={navDrawerOpen}
-        />
         {!hideFooter && this.renderFooter()}
         {!hideFab && 
           <FloatingActionButton
@@ -248,4 +252,4 @@ class App extends Component {
   }
 }
 
-export default withWidth()(App);
+export default connect(mapStateToProps, mapDispatchToProps)(withWidth()(App));

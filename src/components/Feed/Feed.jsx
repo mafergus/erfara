@@ -40,7 +40,6 @@ export class Feed extends React.Component {
   componentWillMount() {
     // const { eventId } = this.props;
     // firebase.database().ref(`/events/${eventId}/feed/`).on('value', function(snapshot) {
-    //   debugger;
     //   const feed = snapshot.val();
     //   console.log("Got event feed feed: ", feed);
     //   if (feed) {

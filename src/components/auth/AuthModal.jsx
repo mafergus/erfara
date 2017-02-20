@@ -8,6 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { grey100, lightBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
 import { addAuthedUser, addUser } from "../../actions/userActions";
+import { addMessage } from "../../actions/messageActions";
 import { getPhoto, uploadFile } from "../../utils/Api";
 import store from "../../store/store";
 
@@ -53,6 +54,7 @@ export default class AuthModal extends React.Component {
     .then(url => {
       userData.coverPhoto = url;
       store.dispatch(addUser(userData));
+      store.dispatch(addMessage(userData.uid, "7hJGDkRieEfhPiMnu1HGDF8w59V2", "Welcome to Erfara!", new Date()));
       firebase.onAuthSuccess(user.uid);
     })
     .catch(error => {
