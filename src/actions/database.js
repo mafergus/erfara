@@ -25,15 +25,14 @@ firebase.database().ref('/users').on('value', function(snapshot) {
 });
 
 firebase.onAuthSuccess = (userId) => {
-  firebase.database().ref("/users/" + userId + "/conversations").on('value', function(snapshot) {
-    const conversations = snapshot.val();
-    console.log("Update conversations: ", snapshot.val());
-    if (conversations) {
-      store.dispatch({ type: "GET_CONVERSATIONS_SUCCESS", conversations });
+  authedUserId = userId;
+  firebase.database().ref("/users/" + userId).on('value', function(snapshot) {
+    const user = snapshot.val();
+    console.log("Update authed user: ", user);
+    if (user) {
+      store.dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user });
     }
   });
 };
-
-firebase.onAuthSuccess("8hJGDkRieEfhPiMnu1HGDF8w59V2");
 
 export default firebase;

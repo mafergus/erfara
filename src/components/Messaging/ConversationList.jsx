@@ -7,7 +7,7 @@ import { faintBlack } from "material-ui/styles/colors";
 export default class ConversationList extends React.Component {
 
   static propTypes = {
-    conversations: ImmutablePropTypes.map,
+    conversations: PropTypes.object,
     style: PropTypes.object,
     onConversationSelected: PropTypes.func.isRequired,
   };
@@ -27,8 +27,8 @@ export default class ConversationList extends React.Component {
       backgroundColor: "white",
     }
     return <ul style={STYLE} className="conversationList">
-      {conversations && conversations.map((item, key) => {
-        return <ConversationListItem conversationId={key} conversation={item} onConversationClick={this.props.onConversationSelected} />
+      {conversations && Object.entries(conversations).map(item => {
+        return <ConversationListItem key={item[0]} conversationId={item[0]} conversation={item[1]} onConversationClick={this.props.onConversationSelected} />
       })}
     </ul>;
   }  

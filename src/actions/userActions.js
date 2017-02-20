@@ -37,11 +37,23 @@ export function addUser(user) {
     updates["users/" + user.uid + "/email"] = user.email;
     updates["users/" + user.uid + "/photo"] = user.photo;
     updates["users/" + user.uid + "/coverPhoto"] = user.coverPhoto || PLACEHOLDER_PHOTO;
-    updates["users/" + user.uid + "/buddies/7hJGDkRieEfhPiMnu1HGDF8w59V2"] = true;
-    updates["users/7hJGDkRieEfhPiMnu1HGDF8w59V2/buddies/" + user.uid] = true;
 
     firebase.database().ref().update(updates).then(snap => {
       dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user });
+      firebase.onAuthSuccess(user.uid);
+    });
+  }
+}
+
+export function addBuddy(userId1, userId2) {
+  return dispatch => {
+
+    let updates = {};
+    updates["users/" + userId1 + "/buddies/" + userId2] = true;
+    updates["users/" + userId2 + "/buddies/" + userId1] = true;
+
+    firebase.database().ref().update(updates).then(snap => {
+      dispatch({ type: "ADD_BUDDY_SUCCESS", userId1, userId2 });
     });
   }
 }

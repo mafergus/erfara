@@ -43,8 +43,9 @@ export class ConversationListItem extends React.Component {
   }
 
   componentWillMount() {
-    if (this.props.conversation && this.props.conversation.messages.length > 0) {
-      this.props.getUser(this.props.conversation.messages[0].from);
+    const messageEntries = this.props.conversation && Object.values(this.props.conversation.messages);
+    if (this.props.conversation && messageEntries.length > 0) {
+      this.props.getUser(this.props.conversationId);
     }
   }
 

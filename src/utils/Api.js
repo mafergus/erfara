@@ -3,7 +3,6 @@ import firebase from '../actions/database';
 const PIXABAY_KEY = "4423887-ab96e540ffbe404d644032133";
 
 export function getPhoto(searchTerm) {
-  debugger;
   const photoParam = searchTerm ? `&q=${searchTerm}` : ""; 
   return new Promise((resolve, reject) => {
     fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}${photoParam}&image_type=photo`).then(response => {

@@ -11,11 +11,12 @@ export function addMessage(recipientId, senderId, message, date) {
 
     var newMessageKey = firebase.database().ref().child("/users/" + recipientId + "/conversations/" + senderId + "/messages").push().key;
 
-    // Write the new post's data simultaneously in the posts list and the user's post list.
     var updates = {};
     updates["/users/" + recipientId + "/conversations/" + senderId + "/messages/" + newMessageKey] = messageData;
     updates["/users/" + senderId + "/conversations/" + recipientId + "/messages/" + newMessageKey] = messageData;
 
-    return firebase.database().ref().update(updates);
+    return firebase.database().ref().update(updates).then(snap => {
+      dispatch({ type: "ADD_MESSAGE_SUCCESS", messageData });
+    });
   }
 }
