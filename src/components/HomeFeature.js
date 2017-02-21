@@ -110,7 +110,7 @@ class HomeFeature extends Component {
       >
         <h3 style={styles.heading}>{this.props.heading}</h3>
         <Link to={this.props.route}>
-          <img style={styles.image} className={this.props.imageClass} />
+          <img style={styles.image} alt="Category" className={this.props.imageClass} />
         </Link>
       </Paper>
     );

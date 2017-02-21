@@ -54,12 +54,13 @@ export class EventsList extends React.Component {
 
     return <div style={styles.root}>
       <GridList
+        cols={3}
         padding={35}
         cellHeight={250}
         style={{ marginTop: "1em", width: "70%" }}
       >
         {events && events.map((value, key) => (
-          <EventListItem eventUid={key} event={value} />
+          <EventListItem key={key} eventUid={key} event={value} />
         ))}
       </GridList>
   </div>;

@@ -40,12 +40,19 @@ export class EventListItem extends React.Component {
     }
   }
 
+  // render() {
+  //   const { event, eventUid, user } = this.props;
+  //   return <Link to={`/event/${eventUid}`}>
+  //   <div style={{ height: 200, width: 350, backgroundColor: "green" }}>
+  //   </div>
+  //   </Link>;
+  // }
+
 	render() {
     const { event, eventUid, user } = this.props;
 		return <Link to={`/event/${eventUid}`}>
       <GridTile
         key={eventUid}
-        style={{ minWidth: 200 }}
         title={event.title}
         subtitle={user && <div><img src={user.photo} alt="Creator image" style={{ width: "20px", height: "20px", borderRadius: "50%" }}/>{user.name}</div>}
         actionIcon={<IconButton><span style={{ color: white, fontSize: "2em" }}>3</span><Face color="white" /></IconButton>}
