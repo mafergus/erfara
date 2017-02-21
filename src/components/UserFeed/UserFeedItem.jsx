@@ -8,7 +8,7 @@ import { formatDate } from "../../utils/dateTimeHelpers";
 
 function mapStateToProps(state, props) {
   return {
-    user: state.users.get(props.userId),
+    authedUser: state.authedUser,
   };
 }
 
@@ -36,21 +36,24 @@ export class UserFeedItem extends React.Component {
   }
 
   render() {
-    const { feedItem, user } = this.props;
-    const timeStr = formatDate(feedItem.timestamp, false);
-    return <div style={{ display: "flex", padding: "15px 0px 15px 0px", width: "100%" }} className="hover">
-      <div>
-        <img alt="User photo" style={{ height: "40px", width: "40px", margin: "10px", marginRight: "20px", borderRadius: "50%", verticalAlign: "top" }} src={user.photo}/>
-      </div>
-      <div style={{ height: "100%", flexGrow: "1" }}>
-        <div style={{ marginBottom: "0.6em" }}>
-          <span style={{ color: darkBlack, fontSize: "0.9em", fontWeight: "500" }}>{user.name}</span>
-          <span style={{ float: "right", color: minBlack, fontWeight: "500", fontSize: "0.75em" }}>{timeStr}</span>
-        </div>
-        <span style={{ color: lightBlack }}>{feedItem.feedback}</span>
-      </div>
-      <hr/>
-    </div>;
+    // const { feedItem, user } = this.props;
+    // const timeStr = formatDate(feedItem.timestamp, false);
+    // return <div style={{ display: "flex", padding: "15px 0px 15px 0px", width: "100%" }} className="hover">
+    //   <div>
+    //     <img alt="User photo" style={{ height: "40px", width: "40px", margin: "10px", marginRight: "20px", borderRadius: "50%", verticalAlign: "top" }} src={user.photo}/>
+    //   </div>
+    //   <div style={{ height: "100%", flexGrow: "1" }}>
+    //     <div style={{ marginBottom: "0.6em" }}>
+    //       <span style={{ color: darkBlack, fontSize: "0.9em", fontWeight: "500" }}>{user.name}</span>
+    //       <span style={{ float: "right", color: minBlack, fontWeight: "500", fontSize: "0.75em" }}>{timeStr}</span>
+    //     </div>
+    //     <span style={{ color: lightBlack }}>{feedItem.feedback}</span>
+    //   </div>
+    //   <hr/>
+    // </div>;
+    <div>
+      <h2>{'feedback is here'}</h2>
+    </div>
   }
 }
 
