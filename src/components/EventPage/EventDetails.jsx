@@ -1,6 +1,6 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
-import { minBlack, lightBlack, darkBlack } from "material-ui/styles/colors"
+import { minBlack, darkBlack } from "material-ui/styles/colors"
 import MapsPlace from 'material-ui/svg-icons/maps/place';
 import ActionSchedule from 'material-ui/svg-icons/action/schedule';
 import { getDateString } from "../../utils/dateTimeHelpers";

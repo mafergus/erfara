@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import Title from 'react-title-component';
@@ -6,30 +6,24 @@ import IconButton from 'material-ui/IconButton';
 import spacing from 'material-ui/styles/spacing';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { darkWhite, white, lightWhite, grey900, orange500, orange700 } from 'material-ui/styles/colors';
+import { darkWhite, lightWhite, grey900, orange500, orange700 } from 'material-ui/styles/colors';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import FullWidthSection from './FullWidthSection';
 import withWidth, { MEDIUM, LARGE } from 'material-ui/utils/withWidth';
 import AppBarContainer from "../containers/AppBarContainer";
 import CreateEventModal from "./Modals/CreateEventModal";
-import { getUnreadMessages } from "../utils/helpers";
+import { getUnreadMessageCount } from "../utils/helpers";
 
 function mapStateToProps(state, props) {
   return {
     authedUser: state.authedUser,
-    unreadMessages: getUnreadMessages(state),
+    unreadMessages: getUnreadMessageCount(state),
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-  };
-}
-
-class App extends Component {
+class App extends React.Component {
   static propTypes = {
     children: PropTypes.node,
-    location: PropTypes.object,
     width: PropTypes.number.isRequired,
   };
 
@@ -46,7 +40,6 @@ class App extends Component {
     autoBind(this);
 
     this.state = {
-      navDrawerOpen: false,
       eventModalOpen: false,
     };
   }
@@ -125,47 +118,17 @@ class App extends Component {
     return styles;
   }
 
-  handleTouchTapLeftIconButton = () => {
-    this.setState({
-      navDrawerOpen: !this.state.navDrawerOpen,
-    });
-  };
-
-  handleChangeRequestNavDrawer = (open) => {
-    this.setState({
-      navDrawerOpen: open,
-    });
-  };
-
-  handleChangeList = (event, value) => {
-    this.context.router.push(value);
-    this.setState({
-      navDrawerOpen: false,
-    });
-  };
-
   handleChangeMuiTheme = (muiTheme) => {
     this.setState({
       muiTheme: muiTheme,
     });
   };
 
-  createEvent() {
-    this.setState({ eventModalOpen: true });
-  }
-
-  onRequestClose() {
-    this.setState({
-      eventModalOpen: false,
-    });
-  }
-
   renderFooter() {
-    const {
-      prepareStyles,
-    } = this.state.muiTheme;
+    const { prepareStyles } = this.state.muiTheme;
+    const hideFooter = this.context.router.isActive('/messages');
     const styles = this.getStyles();
-    return <FullWidthSection style={styles.footer}>
+    return !hideFooter && <FullWidthSection style={styles.footer}>
       <p style={prepareStyles(styles.p)}>
         Brought to you by the fine folks at PhoenixApp
       </p>
@@ -180,76 +143,67 @@ class App extends Component {
     </FullWidthSection>;
   }
 
-  render() {
-    const {
-      location,
-      children,
-    } = this.props;
+  renderFAB() {
+    const hideFab = this.context.router.isActive('/messages');
+    return !hideFab && 
+      <FloatingActionButton
+        onTouchTap={() => this.setState({ eventModalOpen: true })}
+        style={{ position: "fixed", right: "1.3em", bottom: "1.3em" }}
+      >
+        <ContentAdd />
+      </FloatingActionButton>;
+  }
 
-    let {
-      navDrawerOpen,
-    } = this.state;
-
-    const {
-      prepareStyles,
-    } = this.state.muiTheme;
-
-    const router = this.context.router;
+  renderContent() {
     const styles = this.getStyles();
+    const router = this.context.router;
     const title =
       router.isActive('/get-started') ? 'Get Started' :
       router.isActive('/customization') ? 'Customization' :
       router.isActive('/components') ? 'Components' :
       router.isActive('/discover-more') ? 'Discover More' : '';
+    const { prepareStyles } = this.state.muiTheme;
+    const { children } = this.props;
 
-    const isHome = router.isActive('');
-    const hideFooter = router.isActive('/messages');
-    const hideFab = router.isActive('/messages');
+    return title !== '' ?
+      <div style={prepareStyles(styles.root)}>
+        <div style={prepareStyles(styles.content)}>
+          {React.cloneElement(children, {
+            onChangeMuiTheme: this.handleChangeMuiTheme,
+          })}
+        </div>
+      </div> :
+      children
+  }
 
-    let docked = false;
-    let showMenuIconButton = true;
-
+  render() {
+    const styles = this.getStyles();
+    const router = this.context.router;
+    const title =
+      router.isActive('/get-started') ? 'Get Started' :
+      router.isActive('/customization') ? 'Customization' :
+      router.isActive('/components') ? 'Components' :
+      router.isActive('/discover-more') ? 'Discover More' : '';
     if (this.props.width === LARGE && title !== '') {
-      docked = true;
-      navDrawerOpen = true;
-      showMenuIconButton = false;
-
-      styles.navDrawer = {
-        zIndex: this.state.muiTheme.zIndex.appBar,
-      };
       styles.root.paddingLeft = 256;
       styles.footer.paddingLeft = 256;
     }
 
-    const unreadMessages = this.props.unreadMessages && this.props.unreadMessages > 0 ? `(${this.props.unreadMessages}) Erfara` : "Erfara";
+    const unreadMessages = this.props.unreadMessages && this.props.unreadMessages > 0 ? 
+      `(${this.props.unreadMessages}) Erfara` : 
+      "Erfara";
 
     return (
       <div>
         <Title render={unreadMessages} />
         <AppBarContainer />
-        {title !== '' ?
-          <div style={prepareStyles(styles.root)}>
-            <div style={prepareStyles(styles.content)}>
-              {React.cloneElement(children, {
-                onChangeMuiTheme: this.handleChangeMuiTheme,
-              })}
-            </div>
-          </div> :
-          children
-        }
-        {!hideFooter && this.renderFooter()}
-        {!hideFab && 
-          <FloatingActionButton
-            onTouchTap={this.createEvent}
-            style={{ position: "fixed", right: "1.3em", bottom: "1.3em" }}
-          >
-            <ContentAdd />
-          </FloatingActionButton>
-        }
-        <CreateEventModal isOpen={this.state.eventModalOpen} onRequestClose={this.onRequestClose}/>
+        {this.renderContent()}
+        {this.renderFooter()}
+        {this.renderFAB()}
+        <CreateEventModal isOpen={this.state.eventModalOpen} onRequestClose={ () => this.setState({ eventModalOpen: false }) }/>
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withWidth()(App));
+export default connect(mapStateToProps)(withWidth()(App));

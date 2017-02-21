@@ -4,7 +4,6 @@ import autoBind from "react-autobind";
 import RaisedButton from 'material-ui/RaisedButton';
 import { getUser } from "../../actions/userActions";
 import FullWidthSection from '../FullWidthSection';
-import EventDescription from "../EventPage/EventDescription";
 import UserList from "../UserList";
 import Hero from "../Hero";
 import UserDetails from "./UserDetails";
@@ -63,7 +62,7 @@ export class UserPage extends React.Component {
   getFollowers() {
     const { user, users } = this.props;
     const followers = [];
-    Object.entries(user.followers).map(item => {
+    Object.entries(user.followers).forEach(item => {
       const user = users.get(item[1]);
       if (user) { followers.push(); }
     });
@@ -78,7 +77,7 @@ export class UserPage extends React.Component {
         <UserList users={buddies} title="Buddies" style={{ position: "absolute", top: "0", width: "200px", marginLeft: "-210px", backgroundColor: "white" }}/>
         <Hero image={user.coverPhoto}>
           <div style={{ position: "absolute", bottom: "12px", left: "12px" }}>
-            <img style={IMG_STYLE} src={user.photo}/>
+            <img style={IMG_STYLE} src={user.photo} alt="User photo"/>
             <h3 style={ H3STYLE }>{user.name}</h3>
           </div>
           <RaisedButton label="Add Friend" style={{ position: "absolute", right: "15px", bottom: "15px" }}/>

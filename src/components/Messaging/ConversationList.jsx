@@ -1,5 +1,4 @@
 import React, { PropTypes } from "react";
-import ImmutablePropTypes from "react-immutable-proptypes";
 import autoBind from "react-autobind";
 import ConversationListItem from "./ConversationListItem";
 import { faintBlack } from "material-ui/styles/colors";

@@ -8,8 +8,6 @@ const config = {
   storageBucket: 'gs://erfara-2aa21.appspot.com'
 };
 
-var authedUserId = null;
-
 firebase.initializeApp(config);
 
 firebase.database().ref('/events').on('value', function(snapshot) {
@@ -25,7 +23,6 @@ firebase.database().ref('/users').on('value', function(snapshot) {
 });
 
 firebase.onAuthSuccess = (userId) => {
-  authedUserId = userId;
   firebase.database().ref("/users/" + userId).on('value', function(snapshot) {
     const user = snapshot.val();
     console.log("Update authed user: ", user);

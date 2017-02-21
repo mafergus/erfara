@@ -1,11 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import firebase from '../../actions/database';
 import Dialog from 'material-ui/Dialog';
-import Divider from 'material-ui/Divider';
 import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import { grey100, lightBlack, darkBlack } from 'material-ui/styles/colors';
+import { darkBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
 import TextField from "material-ui/TextField";
 import DatePicker from 'material-ui/DatePicker';
@@ -43,8 +40,6 @@ export class CreateEventModal extends React.Component {
   onError(error, type) {
     const errorCode = error.code;
     const errorMessage = error.message;
-    const email = error.email;
-    const credential = error.credential;
     console.log(type, " errorCode: ", errorCode, " errorMessage: ", errorMessage);
   }
 
@@ -80,7 +75,6 @@ export class CreateEventModal extends React.Component {
   }
 
   render() {
-    const { title } = this.props;
     const actions = [
       <FlatButton
         label="Cancel"

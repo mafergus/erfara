@@ -1,6 +1,6 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
-import { minBlack, lightBlack, darkBlack } from "material-ui/styles/colors"
+import { lightBlack } from "material-ui/styles/colors"
 
 export default class EventDescription extends React.Component {
 

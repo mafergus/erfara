@@ -1,25 +1,19 @@
-import React, { PropTypes } from "react";
-import Immutable from "immutable";
+import React from "react";
 import ImmutablePropTypes from "react-immutable-proptypes";
 import autoBind from "react-autobind";
 import { connect } from 'react-redux';
 import { getEvents } from "../actions/eventActions";
 import { GridList } from 'material-ui/GridList';
-import EventCard from "./EventCard";
-import Subheader from 'material-ui/Subheader';
 import { getUsers } from "../actions/userActions";
 import EventListItem from "./EventListItem";
 
 const styles = {
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
     marginBottom: 70,
-  },
-  gridList: {
-    marginTop: "1em",
-    width: "70%",
+    overflow: "auto",
   },
 };
 
@@ -60,10 +54,9 @@ export class EventsList extends React.Component {
 
     return <div style={styles.root}>
       <GridList
-        cols={3}
         padding={35}
         cellHeight={250}
-        style={styles.gridList}
+        style={{ marginTop: "1em", width: "70%" }}
       >
         {events && events.map((value, key) => (
           <EventListItem eventUid={key} event={value} />

@@ -1,7 +1,5 @@
 import React, { PropTypes } from "react";
-import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import RaisedButton from 'material-ui/RaisedButton';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
