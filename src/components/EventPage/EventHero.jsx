@@ -42,7 +42,7 @@ export default class EventHero extends React.Component {
       <div style={{ position: "absolute", bottom: "0px", left: "3px", margin: "0.7em" }}>
         <h3 style={H3STYLE}>{event && event.title}</h3>
         <div>
-          <img style={IMG_STYLE} src={owner && owner.photo}/>
+          <img style={IMG_STYLE} alt="Event" src={owner && owner.photo}/>
           <a style={{ display: "inline-block", height: "100%", verticalAlign: "middle" }}>hosted by {owner.name}</a>
         </div>
       </div>

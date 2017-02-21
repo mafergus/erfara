@@ -77,7 +77,7 @@ export class UserPage extends React.Component {
         <UserList users={buddies} title="Buddies" style={{ position: "absolute", top: "0", width: "200px", marginLeft: "-210px", backgroundColor: "white" }}/>
         <Hero image={user.coverPhoto}>
           <div style={{ position: "absolute", bottom: "12px", left: "12px" }}>
-            <img style={IMG_STYLE} src={user.photo} alt="User photo"/>
+            <img style={IMG_STYLE} src={user.photo} alt="User"/>
             <h3 style={ H3STYLE }>{user.name}</h3>
           </div>
           <RaisedButton label="Add Friend" style={{ position: "absolute", right: "15px", bottom: "15px" }}/>

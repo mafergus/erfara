@@ -74,7 +74,7 @@ export class Feed extends React.Component {
       borderBottom: `1px solid ${faintBlack}`,
     };
     return <div style={STYLE}>
-      <img src={this.props.authedUser.photo} style={{ height: "40px", width: "40px", margin: "10px", borderRadius: "50%" }} />
+      <img src={this.props.authedUser.photo} alt="You" style={{ height: "40px", width: "40px", margin: "10px", borderRadius: "50%" }} />
       <div style={{ flexGrow: "1", height: "100%", alignSelf: "center" }}>
         <TextField 
           hintText="Message"

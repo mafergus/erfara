@@ -63,7 +63,7 @@ export class ConversationListItem extends React.Component {
     if (!conversation || !user) { return <div/>; }
     return <li style={{ display: "flex", alignItems: "center", height: "72px", position: "relative" }} onClick={ this.props.onConversationClick.bind(null, conversationId) }>
       <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <img src={photo} style={IMG_STYLE}/>
+        <img src={photo} alt="Sender" style={IMG_STYLE}/>
       </div>
       <div style={{ width: "50%", display: "inline-block", flexGrow: "1", paddingRight: "20px" }}>
         <div style={{ display: "flex" }}>

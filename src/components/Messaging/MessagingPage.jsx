@@ -32,7 +32,7 @@ export class MessagingPage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     //This is to load the first conversation when this component loads
-    if (!this.state.conversation && 
+    if (!this.state.conversationId && 
       nextProps.authedUser.hasOwnProperty("conversations") && 
       Object.keys(nextProps.authedUser["conversations"]).length > 0) {
       const conversationEntry = Object.entries(nextProps.authedUser["conversations"])[0];
