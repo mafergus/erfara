@@ -1,7 +1,6 @@
 import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import { faintBlack } from "material-ui/styles/colors";
 import MessageListItem from "./MessageListItem";
 
 function mapStateToProps(state, props) {
@@ -28,6 +27,10 @@ export class MessageList extends React.Component {
     autoBind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.refs.list.scrollTop = this.refs.list.scrollHeight;
+  }
+
   render() {
     const { messages, style, authedUser } = this.props;
     const STYLE = {
@@ -37,9 +40,9 @@ export class MessageList extends React.Component {
       paddingRight: "30px",
       overflow: "auto",
     }
-    return <ul style={STYLE}>
+    return <ul style={STYLE} ref="list">
       {messages && messages.map((item, key) => {
-        return <MessageListItem key={key} message={item} isMine={authedUser.uid == item.from} />;
+        return <MessageListItem key={key} message={item} isMine={authedUser.uid === item.from} />;
       })}
     </ul>;
   }

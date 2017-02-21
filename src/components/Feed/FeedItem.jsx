@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { bindActionCreators } from "redux";
 import { getUser } from "../../actions/userActions";
-import { darkBlack, lightBlack, minBlack, faintBlack, orange200, orange500, orange50 } from "material-ui/styles/colors";
+import { darkBlack, lightBlack, minBlack } from "material-ui/styles/colors";
 import { formatDate } from "../../utils/dateTimeHelpers";
 
 function mapStateToProps(state, props) {
@@ -40,7 +40,7 @@ export class FeedItem extends React.Component {
     const timeStr = formatDate(feedItem.timestamp, false);
     return <div style={{ display: "flex", padding: "15px 0px 15px 0px", width: "100%" }} className="hover">
       <div>
-        <img style={{ height: "40px", width: "40px", margin: "10px", marginRight: "20px", borderRadius: "50%", verticalAlign: "top" }} src={user.photo}/>
+        <img alt="User photo" style={{ height: "40px", width: "40px", margin: "10px", marginRight: "20px", borderRadius: "50%", verticalAlign: "top" }} src={user.photo}/>
       </div>
       <div style={{ height: "100%", flexGrow: "1" }}>
         <div style={{ marginBottom: "0.6em" }}>

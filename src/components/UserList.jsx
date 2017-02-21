@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
 import AttendeeListItem from "./EventPage/AttendeeListItem";
-import { darkBlack, faintBlack } from "material-ui/styles/colors";
+import { faintBlack } from "material-ui/styles/colors";
 import PeopleList from "./PeopleList";
 
 export default class UserList extends React.Component {
@@ -22,9 +22,9 @@ export default class UserList extends React.Component {
   }
 
   render() {
-    const { users, title } = this.props;
-    const style = {
-      ...this.props.style,
+    const { users, title, style } = this.props;
+    const STYLE = {
+      ...style,
       padding: "0 0 0 0",
       border: `1px solid ${faintBlack}`,
       borderRadius: "1%",
@@ -40,7 +40,7 @@ export default class UserList extends React.Component {
         image={item.photo}
         />);
     });
-    return <PeopleList people={items} peopleType={title} style={this.props.style} />
+    return <PeopleList people={items} peopleType={title} style={STYLE} />
   }
   
 }

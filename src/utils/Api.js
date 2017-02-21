@@ -13,7 +13,10 @@ export function getPhoto(searchTerm) {
       }
     }).then(json => {
       if (json && json.hits && json.hits.length > 0) {
-        return fetch(json.hits[0].webformatURL);
+        const url = searchTerm ? 
+          json.hits[0].webformatURL : 
+          json.hits[getRandomInt(0, json.hits.length)].webformatURL;
+        return fetch(url);
       }
     }).then(response => {
       if (response && response.ok) {
@@ -52,19 +55,24 @@ export function uploadFile(file) {
           case firebase.storage.TaskState.RUNNING:
             console.log('Upload is running');
             break;
+          default: break;
         }
       }, error => {
       switch (error.code) {
         case 'storage/unauthorized':
-          break;
         case 'storage/canceled':
-          break;
-        case 'storage/unknown':
-          break;
+        case 'storage/unknown': 
+        default: break;
       }
       reject(error);
     }, function() {
       resolve(uploadTask.snapshot.downloadURL);
     });
   });
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
 }

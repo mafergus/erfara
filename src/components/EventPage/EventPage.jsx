@@ -1,10 +1,7 @@
 import React, { PropTypes } from "react";
-import Immutable from "immutable";
-import ImmutablePropTypes from "react-immutable-proptypes";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import FullWidthSection from '../FullWidthSection';
-import RaisedButton from 'material-ui/RaisedButton';
 import EventDescription from "./EventDescription";
 import EventDetails from "./EventDetails";
 import UserList from "../UserList";
@@ -63,7 +60,7 @@ export class EventPage extends React.Component {
   }
 
   onRSVP() {
-    const { event, owner, authedUser } = this.props;
+    const { event, authedUser } = this.props;
     const eventId = this.props.params.id;
     store.dispatch(rsvp(event, eventId, authedUser.uid, !this.props.isRSVPD));
   }

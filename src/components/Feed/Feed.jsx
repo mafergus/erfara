@@ -1,11 +1,8 @@
 import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import firebase from "../../actions/database";
-import { darkBlack, lightBlack, minBlack, faintBlack, orange200, orange500, orange50 } from "material-ui/styles/colors";
+import { faintBlack } from "material-ui/styles/colors";
 import TextField from "material-ui/TextField";
-import SendIcon from 'material-ui/svg-icons/content/send';
-import IconButton from 'material-ui/IconButton';
 import { addEventMessage } from "../../actions/eventActions";
 import store from "../../store/store";
 import FeedItem from "./FeedItem";
@@ -65,7 +62,7 @@ export class Feed extends React.Component {
   }
 
   renderFeedItem(key, item) {
-    const { message, userId } = item;
+    const { userId } = item;
     return <FeedItem key={key} userId={userId} feedItem={item} />;
   }
 
@@ -82,7 +79,6 @@ export class Feed extends React.Component {
         <TextField 
           hintText="Message"
           value={this.state.message}
-          onKeyPress={this.onKeyPress}
           style={{ width: "90%", marginLeft: "10px", marginRight: "10px" }}
           onKeyPress={this.onKeyPress}
           onChange={ (event, value) => { this.setState({ message: value }) }} />

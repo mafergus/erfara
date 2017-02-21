@@ -1,4 +1,3 @@
-import React from "react";
 import firebase from "firebase";
 
 const PLACEHOLDER_PHOTO = "https://s-media-cache-ak0.pinimg.com/originals/96/bb/de/96bbdef0373c7e8e7899c01ae11aee91.jpg";
@@ -43,23 +42,4 @@ export function addUser(user) {
       firebase.onAuthSuccess(user.uid);
     });
   }
-}
-
-export function addBuddy(userId1, userId2) {
-  return dispatch => {
-
-    let updates = {};
-    updates["users/" + userId1 + "/buddies/" + userId2] = true;
-    updates["users/" + userId2 + "/buddies/" + userId1] = true;
-
-    firebase.database().ref().update(updates).then(snap => {
-      dispatch({ type: "ADD_BUDDY_SUCCESS", userId1, userId2 });
-    });
-  }
-}
-
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
 }

@@ -19,7 +19,18 @@ export function getDayString(day) {
     case 4: return "Thursday";
     case 5: return "Friday";
     case 6: return "Saturday";
+    default: return "Uh oh";
   }
+}
+
+export function getErfaraDate(date) {
+  if (isToday(date)) {
+    return formatTime(date);
+  }
+  if (isYesterday(date)) {
+    return "Yesterday";
+  }
+  return format(date, "MM/DD/YYYY");
 }
 
 export function getDateString(date) {

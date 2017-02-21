@@ -4,9 +4,8 @@ import AppRoutes from './AppRoutes';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import store from './store/store';
-import { Link, Router, Route, IndexRoute, browserHistory, useRouterHistory } from 'react-router';
+import { Router, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
-import { createHashHistory } from 'history';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 injectTapEventPlugin();

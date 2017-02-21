@@ -9,11 +9,19 @@ export default class MessagesWindow extends React.Component {
   static propTypes = {
     style: PropTypes.object,
     conversation: PropTypes.object,
+    onReadMessage: PropTypes.func.isRequired,
   }
 
   constructor() {
     super();
     autoBind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { conversation } = nextProps;
+    const messages = conversation && Object.keys(conversation.messages);
+    const lastMessage = messages.slice(-1)[0];
+    this.props.onReadMessage(lastMessage);
   }
 
   render() {
@@ -27,7 +35,6 @@ export default class MessagesWindow extends React.Component {
     }
     if (!conversation) { return <div/>; }
     const messages = Object.values(conversation.messages);
-    console.log("CONVERSATION SON: ", conversation);
     return <div style={ STYLE } className="messaging-pane">
       <img className="background-image" />
       <MessageList messages={messages} style={{ width: "100%", position: "absolute", bottom: "150px", left: "0", top: "0" }} />

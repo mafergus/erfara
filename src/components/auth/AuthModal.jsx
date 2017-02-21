@@ -1,13 +1,10 @@
 import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
 import firebase from '../../actions/database';
 import Dialog from 'material-ui/Dialog';
-import Divider from 'material-ui/Divider';
 import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import { grey100, lightBlack } from 'material-ui/styles/colors';
+import { lightBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
-import { addAuthedUser, addUser } from "../../actions/userActions";
+import { addUser } from "../../actions/userActions";
 import { addMessage } from "../../actions/messageActions";
 import { getPhoto, uploadFile } from "../../utils/Api";
 import store from "../../store/store";
@@ -33,13 +30,10 @@ export default class AuthModal extends React.Component {
   onError(error, type) {
     const errorCode = error.code;
     const errorMessage = error.message;
-    const email = error.email;
-    const credential = error.credential;
     console.log(type, " errorCode: ", errorCode, " errorMessage: ", errorMessage);
   }
 
   onSuccess(result) {
-    const token = result.credential.accessToken;
     const user = result.user;
     let userData = {
       name: user.displayName,

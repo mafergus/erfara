@@ -1,12 +1,7 @@
-import React, { PropTypes } from "react";
+import React from "react";
 import autoBind from "react-autobind";
 import { Tabs, Tab } from 'material-ui/Tabs';
-import { darkBlack, lightBlack } from "material-ui/styles/colors";
-
-const TABS = [
-  { name: "Erfaras" },
-  { name: "About" },
-];
+import { lightBlack } from "material-ui/styles/colors";
 
 const TABSTYLE = {
   display: "inline-block",
@@ -75,7 +70,6 @@ export default class UserDetails extends React.Component {
   }
 
   render() {
-    const tabs = this.renderTabs();
     return <div style={{ width: "100%", height: "400px", backgroundColor: "white" }}>
       {this.renderNewTabs()}
     </div>

@@ -11,7 +11,7 @@ import ErfaraIcon from '../components/ErfaraIcon';
 import AuthModal from '../components/auth/AuthModal';
 import LoggedInUserComponent from "../components/LoggedInUserComponent";
 import { addUser } from "../actions/userActions";
-import { getUnreadMessages } from "../utils/helpers";
+import { getUnreadMessageCount } from "../utils/helpers";
 
 const STYLE = {
   position: 'fixed',
@@ -28,7 +28,7 @@ function mapStateToProps(state) {
   }
   return {
     user,
-    unreadCount: getUnreadMessages(state),
+    unreadCount: getUnreadMessageCount(state),
   };
 }
 
@@ -52,7 +52,6 @@ export class AppBarContainer extends React.Component {
     if (authedUser) {
       this.props.addUser(authedUser);
     }
-    var blah;
   }
 
   onTitleTouchTap() {
@@ -74,12 +73,17 @@ export class AppBarContainer extends React.Component {
   }
 
   renderLoggedInUser(user) {
+    const badgeStyle = {
+      top: 2,
+      right: 2,
+      visibility: this.props.unreadCount === 0 ? 'hidden' : 'visible',
+    };
     return <div>
       <Badge
         style={{ padding: 0 }}
         badgeContent={this.props.unreadCount}
         secondary={true}
-        badgeStyle={{ top: 2, right: 2 }}
+        badgeStyle={badgeStyle}
       >
         <IconButton
           style={{ height: "50px", width: "50px", padding: "10px" }}

@@ -13,7 +13,7 @@ import withWidth, {LARGE} from 'material-ui/utils/withWidth';
 import spacing from 'material-ui/styles/spacing';
 import typography from 'material-ui/styles/typography';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import { cyan500, grey200, darkWhite, orange500, orange50, lightBlack, darkBlack } from 'material-ui/styles/colors';
+import { cyan500, darkWhite, orange50, lightBlack, darkBlack } from 'material-ui/styles/colors';
 import EventsList from "./EventsList";
 
 function mapStateToProps(state, props) {

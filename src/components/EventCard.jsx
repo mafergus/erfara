@@ -1,5 +1,4 @@
 import React, { PropTypes } from "react";
-import { connect } from 'react-redux';
 import autoBind from "react-autobind";
 import Card from "material-ui/Card";
 

@@ -8,9 +8,7 @@ export function usersReducer(state = Immutable.Map(), action) {
     }
     case "GET_USERS_SUCCESS": {
       if (!action.users) { return state; }
-      Object.entries(action.users).map(item => {
-        state = state.set(item[0], item[1]);
-      });
+      Object.entries(action.users).forEach(item => state = state.set(item[0], item[1]));
       return state;
     }
     default:
