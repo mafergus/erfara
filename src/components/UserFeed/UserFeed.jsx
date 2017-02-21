@@ -3,14 +3,14 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { faintBlack } from "material-ui/styles/colors";
 import TextField from "material-ui/TextField";
-import { addEventMessage } from "../../actions/eventActions";
+import { addUserFeed } from "../../actions/userActions";
 import store from "../../store/store";
-import FeedItem from "./FeedItem";
+import UserFeedItem from "./UserFeedItem";
 
 function mapStateToProps(state, props) {
   return {
-    items: props.eventId && state.events.get(props.eventId).feed,
-    authedUser: state.authedUser,
+    userFeed: state.userFeed,
+    authedUser: state.authedUser
   };
 }
 
@@ -20,18 +20,18 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export class Feed extends React.Component {
+export class UserFeed extends React.Component {
 
   static propTypes = {
     style: PropTypes.object,
-    eventId: PropTypes.string,
+    //eventId: PropTypes.string,
     authedUser: PropTypes.object,
   };
 
   constructor() {
     super();
     autoBind(this);
-    this.state = { message: "" };
+    this.state = { feedback: "" };
   }
 
   componentWillMount() {
@@ -46,9 +46,9 @@ export class Feed extends React.Component {
   }
 
   onSendClicked() {
-    // this.props.onSend(this.state.message);
-    store.dispatch(addEventMessage(this.props.eventId, this.props.authedUser.uid, this.state.message, new Date()));
-    this.setState({ message: "" });
+    // this.props.onSend(this.state.feedback);
+    store.dispatch(addUserFeed(this.props.authedUser.uid, this.state.feedback, new Date()));
+    this.setState({ feedback: "" });
   }
 
   onKeyPress(event) {
@@ -63,7 +63,7 @@ export class Feed extends React.Component {
 
   renderFeedItem(key, item) {
     const { userId } = item;
-    return <FeedItem key={key} userId={userId} feedItem={item} />;
+    return <UserFeedItem key={key} userId={userId} feedItem={item} />;
   }
 
   renderMessageBar() {
@@ -74,21 +74,21 @@ export class Feed extends React.Component {
       borderBottom: `1px solid ${faintBlack}`,
     };
     return <div style={STYLE}>
-      <img src={this.props.authedUser.photo} alt="You" style={{ height: "40px", width: "40px", margin: "10px", borderRadius: "50%" }} />
+      <img src={this.props.authedUser.photo} style={{ height: "40px", width: "40px", margin: "10px", borderRadius: "50%" }} />
       <div style={{ flexGrow: "1", height: "100%", alignSelf: "center" }}>
         <TextField 
           hintText="Message"
-          value={this.state.message}
+          value={this.state.feedback}
           style={{ width: "90%", marginLeft: "10px", marginRight: "10px" }}
           onKeyPress={this.onKeyPress}
-          onChange={ (event, value) => { this.setState({ message: value }) }} />
+          onChange={ (event, value) => { this.setState({ feedback: value }) }} />
       </div>
     </div>;
   }
 
   render() {
     const { style, items } = this.props;
-    console.log(items);
+    console.log(this.props);
     return <div style={{ ...style, borderTop: `1px solid ${faintBlack}` }}>
       {items && Object.entries(items).map(item => this.renderFeedItem(item[0], item[1]))}
       {this.renderMessageBar()}
@@ -96,4 +96,4 @@ export class Feed extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Feed);
+export default connect(mapStateToProps, mapDispatchToProps)(UserFeed);

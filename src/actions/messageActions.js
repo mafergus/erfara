@@ -14,10 +14,9 @@ export function addMessage(recipientId, senderId, message, date) {
     var updates = {};
     updates["/users/" + recipientId + "/conversations/" + senderId + "/messages/" + newMessageKey] = messageData;
     updates["/users/" + senderId + "/conversations/" + recipientId + "/messages/" + newMessageKey] = messageData;
-    debugger;
 
     return firebase.database().ref().update(updates).then(snap => {
-      debugger;
+
       dispatch(readMessage(senderId, recipientId, newMessageKey));
     });
   }
@@ -25,7 +24,6 @@ export function addMessage(recipientId, senderId, message, date) {
 
 export function readMessage(userId, conversationId, messageId) {
   return dispatch => {
-    debugger;
     var updates = {};
     updates["/users/" + userId + "/conversations/" + conversationId + "/lastReadMessage"] = messageId;
     return firebase.database().ref().update(updates).then(snap => {
