@@ -2,6 +2,7 @@ import React from "react";
 import autoBind from "react-autobind";
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { lightBlack } from "material-ui/styles/colors";
+import UserFeed from "../UserFeed/UserFeed"
 
 const TABSTYLE = {
   display: "inline-block",
@@ -36,15 +37,7 @@ export default class UserDetails extends React.Component {
   renderNewTabs() {
     return <Tabs>
       <Tab label="Feed" >
-        <div>
-          <h2>Tab One</h2>
-          <p>
-            This is an example tab.
-          </p>
-          <p>
-            You can put any sort of HTML or react component in here. It even keeps the component state!
-          </p>
-        </div>
+        <UserFeed style={{ width: "100%", backgroundColor: "white" }} />
       </Tab>
       <Tab label="Skill Postings" >
         <div>
