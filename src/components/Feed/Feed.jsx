@@ -88,6 +88,7 @@ export class Feed extends React.Component {
 
   render() {
     const { style, items } = this.props;
+    console.log(items);
     return <div style={{ ...style, borderTop: `1px solid ${faintBlack}` }}>
       {items && Object.entries(items).map(item => this.renderFeedItem(item[0], item[1]))}
       {this.renderMessageBar()}
