@@ -64,22 +64,6 @@ export function addEventMessage(eventId, userId, message, timestamp) {
   }
 }
 
-export function addEventPhoto(eventId, pixabayId) {
-  return dispatch => {
-    fetch(`https://pixabay.com/api/?key=4423887-ab96e540ffbe404d644032133&id=${pixabayId}&pretty=true`).then(function(response) {
-      if (response.ok) {
-        return response.json();
-      }
-    }).then(function(json) {
-      if (json && json.hits && json.hits.length > 0) {
-        dispatch({ type: "GET_EVENT_PHOTO_SUCCESS", id: eventId, photoURL: json.hits[0].webformatURL } );
-      }
-    }).catch(function(error) {
-      console.log("UH OH SHIT FUCKED UP: ", error);
-    });
-  }
-}
-
 export function rsvp(event, eventId, userId, rsvpStatus) {
   return dispatch => {
     if (!event.attendees) { event.attendees = []; }
