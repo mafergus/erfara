@@ -4,7 +4,7 @@ import autoBind from "react-autobind";
 import { connect } from 'react-redux';
 import { getEvents } from "../actions/eventActions";
 import { GridList } from 'material-ui/GridList';
-import { getUsers } from "../actions/userActions";
+import { getUsers } from "actions/userActions";
 import EventListItem from "./EventListItem";
 
 const styles = {
