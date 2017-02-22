@@ -1,4 +1,4 @@
-import firebase from '../actions/database';
+import firebase from 'actions/database';
 
 const PIXABAY_KEY = "4423887-ab96e540ffbe404d644032133";
 

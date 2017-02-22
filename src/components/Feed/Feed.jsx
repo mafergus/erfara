@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { faintBlack } from "material-ui/styles/colors";
 import TextField from "material-ui/TextField";
-import { addEventMessage } from "../../actions/eventActions";
-import store from "../../store/store";
-import FeedItem from "./FeedItem";
+import { addEventMessage } from "actions/eventActions";
+import store from "store/store";
+import FeedItem from "components/Feed/FeedItem";
 
 function mapStateToProps(state, props) {
   return {

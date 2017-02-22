@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
-import MessageList from "./MessageList";
-import MessageBar from "./MessageBar";
+import MessageList from "components/Messaging/MessageList";
+import MessageBar from "components/Messaging/MessageBar";
 import { orange700 } from "material-ui/styles/colors";
 
 export default class MessagesWindow extends React.Component {

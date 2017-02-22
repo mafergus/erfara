@@ -8,11 +8,11 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { darkWhite, lightWhite, grey900, orange500, orange700 } from 'material-ui/styles/colors';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import FullWidthSection from './FullWidthSection';
 import withWidth, { MEDIUM, LARGE } from 'material-ui/utils/withWidth';
-import AppBarContainer from "../containers/AppBarContainer";
-import CreateEventModal from "./Modals/CreateEventModal";
-import { getUnreadMessageCount } from "../utils/helpers";
+import FullWidthSection from "components/FullWidthSection";
+import AppBar from "components/AppBar";
+import CreateEventModal from "components/Modals/CreateEventModal";
+import { getUnreadMessageCount } from "utils/helpers";
 
 function mapStateToProps(state, props) {
   return {
@@ -196,7 +196,7 @@ class App extends React.Component {
     return (
       <div>
         <Title render={unreadMessages} />
-        <AppBarContainer />
+        <AppBar />
         {this.renderContent()}
         {this.renderFooter()}
         {this.renderFAB()}

@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
-import firebase from '../../actions/database';
+import firebase from 'actions/database';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { lightBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
-import { addUser } from "../../actions/userActions";
-import { addMessage } from "../../actions/messageActions";
-import { getPhoto, uploadFile } from "../../utils/Api";
-import store from "../../store/store";
+import { addUser } from "actions/userActions";
+import { addMessage } from "actions/messageActions";
+import { getPhoto, uploadFile } from "utils/Api";
+import store from "store/store";
 
 /**
  * A modal dialog can only be closed by selecting one of the actions.

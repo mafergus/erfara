@@ -3,8 +3,8 @@ import autoBind from "react-autobind";
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-import firebase from '../actions/database';
-import store from "../store/store";
+import firebase from 'actions/database';
+import store from "store/store";
 import { lightBlack } from 'material-ui/styles/colors';
 
 export default class LoggedInUserComponent extends React.Component {

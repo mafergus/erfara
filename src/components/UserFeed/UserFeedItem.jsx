@@ -2,8 +2,8 @@ import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { bindActionCreators } from "redux";
-import { getUser } from "../../actions/userActions";
 import { darkBlack } from "material-ui/styles/colors";
+import { getUser } from "actions/userActions";
 
 function mapStateToProps(state, props) {
   return {
