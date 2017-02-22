@@ -3,8 +3,7 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { bindActionCreators } from "redux";
 import { getUser } from "../../actions/userActions";
-import { darkBlack, lightBlack, minBlack } from "material-ui/styles/colors";
-import { formatDate } from "../../utils/dateTimeHelpers";
+import { darkBlack } from "material-ui/styles/colors";
 
 function mapStateToProps(state, props) {
   return {
@@ -51,9 +50,9 @@ export class UserFeedItem extends React.Component {
     //   </div>
     //   <hr/>
     // </div>;
-    <div>
-      <h2>{'feedback is here'}</h2>
-    </div>
+    return <div>
+      <h2 style={{ color: darkBlack }}>{'feedback is here'}</h2>
+    </div>;
   }
 }
 

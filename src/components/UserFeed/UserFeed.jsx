@@ -9,14 +9,7 @@ import UserFeedItem from "./UserFeedItem";
 
 function mapStateToProps(state, props) {
   return {
-    userFeed: state.userFeed,
-    authedUser: state.authedUser
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-
+    authedUser: state.authedUser,
   };
 }
 
@@ -24,8 +17,8 @@ export class UserFeed extends React.Component {
 
   static propTypes = {
     style: PropTypes.object,
-    //eventId: PropTypes.string,
     authedUser: PropTypes.object,
+    user: PropTypes.object,
   };
 
   constructor() {
@@ -74,7 +67,7 @@ export class UserFeed extends React.Component {
       borderBottom: `1px solid ${faintBlack}`,
     };
     return <div style={STYLE}>
-      <img src={this.props.authedUser.photo} style={{ height: "40px", width: "40px", margin: "10px", borderRadius: "50%" }} />
+      <img src={this.props.authedUser.photo} alt="You" style={{ height: "40px", width: "40px", margin: "10px", borderRadius: "50%" }} />
       <div style={{ flexGrow: "1", height: "100%", alignSelf: "center" }}>
         <TextField 
           hintText="Message"
@@ -87,13 +80,14 @@ export class UserFeed extends React.Component {
   }
 
   render() {
-    const { style, items } = this.props;
+    const { style } = this.props;
+    const feed = this.props.user.feed;
     console.log(this.props);
     return <div style={{ ...style, borderTop: `1px solid ${faintBlack}` }}>
-      {items && Object.entries(items).map(item => this.renderFeedItem(item[0], item[1]))}
+      {feed && Object.entries(feed).map(item => this.renderFeedItem(item[0], item[1]))}
       {this.renderMessageBar()}
     </div>;
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserFeed);
+export default connect(mapStateToProps)(UserFeed);
