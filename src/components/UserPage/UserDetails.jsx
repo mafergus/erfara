@@ -1,10 +1,7 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
 import { Tabs, Tab } from 'material-ui/Tabs';
-import UserFeed from "../UserFeed/UserFeed"
-
-function handleActive(tab) {
-}
+import UserFeed from "components/UserFeed/UserFeed"
 
 export default class UserDetails extends React.Component {
 
@@ -37,7 +34,6 @@ export default class UserDetails extends React.Component {
       <Tab
         label="About"
         data-route="/home"
-        onActive={handleActive}
       >
         <div>
           <h2>Tab Three</h2>

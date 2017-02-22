@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { darkBlack, lightBlack, minBlack } from "material-ui/styles/colors";
 import Badge from 'material-ui/Badge';
-import { getUser } from "../../actions/userActions";
-import { getErfaraDate } from "../../utils/dateTimeHelpers";
-import { getUnreadMessageCountForConversation } from "../../utils/helpers";
+import { getUser } from "actions/userActions";
+import { getErfaraDate } from "utils/dateTimeHelpers";
+import { getUnreadMessageCountForConversation } from "utils/helpers";
 
 function mapStateToProps(state, props) {
   return {

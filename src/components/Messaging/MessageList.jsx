@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import MessageListItem from "./MessageListItem";
+import MessageListItem from "components/Messaging/MessageListItem";
 
 function mapStateToProps(state, props) {
   return {

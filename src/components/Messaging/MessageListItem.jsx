@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
 import { minBlack, darkBlack, orange100 } from "material-ui/styles/colors";
-import { getErfaraDate } from "../../utils/dateTimeHelpers";
+import { getErfaraDate } from "utils/dateTimeHelpers";
 
 const ITEM_STYLE = {
   position: "relative",
