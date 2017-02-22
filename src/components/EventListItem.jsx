@@ -54,10 +54,10 @@ export class EventListItem extends React.Component {
       <GridTile
         key={eventUid}
         title={event.title}
-        subtitle={user && <div><img src={user.photo} alt="Creator image" style={{ width: "20px", height: "20px", borderRadius: "50%" }}/>{user.name}</div>}
+        subtitle={user && <div><img src={user.photo} alt="Creator" style={{ width: "20px", height: "20px", borderRadius: "50%" }}/>{user.name}</div>}
         actionIcon={<IconButton><span style={{ color: white, fontSize: "2em" }}>3</span><Face color="white" /></IconButton>}
       >
-        <img src={event.photo} alt="Event image" />
+        <img src={event.photo} alt="Event" />
       </GridTile>
      </Link>;
 	}

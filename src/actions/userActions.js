@@ -43,3 +43,20 @@ export function addUser(user) {
     });
   }
 }
+
+export function addUserFeed(userId, feedback, timestamp) {
+  return dispatch => {
+    const url = `/users/${userId}/feed/`;
+    const feedData = {
+      feedback,
+      userId,
+      timestamp,
+    };
+    const newUserFeedbackKey = firebase.database().ref().child(url).push().key;
+
+    var updates = {};
+    updates[url + newUserFeedbackKey] = feedData;
+
+    return firebase.database().ref().update(updates);
+  }
+}

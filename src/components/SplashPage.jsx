@@ -47,7 +47,7 @@ export class SplashPage extends React.Component {
     }
   }
 
-  renderHero  () {
+  renderHero() {
     const styles = {
       root: {
         backgroundColor: cyan500,
