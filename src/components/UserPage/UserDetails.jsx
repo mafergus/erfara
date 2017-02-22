@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
 import { Tabs, Tab } from 'material-ui/Tabs';
-import UserFeed from "../UserFeed/UserFeed"
+import UserFeed from "components/UserFeed/UserFeed"
 
 function handleActive(tab) {
 }

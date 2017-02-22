@@ -1,8 +1,8 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
-import AttendeeListItem from "./EventPage/AttendeeListItem";
 import { faintBlack } from "material-ui/styles/colors";
-import PeopleList from "./PeopleList";
+import PeopleList from "components/PeopleList";
+import AttendeeListItem from "components/EventPage/AttendeeListItem";
 
 export default class UserList extends React.Component {
 

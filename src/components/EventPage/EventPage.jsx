@@ -1,14 +1,14 @@
 import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import FullWidthSection from '../FullWidthSection';
-import EventDescription from "./EventDescription";
-import EventDetails from "./EventDetails";
-import UserList from "../UserList";
-import { getEvent, rsvp } from "../../actions/eventActions";
-import EventHero from "./EventHero";
-import Feed from "../Feed/Feed";
-import store from "../../store/store";
+import FullWidthSection from 'components/FullWidthSection';
+import EventDescription from "components/EventPage/EventDescription";
+import EventDetails from "components/EventPage/EventDetails";
+import UserList from "components/UserList";
+import { getEvent, rsvp } from "actions/eventActions";
+import EventHero from "components/EventPage/EventHero";
+import Feed from "components/Feed/Feed";
+import store from "store/store";
 
 const ATTENDEES_LIST = {
   position: "absolute",

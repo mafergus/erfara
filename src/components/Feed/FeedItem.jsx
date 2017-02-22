@@ -2,9 +2,9 @@ import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { bindActionCreators } from "redux";
-import { getUser } from "../../actions/userActions";
 import { darkBlack, lightBlack, minBlack } from "material-ui/styles/colors";
-import { formatDate } from "../../utils/dateTimeHelpers";
+import { getUser } from "actions/userActions";
+import { formatDate } from "utils/dateTimeHelpers";
 
 function mapStateToProps(state, props) {
   return {

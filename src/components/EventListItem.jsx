@@ -7,7 +7,7 @@ import { GridTile } from 'material-ui/GridList';
 import Face from 'material-ui/svg-icons/action/face';
 import IconButton from 'material-ui/IconButton';
 import { white } from "material-ui/styles/colors";
-import { getUser } from "../actions/userActions";
+import { getUser } from "actions/userActions";
 
 function mapStateToProps(state, props) {
   const event = state.events.get(props.eventUid);
