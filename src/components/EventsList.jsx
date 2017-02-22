@@ -2,10 +2,10 @@ import React from "react";
 import ImmutablePropTypes from "react-immutable-proptypes";
 import autoBind from "react-autobind";
 import { connect } from 'react-redux';
-import { getEvents } from "../actions/eventActions";
+import { getEvents } from "actions/eventActions";
 import { GridList } from 'material-ui/GridList';
-import { getUsers } from "../actions/userActions";
-import EventListItem from "./EventListItem";
+import { getUsers } from "actions/userActions";
+import EventListItem from "components/EventListItem";
 
 const styles = {
   root: {

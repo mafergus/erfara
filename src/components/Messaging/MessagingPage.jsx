@@ -1,11 +1,11 @@
 import React from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
-import ConversationList from "./ConversationList";
-import MessagesWindow from "./MessagesWindow";
-import store from "../../store/store";
+import ConversationList from "components/Messaging/ConversationList";
+import MessagesWindow from "components/Messaging/MessagesWindow";
+import store from "store/store";
 import { bindActionCreators } from "redux";
-import { addMessage, readMessage } from "../../actions/messageActions";
+import { addMessage, readMessage } from "actions/messageActions";
 import Resizable from "react-resizable-box";
 
 function mapStateToProps(state, props) {

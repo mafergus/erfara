@@ -4,11 +4,11 @@ import {
   IndexRoute,
 } from 'react-router';
 
-import App from './components/App';
-import SplashPage from './components/SplashPage';
-import EventPage from "./components/EventPage/EventPage";
-import MessagingPage from "./components/Messaging/MessagingPage";
-import UserPage from "./components/UserPage/UserPage";
+import App from 'components/App';
+import SplashPage from 'components/SplashPage';
+import EventPage from "components/EventPage/EventPage";
+import MessagingPage from "components/Messaging/MessagingPage";
+import UserPage from "components/UserPage/UserPage";
 
 /**
  * Routes: https://github.com/reactjs/react-router/blob/master/docs/API.md#route

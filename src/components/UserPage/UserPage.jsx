@@ -2,11 +2,11 @@ import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import RaisedButton from 'material-ui/RaisedButton';
-import { getUser } from "../../actions/userActions";
-import FullWidthSection from '../FullWidthSection';
-import UserList from "../UserList";
-import Hero from "../Hero";
-import UserDetails from "./UserDetails";
+import { getUser } from "actions/userActions";
+import FullWidthSection from 'components/FullWidthSection';
+import UserList from "components/UserList";
+import Hero from "components/Hero";
+import UserDetails from "components/UserPage/UserDetails";
 
 const H3STYLE = {
   display: "inline-block",

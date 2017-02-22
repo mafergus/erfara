@@ -1,6 +1,6 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
-import Hero from "../Hero";
+import Hero from "components/Hero";
 import RaisedButton from 'material-ui/RaisedButton';
 
 const H3STYLE = {

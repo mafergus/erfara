@@ -1,8 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import HomeFeature from './HomeFeature';
-import FullWidthSection from './FullWidthSection';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import Share from 'material-ui/svg-icons/notification/wc';
@@ -14,7 +12,9 @@ import spacing from 'material-ui/styles/spacing';
 import typography from 'material-ui/styles/typography';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import { cyan500, darkWhite, orange50, lightBlack, darkBlack } from 'material-ui/styles/colors';
-import EventsList from "./EventsList";
+import HomeFeature from 'components/HomeFeature';
+import FullWidthSection from 'components/FullWidthSection';
+import EventsList from "components/EventsList";
 
 function mapStateToProps(state, props) {
   return {

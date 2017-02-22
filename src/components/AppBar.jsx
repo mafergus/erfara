@@ -2,16 +2,16 @@ import React, { PropTypes } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import AppBar from 'material-ui/AppBar';
+import MaterialUIAppBar from 'material-ui/AppBar';
 import Badge from 'material-ui/Badge';
 import IconButton from 'material-ui/IconButton';
 import MailIcon from 'material-ui/svg-icons/content/mail';
 import { white, lightBlack, orange500, orange200 } from 'material-ui/styles/colors';
-import ErfaraIcon from '../components/ErfaraIcon';
-import AuthModal from '../components/auth/AuthModal';
-import LoggedInUserComponent from "../components/LoggedInUserComponent";
-import { addUser } from "../actions/userActions";
-import { getUnreadMessageCount } from "../utils/helpers";
+import ErfaraIcon from 'components/ErfaraIcon';
+import AuthModal from 'components/auth/AuthModal';
+import LoggedInUserComponent from "components/LoggedInUserComponent";
+import { addUser } from "actions/userActions";
+import { getUnreadMessageCount } from "utils/helpers";
 
 const STYLE = {
   position: 'fixed',
@@ -36,7 +36,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ addUser }, dispatch);
 }
 
-export class AppBarContainer extends React.Component {
+export class AppBar extends React.Component {
 
   static contextTypes = {
     router: PropTypes.object.isRequired
@@ -101,7 +101,7 @@ export class AppBarContainer extends React.Component {
   }
 
   render() {
-    return <AppBar
+    return <MaterialUIAppBar
       className="appBar"
       title="Erfara"
       titleStyle={{ fontFamily: "LobsterTwo-Regular", color: orange500 }}
@@ -115,4 +115,4 @@ export class AppBarContainer extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppBarContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(AppBar);

@@ -7,9 +7,9 @@ import autoBind from 'react-autobind';
 import TextField from "material-ui/TextField";
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
-import store from "../../store/store";
-import { addEvent } from "../../actions/eventActions";
-import { getPhoto, uploadFile } from "../../utils/Api";
+import store from "store/store";
+import { addEvent } from "actions/eventActions";
+import { getPhoto, uploadFile } from "utils/Api";
 
 const PLACEHOLDER_PHOTO = "http://files.parsetfss.com/a5e80e30-a275-49f2-989e-e218e12017db/tfss-02ed6157-7aa6-4ffa-b530-16f711fb8f59-muir-woods.jpg";
 
