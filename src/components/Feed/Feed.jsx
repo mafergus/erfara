@@ -34,17 +34,6 @@ export class Feed extends React.Component {
     this.state = { message: "" };
   }
 
-  componentWillMount() {
-    // const { eventId } = this.props;
-    // firebase.database().ref(`/events/${eventId}/feed/`).on('value', function(snapshot) {
-    //   const feed = snapshot.val();
-    //   console.log("Got event feed feed: ", feed);
-    //   if (feed) {
-    //     store.dispatch({ type: "GET_EVENT_FEED_SUCCESS", eventId, feed });
-    //   }
-    // });
-  }
-
   onSendClicked() {
     // this.props.onSend(this.state.message);
     store.dispatch(addEventMessage(this.props.eventId, this.props.authedUser.uid, this.state.message, new Date()));
