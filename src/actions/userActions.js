@@ -46,7 +46,7 @@ export function addUser(user) {
 
 export function addUserFeed(userId, feedback, timestamp) {
   return dispatch => {
-    const url = `/users/feed/`;
+    const url = `/users/${userId}/feed/`;
     const feedData = {
       feedback,
       userId,
