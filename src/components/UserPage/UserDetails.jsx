@@ -1,20 +1,16 @@
-import React from "react";
+import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
 import { Tabs, Tab } from 'material-ui/Tabs';
-import { lightBlack } from "material-ui/styles/colors";
 import UserFeed from "../UserFeed/UserFeed"
 
-const TABSTYLE = {
-  display: "inline-block",
-  marginRight: "35px",
-  color: lightBlack,
-};
-
 function handleActive(tab) {
-  alert(`A tab with this route property ${tab.props['data-route']} was activated.`);
 }
 
 export default class UserDetails extends React.Component {
+
+  static PropTypes = {
+    user: PropTypes.object.isRequired,
+  }
   
   constructor() {
     super();
@@ -26,18 +22,9 @@ export default class UserDetails extends React.Component {
   }
 
   renderTabs() {
-    const tabContent = <div style={{ paddingLeft: "20px", paddingTop: "20px" }}>
-      <a style={TABSTYLE} className="userTabs">Feed</a>
-      <a style={TABSTYLE} className="userTabs">Skill Postings</a>
-      <a style={TABSTYLE} className="userTabs">About</a>
-    </div>;
-    return tabContent;
-  }
-
-  renderNewTabs() {
     return <Tabs>
       <Tab label="Feed" >
-        <UserFeed style={{ width: "100%", backgroundColor: "white" }} />
+        <UserFeed style={{ width: "100%", backgroundColor: "white" }} user={this.props.user} />
       </Tab>
       <Tab label="Skill Postings" >
         <div>
@@ -64,7 +51,7 @@ export default class UserDetails extends React.Component {
 
   render() {
     return <div style={{ width: "100%", height: "400px", backgroundColor: "white" }}>
-      {this.renderNewTabs()}
+      {this.renderTabs()}
     </div>
   }
 }
