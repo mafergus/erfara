@@ -50,7 +50,6 @@ export class UserPage extends React.Component {
 
   static propTypes = {
     getUser: PropTypes.func.isRequired,
-    isFriend: PropTypes.bool.isRequired,
     user: PropTypes.object,
   };
 
@@ -82,7 +81,7 @@ export class UserPage extends React.Component {
           </div>
           <RaisedButton label="Add Friend" style={{ position: "absolute", right: "15px", bottom: "15px" }}/>
         </Hero>
-        <UserDetails />
+        <UserDetails user={user}/>
       </div>
     </FullWidthSection>;
   }

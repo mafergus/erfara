@@ -5,6 +5,7 @@ import { authedUserReducer } from "./authedUserReducer";
 import { conversationsReducer } from "./conversationsReducer";
 import { usersReducer } from "./usersReducer";
 import { feedReducer } from "./feedReducer";
+import { userFeedReducer} from "./userFeedReducer";
 
 const rootReducer = combineReducers({
   authedUser: authedUserReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   feed: feedReducer,
   messages: messagesReducer,
   users: usersReducer,
+  userFeed: userFeedReducer
 });
 
 export default rootReducer;
