@@ -127,21 +127,6 @@
   }
 }
 
-.eventHeroImage {
-  height: 250px;
-  background-image: 
-    linear-gradient(
-      rgba(0, 0, 0, 0.2),
-      rgba(0, 0, 0, 0.5)
-    ),
-    url("../images/event image.jpeg");
-  background-size: contain;
-  background-position: 50% 40%;
-  /*background-blend-mode: multiply;*/
-  /*background-color: #F39C11;*/
-  object-fit: contain;
-}
-
 .googleSignUpButton {
   border: 0;
   border-radius: 5%;
