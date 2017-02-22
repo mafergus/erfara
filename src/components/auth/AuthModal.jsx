@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import firebase from 'actions/database';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 import { lightBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
 import { addUser } from "actions/userActions";
@@ -16,15 +15,13 @@ export default class AuthModal extends React.Component {
 
   static propTypes = {
     title: PropTypes.string.isRequired,
+    isOpen: PropTypes.bool.isRequired,
+    handleClose: PropTypes.func.isRequired,
   };
 
   constructor() {
     super();
     autoBind(this);
-
-    this.state = {
-      open: false,
-    };
   }
 
   onError(error, type) {
@@ -57,7 +54,7 @@ export default class AuthModal extends React.Component {
   }
 
   handleSignUpFacebook() {
-    this.handleClose();
+    this.props.handleClose();
     const provider = new firebase.auth.FacebookAuthProvider();
     firebase.auth().signInWithPopup(provider)
       .then(this.onSuccess)
@@ -65,47 +62,33 @@ export default class AuthModal extends React.Component {
   }
 
   handleSignUpGoogle() {
-    this.handleClose();
+    this.props.handleClose();
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider)
       .then(this.onSuccess)
       .catch(this.onError.bind(null, "Google"));
   }
 
-  handleOpen() {
-    this.setState({open: true});
-  }
-
-  handleClose() {
-    this.setState({open: false});
-  }
-
   render() {
-    const { title } = this.props;
+    const { title, isOpen, handleClose } = this.props;
 
     return (
-      <span>
-        <FlatButton 
-          label={title}
-          primary={true}
-          onTouchTap={this.handleOpen} />
-        <Dialog
-          contentStyle={{textAlign: "center", width: "40%", marginBottom: "300px"}}
-          title={title}
-          titleStyle={{ fontSize: "1.1em", textAlign: "left", padding: "12px 0px 12px 25px", color: lightBlack }}
-          modal={false}
-          onRequestClose={this.handleClose}
-          open={this.state.open}>
-          <button
-            style={{margin: "3em 8em 3em 0em", verticalAlign: "middle"}}
-            className="googleSignUpButton"
-            onClick={this.handleSignUpGoogle}></button>
-          <button
-            style={{verticalAlign: "middle"}}
-            className="facebookSignUpButton"
-            onClick={this.handleSignUpFacebook}></button>
-        </Dialog>
-      </span>
+      <Dialog
+        contentStyle={{textAlign: "center", width: "40%", marginBottom: "300px"}}
+        title={title}
+        titleStyle={{ fontSize: "1.1em", textAlign: "left", padding: "12px 0px 12px 25px", color: lightBlack }}
+        modal={false}
+        onRequestClose={handleClose}
+        open={isOpen}>
+        <button
+          style={{margin: "3em 8em 3em 0em", verticalAlign: "middle"}}
+          className="googleSignUpButton"
+          onClick={this.handleSignUpGoogle}></button>
+        <button
+          style={{verticalAlign: "middle"}}
+          className="facebookSignUpButton"
+          onClick={this.handleSignUpFacebook}></button>
+      </Dialog>
     );
   }
 }

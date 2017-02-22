@@ -5,6 +5,7 @@ import autoBind from "react-autobind";
 import MaterialUIAppBar from 'material-ui/AppBar';
 import Badge from 'material-ui/Badge';
 import IconButton from 'material-ui/IconButton';
+import FlatButton from 'material-ui/FlatButton';
 import MailIcon from 'material-ui/svg-icons/content/mail';
 import { white, lightBlack, orange500, orange200 } from 'material-ui/styles/colors';
 import ErfaraIcon from 'components/ErfaraIcon';
@@ -45,6 +46,11 @@ export class AppBar extends React.Component {
   constructor() {
     super();
     autoBind(this);
+
+    this.state = {
+      signUpModalOpen: false,
+      logInModalOpen: false,
+    }
   }
 
   componentWillMount() {
@@ -67,8 +73,24 @@ export class AppBar extends React.Component {
     return Object.keys(user).length > 0 ?
       this.renderLoggedInUser(user) : 
       <div style={{ marginTop: "6px" }}>
-        <AuthModal title="Log In" />
-        <AuthModal title="Sign Up" />
+        <FlatButton 
+          label="Sign Up"
+          primary={true}
+          onTouchTap={() => this.setState({ signUpModalOpen: true })} />
+        <FlatButton 
+          label="Log In"
+          primary={true}
+          onTouchTap={() => this.setState({ logInModalOpen: true })} />
+        <AuthModal 
+          title="Sign Up"
+          isOpen={this.state.signUpModalOpen}
+          handleClose={() => this.setState({ signUpModalOpen: false })} 
+        />
+        <AuthModal
+          title="Log In"
+          isOpen={this.state.logInModalOpen}
+          handleClose={() => this.setState({ logInModalOpen: false })}
+        />
       </div>;
   }
 

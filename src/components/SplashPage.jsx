@@ -12,6 +12,7 @@ import spacing from 'material-ui/styles/spacing';
 import typography from 'material-ui/styles/typography';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import { cyan500, darkWhite, orange50, lightBlack, darkBlack } from 'material-ui/styles/colors';
+import AuthModal from 'components/auth/AuthModal';
 import HomeFeature from 'components/HomeFeature';
 import FullWidthSection from 'components/FullWidthSection';
 import EventsList from "components/EventsList";
@@ -121,6 +122,11 @@ export class SplashPage extends React.Component {
             label="Join"
             onTouchTap={() => this.setState({ isJoinOpen: true })}
             buttonStyle={{width: '10em'}}
+          />
+          <AuthModal
+            title="Sign Up"
+            isOpen={this.state.isJoinOpen}
+            handleClose={() => this.setState({ isJoinOpen: false })}
           />
         </div>
       </FullWidthSection>
