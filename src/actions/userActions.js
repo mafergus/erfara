@@ -6,7 +6,9 @@ export function getUser(uuid) {
   return dispatch => {
     return firebase.database().ref('/users/' + uuid).once('value', snap => {
       const user = snap.val();
-      dispatch({type: "GET_USER_SUCCESS", user});
+      if (user) {
+        dispatch({type: "GET_USER_SUCCESS", user});
+      }
     })
     .catch((error) => {
       console.log(error);
@@ -44,12 +46,12 @@ export function addUser(user) {
   }
 }
 
-export function addUserFeed(userId, feedback, timestamp) {
+export function addUserFeedback(senderId, recipientId, feedback, timestamp) {
   return dispatch => {
-    const url = `/users/${userId}/feed/`;
+    const url = `/users/${recipientId}/feed/`;
     const feedData = {
       feedback,
-      userId,
+      userId: senderId,
       timestamp,
     };
     const newUserFeedbackKey = firebase.database().ref().child(url).push().key;

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { faintBlack } from "material-ui/styles/colors";
 import TextField from "material-ui/TextField";
-import { addUserFeed } from "actions/userActions";
+import { addUserFeedback } from "actions/userActions";
 import store from "store/store";
 import UserFeedItem from "components/UserFeed/UserFeedItem";
 
@@ -30,7 +30,7 @@ export class UserFeed extends React.Component {
   onSendClicked() {
     // this.props.onSend(this.state.feedback);
     console.log(this.props);
-    store.dispatch(addUserFeed(this.props.user.uid, this.state.feedback, new Date()));
+    store.dispatch(addUserFeedback(this.props.authedUser.uid, this.props.user.uid, this.state.feedback, new Date()));
     this.setState({ feedback: "" });
   }
 
