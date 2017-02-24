@@ -4,7 +4,6 @@ export function addMessage(recipientId, senderId, message, date) {
   return dispatch => {
     var messageData = {
       message,
-      isRead: false,
       date,
       from: senderId,
     };

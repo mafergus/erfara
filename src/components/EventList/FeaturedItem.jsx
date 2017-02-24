@@ -21,17 +21,17 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ getUser }, dispatch);
 }
 
-export class EventListItem extends React.Component {
+export class FeaturedItem extends React.Component {
 
   static PropTypes = {
     event: PropTypes.object.isRequired,
     eventUid: PropTypes.string.isRequired,
   };
 
-	constructor() {
-		super();
-		autoBind(this);
-	}
+  constructor() {
+    super();
+    autoBind(this);
+  }
 
   componentWillMount() {
     const { event, getUser } = this.props;
@@ -40,19 +40,12 @@ export class EventListItem extends React.Component {
     }
   }
 
-  // render() {
-  //   const { event, eventUid, user } = this.props;
-  //   return <Link to={`/event/${eventUid}`}>
-  //   <div style={{ height: 200, width: 350, backgroundColor: "green" }}>
-  //   </div>
-  //   </Link>;
-  // }
-
-	render() {
+  render() {
     const { event, eventUid, user } = this.props;
-		return <Link to={`/event/${eventUid}`}>
+    return <Link to={`/event/${eventUid}`}>
       <GridTile
         key={eventUid}
+        style={{ width: 720, height: 250 }}
         title={event.title}
         subtitle={user && <div><img src={user.photo} alt="Creator" style={{ width: "20px", height: "20px", borderRadius: "50%" }}/>{user.name}</div>}
         actionIcon={<IconButton><span style={{ color: white, fontSize: "2em" }}>3</span><Face color="white" /></IconButton>}
@@ -60,7 +53,7 @@ export class EventListItem extends React.Component {
         <img src={event.photo} alt="Event" />
       </GridTile>
      </Link>;
-	}
+  }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventListItem);
+export default connect(mapStateToProps, mapDispatchToProps)(FeaturedItem);
