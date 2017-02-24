@@ -29,7 +29,8 @@ export class UserFeed extends React.Component {
 
   onSendClicked() {
     // this.props.onSend(this.state.feedback);
-    store.dispatch(addUserFeed(this.props.authedUser.uid, this.state.feedback, new Date()));
+    console.log(this.props);
+    store.dispatch(addUserFeed(this.props.user.uid, this.state.feedback, new Date()));
     this.setState({ feedback: "" });
   }
 
@@ -71,7 +72,6 @@ export class UserFeed extends React.Component {
   render() {
     const { style } = this.props;
     const feed = this.props.user.feed;
-    console.log(this.props);
     return <div style={{ ...style, borderTop: `1px solid ${faintBlack}` }}>
       {feed && Object.entries(feed).map(item => this.renderFeedItem(item[0], item[1]))}
       {this.renderMessageBar()}
