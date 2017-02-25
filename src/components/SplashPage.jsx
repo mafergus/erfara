@@ -204,7 +204,7 @@ export class SplashPage extends React.Component {
       <div style={{ width: "43%", height: "100%", display: "inline-block" }}>
         <div style={{ height: "80%", width: "100%", padding: 80 }} className="heroImage">
           <div>
-            <span style={{ fontSize: "2em", color: "#424242" }}>Share knowledge,<br/>build friendships.</span>
+            <span style={{ fontSize: "2.6em", fontWeight: "100", color: "#424242" }}>Share knowledge,<br/>build friendships.</span>
           </div>
         </div>
         <div style={{ height: "20%", width: "100%", backgroundColor: orange50, overflow: "hidden" }}>

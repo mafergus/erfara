@@ -2,6 +2,7 @@ import React, { PropTypes } from "react";
 import ImmutablePropTypes from "react-immutable-proptypes";
 import autoBind from "react-autobind";
 import { connect } from 'react-redux';
+import muiThemeable from 'material-ui/styles/muiThemeable';
 import { getEvents } from "actions/eventActions";
 import { getUsers } from "actions/userActions";
 import EventListItem from "components/EventList/EventListItem";
@@ -31,6 +32,7 @@ export class EventsList extends React.Component {
     cols: PropTypes.number,
     colPadding: PropTypes.number,
     rowPadding: PropTypes.number,
+    muiTheme: PropTypes.object,
   };
 
   static defaultProps = {
@@ -51,7 +53,7 @@ export class EventsList extends React.Component {
   }
 
   render() {
-    const { cols, events, style, hasFeatured, colPadding, rowPadding } = this.props;
+    const { cols, events, style, hasFeatured, colPadding, rowPadding, muiTheme } = this.props;
     const STYLE = {
       ...style,
       width: "720px",
@@ -66,7 +68,7 @@ export class EventsList extends React.Component {
     events.forEach((item, key) => {
       if (hasFeatured && !processedFeatured) {
         const featured = [];
-        featured.push(<FeaturedItem key={key} eventUid={key} event={item} />);
+        featured.push(<EventListItem muiTheme={muiTheme} key={key} eventUid={key} event={item} isFeatured/>);
         rows.push(<Row key={rows.length} rowPadding={rowPadding}>{featured}</Row>);
         processedFeatured = true;
         return;
@@ -75,11 +77,11 @@ export class EventsList extends React.Component {
         rows.push(<Row key={rows.length}>{items}</Row>);
         items = [];
       }
-      items.push(<EventListItem eventUid={key} event={item} />);
+      items.push(<EventListItem muiTheme={muiTheme} key={key} eventUid={key} event={item} />);
     });
     if (items.length !== 0) { rows.push(<Row key={rows.length} rowPadding={rowPadding}>{items}</Row>) }
     return <div style={STYLE}>{rows}</div>;
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventsList);
+export default muiThemeable()(connect(mapStateToProps, mapDispatchToProps)(EventsList));
