@@ -6,15 +6,16 @@ import { Link } from "react-router";
 import { GridTile } from 'material-ui/GridList';
 import Face from 'material-ui/svg-icons/action/face';
 import IconButton from 'material-ui/IconButton';
-import { white } from "material-ui/styles/colors";
+import { white, lightBlack } from "material-ui/styles/colors";
 import { getUser } from "actions/userActions";
-import { erfaraBlack } from "utils/colors";
+import { darkGray } from "utils/colors";
 import { getShortMonth } from "utils/dateTimeHelpers";
 
 function mapStateToProps(state, props) {
   const event = state.events.get(props.eventUid);
   return {
     event,
+    attendees: event && Object.keys(event.attendees).map(userId => state.users.get(userId)),
     user: event && state.users.get(event.userId),
   };
 }
@@ -28,6 +29,11 @@ export class EventListItem extends React.Component {
   static PropTypes = {
     event: PropTypes.object.isRequired,
     eventUid: PropTypes.string.isRequired,
+    isFeatured: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    isFeatured: false,
   };
 
   constructor() {
@@ -42,44 +48,58 @@ export class EventListItem extends React.Component {
     }
   }
 
-  render() {
-    const { event, eventUid, user } = this.props;
-    const timestamp = new Date(event.date);
-    return <Link to={`/event/${eventUid}`} style={{ textDecoration: "none" }}>
-      <div style={{ width: 333, height: 250 }} className="shadow border">
-        <img src={event.photo} alt="Event" style={{ width: "100%", height: 181, objectFit: "cover" }} />
-        <div style={{ width: "100%", height: 70, marginTop: -5, position: "relative", display: "flex" }}>
-          <div style={{ height: "100%", width: 70, display: "inline-block", borderRight: "1px solid rgba(0, 0, 0, 0.06)" }}>
-            <div style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div style={{ marginTop: "auto", marginBottom: "auto" }}>
-                <p style={{ fontSize: "0.8em", fontWeight: "300", color: erfaraBlack }}>{getShortMonth(timestamp)}</p>
-                <p style={{ fontSize: "1.1em", fontWeight: "200", color: erfaraBlack }}>{timestamp.getDate()}</p>
-              </div>
-            </div>
-          </div>
-          <div style={{ height: "100%", flexGrow: "1", display: "flex", alignItems: "center", paddingLeft: "17px" }}>
-            <p style={{ color: "#424242", textAlign: "left" }}>
-              <span style={{ fontSize: "1em" }}>{event.title}</span>
-              <br/>
-              <span style={{ fontSize: "0.8em" }}>Fri 8PM &nbsp; &#8226; &nbsp; {event.locationString}</span>
-            </p>
-          </div>
-          <div>
-            <div style={{ height: 40, width: 40, borderRadius: "50%", backgroundColor: "gray" }}/>
-          </div>
+  renderAttendees(count) {
+    const { event, isFeatured, attendees } = this.props;
+    if (count > 1) {
+      if (isFeatured && attendees) {
+        return attendees.map(user => <img style={{ height: 26, width: 26, borderRadius: "50%", objectFit: "cover" }} src={user.photo}/>);
+      } else {
+        return <div style={{ height: 29, width: 29, borderRadius: "50%", backgroundColor: "rgba(0, 0, 0, 0.12)", display: "inline-block", marginLeft: 8 }}>
+          <span style={{ color: lightBlack, verticalAlign: "middle", fontSize: "0.8em" }}>{`+${count-1}`}</span>
+        </div>;
+      }
+    }
+  }
+
+  renderDate(timestamp) {
+    const { muiTheme } = this.props;
+    return <div style={{ height: "100%", width: 70, display: "inline-block", borderRight: "1px solid rgba(0, 0, 0, 0.06)" }}>
+      <div style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ marginTop: "auto", marginBottom: "auto" }}>
+          <p style={{ fontSize: "0.8em", fontWeight: "300", color: muiTheme.palette.accent1Color }}>{getShortMonth(timestamp)}</p>
+          <p style={{ fontSize: "1.1em", fontWeight: "200", color: muiTheme.palette.accent1Color }}>{timestamp.getDate()}</p>
         </div>
       </div>
-    </Link>;
+    </div>;
+  }
 
-      <GridTile
-        key={eventUid}
-        style={{ width: 333, height: 250 }}
-        title={event.title}
-        subtitle={user && <div><img src={user.photo} alt="Creator" style={{ width: "20px", height: "20px", borderRadius: "50%" }}/>{user.name}</div>}
-        actionIcon={<IconButton><span style={{ color: white, fontSize: "2em" }}>3</span><Face color="white" /></IconButton>}
-      >
-        
-      </GridTile>
+  renderEventDetails() {
+    const { event, user } = this.props;
+    const timestamp = new Date(event.date);
+    return <div style={{ width: "100%", height: 70, marginTop: -5, position: "relative", display: "flex", alignItems: "center", backgroundColor: "white" }}>
+      {this.renderDate(timestamp)}
+      <div style={{ height: "100%", flexGrow: "1", display: "flex", alignItems: "center", paddingLeft: 13 }}>
+        <p style={{ color: "#424242", textAlign: "left" }}>
+          <span style={{ fontSize: "1em" }}>{event.title}</span>
+          <br/>
+          <span style={{ fontSize: "0.8em" }}>Fri 8PM &nbsp; &#8226; &nbsp; {event.locationString}</span>
+        </p>
+      </div>
+      <div style={{ paddingRight: 15, display: "flex", alignItems: "center" }}>
+        <img style={{ height: 26, width: 26, borderRadius: "50%", objectFit: "cover" }} src={user.photo}/>
+        {this.renderAttendees(Object.keys(event.attendees).length)}
+      </div>
+    </div>;
+  }
+
+  render() {
+    const { event, eventUid, muiTheme, isFeatured } = this.props;
+    return <Link to={`/event/${eventUid}`} style={{ textDecoration: "none" }}>
+      <div style={{ width: isFeatured ? 720 : 333, height: 250 }} className="shadow border">
+        <img src={event.photo} alt="Event" style={{ width: "100%", height: 181, objectFit: "cover" }} />
+        {this.renderEventDetails()}
+      </div>
+    </Link>;
   }
 }
 

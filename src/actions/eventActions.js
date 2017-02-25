@@ -66,14 +66,11 @@ export function addEventMessage(eventId, userId, message, timestamp) {
 
 export function rsvp(event, eventId, userId, rsvpStatus) {
   return dispatch => {
-    if (!event.attendees) { event.attendees = []; }
-    if (rsvpStatus && !event.attendees.includes(userId)) {
-      event.attendees.push(userId);
+    if (!event.attendees) { event.attendees = {}; }
+    if (rsvpStatus && !Object.keys(event.attendees).includes(userId)) {
+      event.attendees[userId] = true;
     } else {
-      const index = event.attendees.indexOf(userId);
-      if (index > -1) {
-        event.attendees.splice(index, 1);
-      }
+      delete event.attendees[userId];
     }
 
     var updates = {};
