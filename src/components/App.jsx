@@ -198,7 +198,6 @@ class App extends React.Component {
         <Title render={unreadMessages} />
         <AppBar />
         {this.renderContent()}
-        {this.renderFooter()}
         {this.renderFAB()}
         <CreateEventModal isOpen={this.state.eventModalOpen} onRequestClose={ () => this.setState({ eventModalOpen: false }) }/>
       </div>

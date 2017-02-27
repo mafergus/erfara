@@ -6,16 +6,14 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Share from 'material-ui/svg-icons/notification/wc';
 import Learn from 'material-ui/svg-icons/social/sentiment-very-satisfied';
 import Experience from 'material-ui/svg-icons/image/brightness-7';
-import FlatButton from "material-ui/FlatButton";
 import withWidth, {LARGE} from 'material-ui/utils/withWidth';
-import spacing from 'material-ui/styles/spacing';
 import typography from 'material-ui/styles/typography';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import { cyan500, darkWhite, orange50, lightBlack, darkBlack } from 'material-ui/styles/colors';
 import AuthModal from 'components/auth/AuthModal';
 import HomeFeature from 'components/HomeFeature';
 import FullWidthSection from 'components/FullWidthSection';
-import EventsList from "components/EventsList";
+import EventsList from "components/EventList/EventList";
 
 function mapStateToProps(state, props) {
   return {
@@ -178,11 +176,10 @@ export class SplashPage extends React.Component {
     </Dialog>
   }
 
-  renderDescriptionItem(image, title, text) {
-    return <div style={{ display: "inline-block", margin: "0px 50px", verticalAlign: "text-top" }}>
+  renderDescriptionItem(image, text) {
+    return <div style={{ display: "inline-block", margin: "0px 20px", verticalAlign: "text-top" }}>
       <div style={{ textAlign: "center" }}>{image}</div>
-      <h2 style={{ textAlign: "center", color: darkBlack, fontWeight: "300" }}>{title}</h2>
-      <h4 style={{ width: "200px", textAlign: "center", fontWeight: "200", color: darkBlack }}>{text}</h4>
+      <h4 style={{ width: "200px", textAlign: "center", fontWeight: "200", fontSize: "0.8em", color: darkBlack }}>{text}</h4>
     </div>;
   }
 
@@ -192,36 +189,57 @@ export class SplashPage extends React.Component {
       height: "36px",
       width: "36px",
     }
-    return <div style={{ height: "300px", backgroundColor: orange50, display: "flex", alignItems: "center", justifyContent: "center" }}>
-      {this.renderDescriptionItem(<Learn style={style} />, "Learn", "Learn new, unique skills and talents from thousands of passionate community members")}
-      {this.renderDescriptionItem(<Share style={style} />, "Share", "Share a unique skill or ability with the community")}
-      {this.renderDescriptionItem(<Experience style={style} />, "Connect", "Build amazing friendships with people in your community")}
+    return <div style={{ width: "100%", backgroundColor: orange50, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      {this.renderDescriptionItem(<Learn style={style} />, "Learn interesting skills from thousands of passionate individuals")}
+      {this.renderDescriptionItem(<Share style={style} />, "Share a unique skill or ability with others")}
+      {this.renderDescriptionItem(<Experience style={style} />, "Build amazing friendships with people in your community")}
     </div>
   }
 
   render() {
-    const style = {
-      paddingTop: spacing.desktopKeylineIncrement,
-    };
     const { authedUser } = this.props;
     const isAuthed = authedUser && Object.keys(authedUser).length > 0;
-    const list = this.state.showEvents ? <EventsList /> : this.renderFeatures();
 
-    return (
-      <div style={style}>
-        {this.renderJoinModal()}
-        {!isAuthed && this.renderHero()}
-        <div style={{ float: "right", marginTop: "1em", marginRight: "1em" }}>
-          <FlatButton label="Events" style={{ marginRight: "1em" }} onTouchTap={ () => this.setState({ showEvents: true }) } />
-          <FlatButton label="Categories" onTouchTap={ () => this.setState({ showEvents: false }) }/>
+    return <div style={{ position: "absolute", top: 63, bottom: 0, left: 0, width: "100%" }}>
+      <div style={{ width: "43%", height: "100%", display: "inline-block" }}>
+        <div style={{ height: "80%", width: "100%", padding: 80 }} className="heroImage">
+          <div>
+            <span style={{ fontSize: "2.6em", fontFamily: "Roboto-Light", color: "white" }}>Share knowledge,<br/>build friendships.</span>
+          </div>
         </div>
-        <span style={{ float: "clear" }} />
-        <a style={{ width: "100%", textAlign: "center", fontSize: "1.3em", color: lightBlack, fontWeight: "bold", lineHeight: "3em" }}>Check out some events near you:</a>
-        {list}
-        {!isAuthed && this.renderDescription()}
+        <div style={{ height: "20%", width: "100%", backgroundColor: orange50, overflow: "hidden" }}>
+          {!isAuthed && this.renderDescription()}
+        </div>
       </div>
-    );
+      <div style={{ width: "57%", height: "100%", display: "inline-block", overflowX: "hidden" }}>
+        <EventsList style={{ width: "720px" }} />
+      </div>
+    </div>;
   }
+
+  // render() {
+  //   const style = {
+  //     paddingTop: spacing.desktopKeylineIncrement,
+  //   };
+  //   const { authedUser } = this.props;
+  //   const isAuthed = authedUser && Object.keys(authedUser).length > 0;
+  //   const list = this.state.showEvents ? <EventsList /> : this.renderFeatures();
+
+  //   return (
+  //     <div style={style}>
+  //       {this.renderJoinModal()}
+  //       {!isAuthed && this.renderHero()}
+  //       <div style={{ float: "right", marginTop: "1em", marginRight: "1em" }}>
+  //         <FlatButton label="Events" style={{ marginRight: "1em" }} onTouchTap={ () => this.setState({ showEvents: true }) } />
+  //         <FlatButton label="Categories" onTouchTap={ () => this.setState({ showEvents: false }) }/>
+  //       </div>
+  //       <span style={{ float: "clear" }} />
+  //       <a style={{ width: "100%", textAlign: "center", fontSize: "1.3em", color: lightBlack, fontWeight: "bold", lineHeight: "3em" }}>Check out some events near you:</a>
+  //       {list}
+  //       {!isAuthed && this.renderDescription()}
+  //     </div>
+  //   );
+  // }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withWidth()(SplashPage));
