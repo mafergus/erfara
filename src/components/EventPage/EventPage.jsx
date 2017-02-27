@@ -22,10 +22,11 @@ function mapStateToProps(state, props) {
   const event = state.events.get(props.params.id);
   const owner = event && state.users.get(event.userId);
   let leUsers = [];
+  let isRSVPD;
   if (event && event.attendees) {
-    event.attendees.forEach(item => { leUsers.push(state.users.get(item)); });
+    leUsers = Object.keys(event.attendees).map(item => state.users.get(item));
+    isRSVPD = Object.keys(event.attendees).includes(state.authedUser.uid);
   }
-  const isRSVPD = leUsers.some(item => item.uid === state.authedUser.uid);
   return {
     authedUser: state.authedUser,
     event: event,
