@@ -17,7 +17,6 @@ function mapStateToProps(state) {
     userId: state.authedUser && state.authedUser.uid,
   };
 }
-
 /**
  * A modal dialog can only be closed by selecting one of the actions.
  */
@@ -33,7 +32,9 @@ export class CreateEventModal extends React.Component {
     super();
     autoBind(this);
 
-    this.timestamp = new Date();
+    this.dateStamp = new Date();
+    this.startTimeStamp = new Date();
+    this.endTimeStamp = new Date();
   }
 
   onError(error, type) {
@@ -43,7 +44,7 @@ export class CreateEventModal extends React.Component {
   }
 
   addNewEvent() {
-    const { name, description, timestamp, locationString } = this;
+    const { name, description, dateStamp, startTimeStamp, endTimeStamp, advices, locationString } = this;
     const { userId, onRequestClose } = this.props;
     const searchTerm = name.split(" ")[0];
     if (!this.props.userId) { return; }
@@ -53,24 +54,29 @@ export class CreateEventModal extends React.Component {
       return uploadFile(blob);
     })
     .then(url => {
-      store.dispatch(addEvent(name, description, url, timestamp, locationString, userId));
+      store.dispatch(addEvent(name, description, url, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
       onRequestClose();
     })
     .catch(error => {
-      store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, timestamp, locationString, userId));
+      store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
       onRequestClose();
     });
   }
 
   dateChange(placeholder, date) {
-    this.timestamp.setFullYear(date.getFullYear());
-    this.timestamp.setMonth(date.getMonth());
-    this.timestamp.setDate(date.getDate());
+    this.dateStamp.setFullYear(date.getFullYear());
+    this.dateStamp.setMonth(date.getMonth());
+    this.dateStamp.setDate(date.getDate());
   }
 
-  timeChange(placeholder, date) {
-    this.timestamp.setHours(date.getHours());
-    this.timestamp.setMinutes(date.getMinutes());
+  startTimeChange(placeholder, date) {
+    this.startTimeStamp.setHours(date.getHours());
+    this.startTimeStamp.setMinutes(date.getMinutes());
+  }
+
+  endTimeChange(placeholder, date) {
+    this.endTimeStamp.setHours(date.getHours());
+    this.endTimeStamp.setMinutes(date.getMinutes());
   }
 
   render() {
@@ -161,7 +167,7 @@ export class CreateEventModal extends React.Component {
                     hintStyle={style.hintStyle}
                     textFieldStyle={style.textFieldStyle}
                     underlineShow={false}  
-                    onChange={this.timeChange} />
+                    onChange={this.startTimeChange} />
                 </div>
               </div>
               <div className="end-time">
@@ -175,7 +181,7 @@ export class CreateEventModal extends React.Component {
                     hintStyle={style.hintStyle}
                     textFieldStyle={style.textFieldStyle}
                     underlineShow={false}  
-                    onChange={this.timeChange} />
+                    onChange={this.endTimeChange} />
                 </div>
               </div>
               <div className="event-info">
@@ -189,6 +195,7 @@ export class CreateEventModal extends React.Component {
                     hintStyle={style.hintStyle}
                     style={style.textFieldStyle}
                     underlineShow={false}
+                    onChange={(event, value) => { this.advices = value; }}
                   />
                 </div>
               </div>
