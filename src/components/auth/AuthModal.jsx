@@ -5,7 +5,7 @@ import { lightBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
 import { addUser } from "actions/userActions";
 import { addMessage } from "actions/messageActions";
-import { getPhoto, uploadFile } from "utils/Api";
+import { getPhoto, uploadFile, checkUserExists } from "utils/Api";
 import store from "store/store";
 
 /**
@@ -38,18 +38,18 @@ export default class AuthModal extends React.Component {
       email: user.email,
       photo: user.photoURL,
     };
-    getPhoto()
-    .then(blob => {
-      return uploadFile(blob);
+    checkUserExists(user.uid)
+    .then(user => getPhoto(), () => {
+      store.dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user: userData });
+      firebase.onAuthSuccess(userData.uid);
     })
+    .then(blob => uploadFile(blob))
     .then(url => {
       userData.coverPhoto = url;
       store.dispatch(addUser(userData));
       store.dispatch(addMessage(userData.uid, "7hJGDkRieEfhPiMnu1HGDF8w59V2", "Welcome to Erfara!", new Date()));
-      firebase.onAuthSuccess(user.uid);
     })
     .catch(error => {
-      alert("oops!");
     });
   }
 

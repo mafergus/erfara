@@ -54,6 +54,7 @@ html {
 }
 
 body {
+  color: #424242;
   background-color: #f1efea;
   font-family: Roboto-Regular;
   font-weight: normal;
@@ -72,7 +73,6 @@ hr {
 
 p, h1 {
   margin: 0px;
-  color: black;
 }
 
 .app {
@@ -85,13 +85,8 @@ p, h1 {
 /* ######################################################################## */
 
 .heroImage {
-  background-image: 
-    linear-gradient(
-      rgba(0, 0, 0, 0.4),
-      rgba(0, 0, 0, 0.3)
-    ),
-    url("../images/kayaking.jpg");
-  background-repeat: repeat;
+  background-image: url("../images/hero_background.svg");
+  background-size: cover;
   /*background-blend-mode: multiply;*/
   /*background-color: #F39C11;*/
 }
@@ -118,7 +113,4 @@ p, h1 {
   top: 0;
   left: 0;
   z-index: 0;
-}
-
-.home {
 }
