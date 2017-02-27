@@ -34,10 +34,10 @@ export default class UserList extends React.Component {
       items.push(<AttendeeListItem
         key={items.length}
         user={item}
-        userId={item.uid}
-        name={item.name}
+        userId={item && item.uid}
+        name={item && item.name}
         location="San Jose, CA" 
-        image={item.photo}
+        image={item && item.photo}
         />);
     });
     return <PeopleList people={items} peopleType={title} style={STYLE} />
