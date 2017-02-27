@@ -14,6 +14,10 @@ export default class LoggedInUserComponent extends React.Component {
     image: PropTypes.string,
   };
 
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  };
+
   constructor() {
     super();
     autoBind(this);
@@ -25,12 +29,12 @@ export default class LoggedInUserComponent extends React.Component {
 
   mouseOver() {
     console.log("mouseOver");
-    this.setState({open: true});
+    this.setState({ open: true });
   }
     
   mouseOut() {
     console.log("mouseOut");
-    this.setState({open: false});
+    this.setState({ open: false });
   }
 
   onClick(event) {
@@ -48,6 +52,7 @@ export default class LoggedInUserComponent extends React.Component {
   }
 
   onSignOut() {
+    this.context.router.push('/');
     firebase.auth().signOut().then(function() {
       store.dispatch({ type: "SIGN_OUT_USER" });
     }, function(error) {

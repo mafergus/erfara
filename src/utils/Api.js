@@ -2,6 +2,19 @@ import firebase from 'actions/database';
 
 const PIXABAY_KEY = "4423887-ab96e540ffbe404d644032133";
 
+export function checkUserExists(uid) {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref(`/users/${uid}`).once('value', function(snapshot) {
+      const user = snapshot.val();
+      if (user) {
+        reject(new Error("User exists!"));
+      } else {
+        resolve(user);
+      }
+    });
+  });
+}
+
 export function getPhoto(searchTerm) {
   const photoParam = searchTerm ? `&q=${searchTerm}` : ""; 
   return new Promise((resolve, reject) => {
