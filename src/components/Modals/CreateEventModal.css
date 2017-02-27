@@ -20,7 +20,7 @@ h3 {
   text-decoration: none;
 }
 .close-btn:hover {
-  color: #979797;
+  color: orange;
 }
 
 /* LABELS */
@@ -62,7 +62,7 @@ h3 {
   outline:0;
 }
 .create-btn:hover {
-  background: #979797;
+  background: orange;
 }
 
 /* TEXTFIELD FIELD POSITIONS */
