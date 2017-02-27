@@ -10,6 +10,7 @@ import { white, lightBlack } from "material-ui/styles/colors";
 import { getUser } from "actions/userActions";
 import { darkGray } from "utils/colors";
 import { getShortMonth } from "utils/dateTimeHelpers";
+import Attendees from "components/EventList/Attendees";
 
 function mapStateToProps(state, props) {
   const event = state.events.get(props.eventUid);
@@ -48,19 +49,6 @@ export class EventListItem extends React.Component {
     }
   }
 
-  renderAttendees(count) {
-    const { event, isFeatured, attendees } = this.props;
-    if (count > 1) {
-      if (isFeatured && attendees) {
-        return attendees.map(user => <img style={{ height: 26, width: 26, borderRadius: "50%", objectFit: "cover" }} src={user.photo}/>);
-      } else {
-        return <div style={{ height: 29, width: 29, borderRadius: "50%", backgroundColor: "rgba(0, 0, 0, 0.12)", display: "inline-block", marginLeft: 8 }}>
-          <span style={{ color: lightBlack, verticalAlign: "middle", fontSize: "0.8em" }}>{`+${count-1}`}</span>
-        </div>;
-      }
-    }
-  }
-
   renderDate(timestamp) {
     const { muiTheme } = this.props;
     return <div style={{ height: "100%", width: 70, display: "inline-block", borderRight: "1px solid rgba(0, 0, 0, 0.06)" }}>
@@ -74,7 +62,7 @@ export class EventListItem extends React.Component {
   }
 
   renderEventDetails() {
-    const { event, user } = this.props;
+    const { event, user, attendees, isFeatured } = this.props;
     const timestamp = new Date(event.date);
     return <div style={{ width: "100%", height: 70, marginTop: -5, position: "relative", display: "flex", alignItems: "center", backgroundColor: "white" }}>
       {this.renderDate(timestamp)}
@@ -85,9 +73,8 @@ export class EventListItem extends React.Component {
           <span style={{ fontSize: "0.8em" }}>Fri 8PM &nbsp; &#8226; &nbsp; {event.locationString}</span>
         </p>
       </div>
-      <div style={{ paddingRight: 15, display: "flex", alignItems: "center" }}>
-        <img style={{ height: 26, width: 26, borderRadius: "50%", objectFit: "cover" }} src={user.photo}/>
-        {this.renderAttendees(Object.keys(event.attendees).length)}
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <Attendees attendees={attendees} extended={isFeatured} />
       </div>
     </div>;
   }
