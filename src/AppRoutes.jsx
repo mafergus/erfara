@@ -4,8 +4,9 @@ import {
   IndexRoute,
 } from 'react-router';
 
-import App from 'components/App';
-import SplashPage from 'components/SplashPage';
+import App from "components/App";
+import SplashPage from "components/SplashPage";
+import HomePage from "components/HomePage";
 import EventPage from "components/EventPage/EventPage";
 import MessagingPage from "components/Messaging/MessagingPage";
 import UserPage from "components/UserPage/UserPage";
