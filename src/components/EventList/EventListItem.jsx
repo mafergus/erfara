@@ -3,12 +3,7 @@ import autoBind from "react-autobind"
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router";
-import { GridTile } from 'material-ui/GridList';
-import Face from 'material-ui/svg-icons/action/face';
-import IconButton from 'material-ui/IconButton';
-import { white, lightBlack } from "material-ui/styles/colors";
 import { getUser } from "actions/userActions";
-import { darkGray } from "utils/colors";
 import { getShortMonth } from "utils/dateTimeHelpers";
 import Attendees from "components/EventList/Attendees";
 
@@ -62,7 +57,7 @@ export class EventListItem extends React.Component {
   }
 
   renderEventDetails() {
-    const { event, user, attendees, isFeatured } = this.props;
+    const { event, attendees, isFeatured } = this.props;
     const timestamp = new Date(event.date);
     return <div style={{ width: "100%", height: 70, marginTop: -5, position: "relative", display: "flex", alignItems: "center", backgroundColor: "white" }}>
       {this.renderDate(timestamp)}
@@ -80,7 +75,7 @@ export class EventListItem extends React.Component {
   }
 
   render() {
-    const { event, eventUid, muiTheme, isFeatured } = this.props;
+    const { event, eventUid, isFeatured } = this.props;
     return <Link to={`/event/${eventUid}`} style={{ textDecoration: "none" }}>
       <div style={{ width: isFeatured ? 720 : 333, height: 250 }} className="shadow border">
         <img src={event.photo} alt="Event" style={{ width: "100%", height: 181, objectFit: "cover" }} />
