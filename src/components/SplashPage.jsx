@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import Share from 'material-ui/svg-icons/notification/wc';
 import Learn from 'material-ui/svg-icons/social/sentiment-very-satisfied';
@@ -154,22 +153,11 @@ export class SplashPage extends React.Component {
   }
 
   renderJoinModal() {
-    return <Dialog
-      contentStyle={{textAlign: "center", width: "40%", marginBottom: "300px"}}
-      title="Sign Up"
-      titleStyle={{ fontSize: "1.1em", textAlign: "left", padding: "12px 0px 12px 25px", color: lightBlack }}
-      modal={false}
-      onRequestClose={() => this.setState({ isJoinOpen: false })}
-      open={this.state.isJoinOpen}>
-      <button
-        style={{margin: "3em 8em 3em 0em", verticalAlign: "middle"}}
-        className="googleSignUpButton"
-        onClick={this.handleSignUpGoogle} />
-      <button
-        style={{verticalAlign: "middle"}}
-        className="facebookSignUpButton"
-        onClick={this.handleSignUpFacebook} />
-    </Dialog>
+    return         <AuthModal 
+          title="Sign Up"
+          isOpen={this.state.signUpModalOpen}
+          handleClose={() => this.setState({ signUpModalOpen: false })} 
+        />
   }
 
   renderDescriptionItem(image, text) {
@@ -194,11 +182,23 @@ export class SplashPage extends React.Component {
 
   render() {
     return <div style={{ position: "absolute", top: 63, bottom: 0, left: 0, width: "100%" }}>
+      <AuthModal 
+        title="Sign Up"
+        isOpen={this.state.isJoinOpen}
+        handleClose={() => this.setState({ isJoinOpen: false })} 
+      />
       <div style={{ width: "43%", height: "100%", display: "inline-block", overflow: "hidden" }}>
         <div style={{ height: "100%", width: "100%", padding: 80 }} className="heroImage">
           <div>
             <span style={{ fontSize: "2.6em", fontFamily: "Roboto-Light", color: "white" }}>Share knowledge,<br/>build friendships.</span>
           </div>
+          <RaisedButton 
+            style={{ marginTop: 50 }}
+            label="JOIN THE COMMUNITY"
+            labelColor="#FFFFFF"
+            onTouchTap={() => this.setState({ isJoinOpen: true })}
+            backgroundColor="#07ADB0"
+          />
         </div>
       </div>
       <div style={{ width: "57%", height: "100%", display: "inline-block", overflowX: "hidden" }}>
