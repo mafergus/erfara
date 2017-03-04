@@ -14,15 +14,10 @@ function mapStateToProps(state, props) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-
-  };
-}
-
 export class Feed extends React.Component {
 
   static propTypes = {
+    items: PropTypes.array,
     style: PropTypes.object,
     eventId: PropTypes.string,
     authedUser: PropTypes.object,
@@ -84,4 +79,4 @@ export class Feed extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Feed);
+export default connect(mapStateToProps)(Feed);

@@ -4,7 +4,7 @@ import { lightBlack } from "material-ui/styles/colors"
 
 export default class EventDescription extends React.Component {
 
-  static PropTypes = {
+  static propTypes = {
     event: PropTypes.object.isRequired,
   };
 

@@ -85,7 +85,7 @@ p, h1 {
 /* ######################################################################## */
 
 .heroImage {
-  background-image: url("../images/hero_background.svg");
+  background-image: url("../images/sun_hero.png");
   background-size: cover;
   /*background-blend-mode: multiply;*/
   /*background-color: #F39C11;*/

@@ -5,7 +5,7 @@ import UserFeed from "components/UserFeed/UserFeed"
 
 export default class UserDetails extends React.Component {
 
-  static PropTypes = {
+  static propTypes = {
     user: PropTypes.object.isRequired,
   }
   

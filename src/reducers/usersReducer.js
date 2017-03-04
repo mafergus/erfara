@@ -1,7 +1,6 @@
 import Immutable from "immutable";
 
 export function usersReducer(state = Immutable.Map(), action) {
-  console.log("eventsReducer() state: ", state, " action: ", action);
   switch (action.type) {
     case "GET_USER_SUCCESS": {
       return state.set(action.user.uid, action.user);
