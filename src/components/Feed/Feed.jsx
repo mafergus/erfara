@@ -70,7 +70,7 @@ export class Feed extends React.Component {
     </div>;
   }
 
-  render() {
+  render() {  
     const { style, items, authedUser } = this.props;
     return <div style={{ ...style, borderTop: `1px solid ${faintBlack}` }}>
       {items && Object.entries(items).map(item => this.renderFeedItem(item[0], item[1]))}
