@@ -15,20 +15,16 @@ import HomeFeature from 'components/HomeFeature';
 import FullWidthSection from 'components/FullWidthSection';
 import EventsList from "components/EventList/EventList";
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
     authedUser: state.authedUser,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
   };
 }
 
 export class SplashPage extends React.Component {
 
   static propTypes = {
+    authedUser: PropTypes.object.isRequired,
     width: PropTypes.number.isRequired,
   };
 
@@ -197,18 +193,12 @@ export class SplashPage extends React.Component {
   }
 
   render() {
-    const { authedUser } = this.props;
-    const isAuthed = authedUser && Object.keys(authedUser).length > 0;
-
     return <div style={{ position: "absolute", top: 63, bottom: 0, left: 0, width: "100%" }}>
-      <div style={{ width: "43%", height: "100%", display: "inline-block" }}>
-        <div style={{ height: "80%", width: "100%", padding: 80 }} className="heroImage">
+      <div style={{ width: "43%", height: "100%", display: "inline-block", overflow: "hidden" }}>
+        <div style={{ height: "100%", width: "100%", padding: 80 }} className="heroImage">
           <div>
             <span style={{ fontSize: "2.6em", fontFamily: "Roboto-Light", color: "white" }}>Share knowledge,<br/>build friendships.</span>
           </div>
-        </div>
-        <div style={{ height: "20%", width: "100%", backgroundColor: orange50, overflow: "hidden" }}>
-          {!isAuthed && this.renderDescription()}
         </div>
       </div>
       <div style={{ width: "57%", height: "100%", display: "inline-block", overflowX: "hidden" }}>
@@ -216,30 +206,6 @@ export class SplashPage extends React.Component {
       </div>
     </div>;
   }
-
-  // render() {
-  //   const style = {
-  //     paddingTop: spacing.desktopKeylineIncrement,
-  //   };
-  //   const { authedUser } = this.props;
-  //   const isAuthed = authedUser && Object.keys(authedUser).length > 0;
-  //   const list = this.state.showEvents ? <EventsList /> : this.renderFeatures();
-
-  //   return (
-  //     <div style={style}>
-  //       {this.renderJoinModal()}
-  //       {!isAuthed && this.renderHero()}
-  //       <div style={{ float: "right", marginTop: "1em", marginRight: "1em" }}>
-  //         <FlatButton label="Events" style={{ marginRight: "1em" }} onTouchTap={ () => this.setState({ showEvents: true }) } />
-  //         <FlatButton label="Categories" onTouchTap={ () => this.setState({ showEvents: false }) }/>
-  //       </div>
-  //       <span style={{ float: "clear" }} />
-  //       <a style={{ width: "100%", textAlign: "center", fontSize: "1.3em", color: lightBlack, fontWeight: "bold", lineHeight: "3em" }}>Check out some events near you:</a>
-  //       {list}
-  //       {!isAuthed && this.renderDescription()}
-  //     </div>
-  //   );
-  // }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withWidth()(SplashPage));
+export default connect(mapStateToProps)(withWidth()(SplashPage));

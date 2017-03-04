@@ -14,7 +14,7 @@ import AppBar from "components/AppBar";
 import CreateEventModal from "components/Modals/CreateEventModal";
 import { getUnreadMessageCount } from "utils/helpers";
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
     authedUser: state.authedUser,
     unreadMessages: getUnreadMessageCount(state),
@@ -22,8 +22,10 @@ function mapStateToProps(state, props) {
 }
 
 class App extends React.Component {
+
   static propTypes = {
     children: PropTypes.node,
+    unreadMessages: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
   };
 

@@ -22,9 +22,12 @@ function mapDispatchToProps(dispatch) {
 
 export class EventListItem extends React.Component {
 
-  static PropTypes = {
+  static propTypes = {
+    attendees: PropTypes.array.isRequired,
     event: PropTypes.object.isRequired,
     eventUid: PropTypes.string.isRequired,
+    getUser: PropTypes.func.isRequired,
+    muiTheme: PropTypes.any,
     isFeatured: PropTypes.bool,
   };
 
