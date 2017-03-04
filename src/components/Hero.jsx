@@ -1,6 +1,6 @@
 import React, { PropTypes } from "react";
 
-export default function Hero({ children, image, subtitle, onFabClick}) {
+export default function Hero({ children, image }) {
   const STYLE = {
     position: "relative",
     height: "250px",
@@ -19,6 +19,4 @@ export default function Hero({ children, image, subtitle, onFabClick}) {
 Hero.propTypes = {
   children: PropTypes.node,
   image: PropTypes.string,
-  subtitle: PropTypes.node,
-  onFabClick: PropTypes.func,
 };

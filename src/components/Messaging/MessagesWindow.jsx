@@ -10,6 +10,7 @@ export default class MessagesWindow extends React.Component {
     style: PropTypes.object,
     conversation: PropTypes.object,
     onReadMessage: PropTypes.func.isRequired,
+    onSendMessage: PropTypes.func.isRequired,
   }
 
   constructor() {

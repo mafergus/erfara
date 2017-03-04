@@ -24,6 +24,8 @@ function mapDispatchToProps(dispatch) {
 export class EventsList extends React.Component {
 
   static propTypes = {
+    getEvents: PropTypes.func.isRequired,
+    getUsers: PropTypes.func.isRequired,
     style: PropTypes.object,
     events: ImmutablePropTypes.map.isRequired,
     hasFeatured: PropTypes.bool,

@@ -34,6 +34,7 @@ const IMG_STYLE = {
 export class ConversationListItem extends React.Component {
 
   static propTypes = {
+    getUser: PropTypes.func.isRequired,
     user: PropTypes.object,
     conversation: PropTypes.object.isRequired,
     conversationId: PropTypes.string.isRequired,
