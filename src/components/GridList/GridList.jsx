@@ -26,7 +26,7 @@ export default class GridList extends React.Component {
     const rows = [];
     let items = [];
     let processedFeatured = false;
-    children.forEach((item, key) => {
+    children.forEach(item => {
       if (hasFeatured && !processedFeatured) {
         rows.push(<Row>{[item]}</Row>);
         processedFeatured = true;

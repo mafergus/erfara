@@ -29,7 +29,7 @@ function mapStateToProps(state, props) {
   const user = state.users.get(props.params.id);
   let buddies = [];
   const leBuddies = user && user.buddies && state.users.filter(aUser => user.buddies.hasOwnProperty(aUser.uid));
-  leBuddies && leBuddies.forEach((item, key) => {
+  leBuddies && leBuddies.forEach(item => {
     buddies.push(item);
   });
   return {
@@ -49,8 +49,10 @@ function mapDispatchToProps(dispatch) {
 export class UserPage extends React.Component {
 
   static propTypes = {
+    buddies: PropTypes.array.isRequired,
     getUser: PropTypes.func.isRequired,
     user: PropTypes.object,
+    users: PropTypes.array,
   };
 
   constructor() {

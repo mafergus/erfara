@@ -18,4 +18,5 @@ AttendeesListItem.propTypes = {
   name: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
 };

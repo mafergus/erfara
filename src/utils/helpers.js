@@ -8,8 +8,8 @@ export function getUnreadMessageCount(state) {
 
 export function getUnreadMessageCountForConversation(authedUserUid, conversation) {
 	if (conversation && conversation.hasOwnProperty("lastReadMessage")) {
-	  const messages = Object.keys(conversation.messages)
-	  const messageIdx = messages.indexOf(conversation.lastReadMessage);
+    const messages = Object.keys(conversation.messages)
+    const messageIdx = messages.indexOf(conversation.lastReadMessage);
     const trimmed = messages.splice(messageIdx, messages);
     return trimmed.reduce((acc, item) => item.from !== authedUserUid ? acc+1 : acc, 0);
 	}

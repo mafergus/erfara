@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import ConversationList from "components/Messaging/ConversationList";
@@ -8,7 +8,7 @@ import { bindActionCreators } from "redux";
 import { addMessage, readMessage } from "actions/messageActions";
 import Resizable from "react-resizable-box";
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
     authedUser: state.authedUser,
     conversations: state.authedUser.hasOwnProperty("conversations") && state.authedUser.conversations,
@@ -20,6 +20,12 @@ function mapDispatchToProps(dispatch) {
 }
 
 export class MessagingPage extends React.Component {
+
+  static propTypes = {
+    authedUser: PropTypes.object.isRequired,
+    conversations: PropTypes.array.isRequired,
+    readMessage: PropTypes.func.isRequired,
+  };
   
   constructor(props) {
     super(props);

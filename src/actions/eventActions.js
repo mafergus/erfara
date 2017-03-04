@@ -5,9 +5,6 @@ export function getEvents() {
     return firebase.database().ref('/events').once('value', snap => {
       const events = snap.val();
       dispatch({type: "GET_EVENTS_SUCCESS", events})
-    })
-    .catch((error) => {
-      console.log(error);
     });
   }
 }
@@ -17,15 +14,12 @@ export function getEvent(id) {
     return firebase.database().ref(`/events/${id}`).once('value', snap => {
       const event = snap.val();
       dispatch({type: "GET_EVENT_SUCCESS", event})
-    })
-    .catch((error) => {
-      console.log(error);
     });
   }
 }
 
 export function addEvent(title, description, photo, date, startTime, endTime, advices, locationString, userId) {
-  return dispatch => {
+  return () => {
     var eventData = {
       title,
       description,
@@ -51,7 +45,7 @@ export function addEvent(title, description, photo, date, startTime, endTime, ad
 }
 
 export function addEventMessage(eventId, userId, message, timestamp) {
-  return dispatch => {
+  return () => {
     const url = `/events/${eventId}/feed/`;
     const messageData = {
       message,
@@ -68,7 +62,7 @@ export function addEventMessage(eventId, userId, message, timestamp) {
 }
 
 export function rsvp(event, eventId, userId, rsvpStatus) {
-  return dispatch => {
+  return () => {
     if (!event.attendees) { event.attendees = {}; }
     if (rsvpStatus && !Object.keys(event.attendees).includes(userId)) {
       event.attendees[userId] = true;

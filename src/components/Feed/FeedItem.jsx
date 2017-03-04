@@ -20,6 +20,8 @@ export class FeedItem extends React.Component {
 
   static propTypes = {
     feedItem: PropTypes.object,
+    getUser: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
     userId: PropTypes.string,
   };
 
