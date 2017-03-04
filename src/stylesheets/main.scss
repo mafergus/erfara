@@ -20,6 +20,17 @@
   }
 }
 
+.hoverable {
+  -webkit-transition: all .1s ease-in-out;
+          transition: all .1s ease-in-out;
+  &:hover {
+    -webkit-transform: scale(1.01);
+        -ms-transform: scale(1.01);
+            transform: scale(1.01);
+           box-shadow: 5px 5px 8px #C7C7C7;
+  }
+}
+
 .border {
   border: 1px solid rgba(0, 0, 0, 0.08);
 }
