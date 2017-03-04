@@ -37,12 +37,6 @@ export class CreateEventModal extends React.Component {
     this.endTimeStamp = new Date();
   }
 
-  onError(error, type) {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log(type, " errorCode: ", errorCode, " errorMessage: ", errorMessage);
-  }
-
   addNewEvent() {
     const { name, description, dateStamp, startTimeStamp, endTimeStamp, advices, locationString } = this;
     const { userId, onRequestClose } = this.props;
@@ -57,7 +51,7 @@ export class CreateEventModal extends React.Component {
       store.dispatch(addEvent(name, description, url, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
       onRequestClose();
     })
-    .catch(error => {
+    .catch(() => {
       store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
       onRequestClose();
     });

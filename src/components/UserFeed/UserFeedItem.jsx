@@ -19,7 +19,9 @@ function mapDispatchToProps(dispatch) {
 export class UserFeedItem extends React.Component {
 
   static propTypes = {
+    getUser: PropTypes.func.isRequired,
     feedItem: PropTypes.object,
+    user: PropTypes.object.isRequired,
     userId: PropTypes.string,
   };
 

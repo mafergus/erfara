@@ -28,12 +28,10 @@ export default class LoggedInUserComponent extends React.Component {
   }
 
   mouseOver() {
-    console.log("mouseOver");
     this.setState({ open: true });
   }
     
   mouseOut() {
-    console.log("mouseOut");
     this.setState({ open: false });
   }
 
@@ -55,7 +53,7 @@ export default class LoggedInUserComponent extends React.Component {
     this.context.router.push('/');
     firebase.auth().signOut().then(function() {
       store.dispatch({ type: "SIGN_OUT_USER" });
-    }, function(error) {
+    }, function() {
       alert("oops");
     });
     const emptyUser = {};

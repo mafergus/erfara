@@ -49,10 +49,14 @@ export class EventPage extends React.Component {
   };
 
   static propTypes = {
+    authedUser: PropTypes.object.isRequired,
     uuid: PropTypes.string,
     event: PropTypes.object,
     getEvent: PropTypes.func.isRequired,
+    params: PropTypes.object,
     isRSVPD: PropTypes.bool,
+    owner: PropTypes.object.isRequired,
+    attendees: PropTypes.array.isRequired,
   };
   
   constructor() {
@@ -68,10 +72,6 @@ export class EventPage extends React.Component {
 
   componentWillMount() {
     this.props.getEvent(this.props.params.id);
-  }
-
-  componentDidMount() {
-    console.log("id: ", this.props.params.id);
   }
 
   render() {

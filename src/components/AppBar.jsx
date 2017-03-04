@@ -39,6 +39,12 @@ function mapDispatchToProps(dispatch) {
 
 export class AppBar extends React.Component {
 
+  static propTypes = {
+    addUser: PropTypes.func.isRequired,
+    unreadCount: PropTypes.number.isRequired,
+    user: PropTypes.object.isRequired,
+  }
+
   static contextTypes = {
     router: PropTypes.object.isRequired
   };

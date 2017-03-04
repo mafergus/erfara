@@ -1,9 +1,19 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 import GoogleMapReact from 'google-map-react';
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
+AnyReactComponent.propTypes = {
+  text: PropTypes.string,
+};
 
-export default class SimpleMap extends Component {
+export default class SimpleMap extends React.Component {
+
+  static propTypes = {
+    text: PropTypes.string,
+    center: PropTypes.object,
+    zoom: PropTypes.number,
+  };
+
   static defaultProps = {
     center: { lat: 59.95, lng: 30.33 },
     zoom: 11
