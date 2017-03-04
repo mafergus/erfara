@@ -24,12 +24,6 @@ export default class AuthModal extends React.Component {
     autoBind(this);
   }
 
-  onError(error, type) {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log(type, " errorCode: ", errorCode, " errorMessage: ", errorMessage);
-  }
-
   onSuccess(result) {
     const user = result.user;
     let userData = {
@@ -39,7 +33,7 @@ export default class AuthModal extends React.Component {
       photo: user.photoURL,
     };
     checkUserExists(user.uid)
-    .then(user => getPhoto(), () => {
+    .then(() => getPhoto(), () => {
       store.dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user: userData });
       firebase.onAuthSuccess(userData.uid);
     })
@@ -48,8 +42,6 @@ export default class AuthModal extends React.Component {
       userData.coverPhoto = url;
       store.dispatch(addUser(userData));
       store.dispatch(addMessage(userData.uid, "7hJGDkRieEfhPiMnu1HGDF8w59V2", "Welcome to Erfara!", new Date()));
-    })
-    .catch(error => {
     });
   }
 
@@ -57,16 +49,14 @@ export default class AuthModal extends React.Component {
     this.props.handleClose();
     const provider = new firebase.auth.FacebookAuthProvider();
     firebase.auth().signInWithPopup(provider)
-      .then(this.onSuccess)
-      .catch(this.onError.bind(null, "Facebook"));
+      .then(this.onSuccess);
   }
 
   handleSignUpGoogle() {
     this.props.handleClose();
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider)
-      .then(this.onSuccess)
-      .catch(this.onError.bind(null, "Google"));
+      .then(this.onSuccess);
   }
 
   render() {

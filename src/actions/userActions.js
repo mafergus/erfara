@@ -9,9 +9,6 @@ export function getUser(uuid) {
       if (user) {
         dispatch({type: "GET_USER_SUCCESS", user});
       }
-    })
-    .catch((error) => {
-      console.log(error);
     });
   }
 }
@@ -21,9 +18,6 @@ export function getUsers() {
     return firebase.database().ref('/users').once('value', snap => {
       const users = snap.val();
       dispatch({type: "GET_USERS_SUCCESS", users});
-    })
-    .catch((error) => {
-      console.log(error);
     });
   }
 }
@@ -39,7 +33,7 @@ export function addUser(user) {
     updates["users/" + user.uid + "/photo"] = user.photo;
     updates["users/" + user.uid + "/coverPhoto"] = user.coverPhoto || PLACEHOLDER_PHOTO;
 
-    firebase.database().ref().update(updates).then(snap => {
+    firebase.database().ref().update(updates).then(() => {
       dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user });
       firebase.onAuthSuccess(user.uid);
     });
@@ -47,7 +41,7 @@ export function addUser(user) {
 }
 
 export function addUserFeedback(senderId, recipientId, feedback, timestamp) {
-  return dispatch => {
+  return () => {
     const url = `/users/${recipientId}/feed/`;
     const feedData = {
       feedback,

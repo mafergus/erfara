@@ -3,14 +3,9 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import MessageListItem from "components/Messaging/MessageListItem";
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
     authedUser: state.authedUser,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
   };
 }
 
@@ -27,7 +22,7 @@ export class MessageList extends React.Component {
     autoBind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps() {
     this.refs.list.scrollTop = this.refs.list.scrollHeight;
   }
 
@@ -48,4 +43,4 @@ export class MessageList extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MessageList);
+export default connect(mapStateToProps)(MessageList);

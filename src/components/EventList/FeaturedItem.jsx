@@ -23,9 +23,11 @@ function mapDispatchToProps(dispatch) {
 
 export class FeaturedItem extends React.Component {
 
-  static PropTypes = {
+  static propTypes = {
+    getUser: PropTypes.func.isRequired,
     event: PropTypes.object.isRequired,
     eventUid: PropTypes.string.isRequired,
+    user: PropTypes.object.isRequired,
   };
 
   constructor() {

@@ -6,8 +6,6 @@ import muiThemeable from 'material-ui/styles/muiThemeable';
 import { getEvents } from "actions/eventActions";
 import { getUsers } from "actions/userActions";
 import EventListItem from "components/EventList/EventListItem";
-import FeaturedItem from "components/EventList/FeaturedItem";
-import GridList from "components/GridList/GridList";
 import Row from "components/GridList/Row";
 
 function mapStateToProps(state) {
@@ -26,6 +24,8 @@ function mapDispatchToProps(dispatch) {
 export class EventsList extends React.Component {
 
   static propTypes = {
+    getEvents: PropTypes.func.isRequired,
+    getUsers: PropTypes.func.isRequired,
     style: PropTypes.object,
     events: ImmutablePropTypes.map.isRequired,
     hasFeatured: PropTypes.bool,
@@ -79,7 +79,7 @@ export class EventsList extends React.Component {
       }
       items.push(<EventListItem muiTheme={muiTheme} key={key} eventUid={key} event={item} />);
     });
-    if (items.length !== 0) { rows.push(<Row key={rows.length} rowPadding={rowPadding}>{items}</Row>) }
+    if (items.length !== 0) { rows.push(<Row key={rows.length} colPadding={colPadding} rowPadding={rowPadding}>{items}</Row>) }
     return <div style={STYLE}>{rows}</div>;
   }
 }

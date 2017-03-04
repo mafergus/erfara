@@ -3,7 +3,6 @@ import autoBind from "react-autobind";
 import { minBlack, darkBlack } from "material-ui/styles/colors"
 import MapsPlace from 'material-ui/svg-icons/maps/place';
 import ActionSchedule from 'material-ui/svg-icons/action/schedule';
-import { getDateString } from "utils/dateTimeHelpers";
 
 const STYLE = {
   color: darkBlack,
