@@ -8,7 +8,8 @@ import Experience from 'material-ui/svg-icons/image/brightness-7';
 import withWidth, {LARGE} from 'material-ui/utils/withWidth';
 import typography from 'material-ui/styles/typography';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import { cyan500, darkWhite, orange50, lightBlack, darkBlack } from 'material-ui/styles/colors';
+import { cyan500, darkWhite, orange50, orange500, lightBlack, darkBlack } from 'material-ui/styles/colors';
+import { darkGray } from "utils/colors";
 import AuthModal from 'components/auth/AuthModal';
 import HomeFeature from 'components/HomeFeature';
 import FullWidthSection from 'components/FullWidthSection';
@@ -199,10 +200,15 @@ export class SplashPage extends React.Component {
             onTouchTap={() => this.setState({ isJoinOpen: true })}
             backgroundColor="#07ADB0"
           />
+          <div style={{ marginTop: 40, fontSize: "0.9em", fontColor: "white", textDecoration: "underline" }}>Learn how it works</div>
         </div>
       </div>
       <div style={{ width: "57%", height: "100%", display: "inline-block", overflowX: "hidden" }}>
-        <EventsList style={{ width: "720px" }} />
+        <div style={{ width: 720, margin: "25px auto 15px auto" }}>
+          <h1 style={{ color: orange500, fontSize: "1.6em", fontFamily: "Roboto-Light" }}>Upcoming Events</h1>
+          <h3 style={{ color: darkGray, fontSize: "0.8em", marginBottom: 0 }}>Around the San Francisco Bay Area</h3>
+        </div>
+        <EventsList style={{ width: 720 }} />
       </div>
     </div>;
   }
