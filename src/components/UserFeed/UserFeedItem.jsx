@@ -42,7 +42,7 @@ export class UserFeedItem extends React.Component {
     return (
       <div style={{ display: "flex", padding: "15px 0px 15px 0px", width: "100%" }} className="hover">
         <div>
-          <img alt="User photo" style={{ height: "40px", width: "40px", margin: "10px", marginRight: "20px", borderRadius: "50%", verticalAlign: "top" }} src={user.photo}/>
+          <img alt="User" style={{ height: "40px", width: "40px", margin: "10px", marginRight: "20px", borderRadius: "50%", verticalAlign: "top" }} src={user.photo}/>
         </div>
         <div style={{ height: "100%", flexGrow: "1" }}>
           <div style={{ marginBottom: "0.6em" }}>
