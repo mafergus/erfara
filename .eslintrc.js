@@ -5,8 +5,15 @@ module.exports = {
     "es6": true,
     "node": true,
   },
-  "extends": "airbnb",
+  "plugins": [
+    "react"
+  ],
+  "parser": "babel-eslint",
   "parserOptions": {
     "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
 };
