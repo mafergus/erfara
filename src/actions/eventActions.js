@@ -20,6 +20,8 @@ export function getEvent(id) {
 
 export function addEvent(title, description, photo, date, startTime, endTime, advices, locationString, userId) {
   return () => {
+    let attendees = {};
+    attendees[userId] = true;
     var eventData = {
       title,
       description,
@@ -30,7 +32,7 @@ export function addEvent(title, description, photo, date, startTime, endTime, ad
       advices,
       locationString,
       userId,
-      attendees: [userId],
+      attendees,
     };
 
     var newEventKey = firebase.database().ref().child('events').push().key;
