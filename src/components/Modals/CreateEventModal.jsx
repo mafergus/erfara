@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import store from "store/store";
 import Dialog from 'material-ui/Dialog';
 import autoBind from 'react-autobind';
 import TextField from "material-ui/TextField";
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import CircularProgress from 'material-ui/CircularProgress';
-import store from "store/store";
 import { addEvent } from "actions/eventActions";
 import { getPhoto, uploadFile } from "utils/Api";
 import "components/Modals/CreateEventModal.css"
@@ -34,7 +34,7 @@ export class CreateEventModal extends React.Component {
     super();
     autoBind(this);
 
-    this.state = { isLoading: false };
+    this.state = { isLoading: false, isOpen: true };
     this.dateStamp = new Date();
     this.startTimeStamp = new Date();
     this.endTimeStamp = new Date();
@@ -42,7 +42,7 @@ export class CreateEventModal extends React.Component {
 
   addNewEvent() {
     const { name, description, dateStamp, startTimeStamp, endTimeStamp, advices, locationString } = this;
-    const { userId, onRequestClose } = this.props;  
+    const { userId, onRequestClose } = this.props;
 
     if (!this.props.userId) { 
       this.disabledProgressCircle();
@@ -91,6 +91,11 @@ export class CreateEventModal extends React.Component {
     this.setState( {isLoading: false} );
   }
 
+  openLogInBox () {
+    const { onRequestClose } = this.props;
+    onRequestClose();
+  }
+
   renderProgressCircle() {
     if(this.props.userId){
       if(this.state.isLoading) {
@@ -109,7 +114,7 @@ export class CreateEventModal extends React.Component {
     else {
       return (
         <div>
-          <button type='submit' className="create-btn">CREATE</button>
+          <button type='submit' className="create-btn" onClick={() => { this.openLogInBox(); }}>PLEASE LOG IN TO CREATE EVENT</button>
         </div>
       )
     }
