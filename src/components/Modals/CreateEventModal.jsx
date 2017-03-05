@@ -5,6 +5,7 @@ import autoBind from 'react-autobind';
 import TextField from "material-ui/TextField";
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
+import CircularProgress from 'material-ui/CircularProgress';
 import store from "store/store";
 import { addEvent } from "actions/eventActions";
 import { getPhoto, uploadFile } from "utils/Api";
@@ -23,6 +24,7 @@ function mapStateToProps(state) {
 export class CreateEventModal extends React.Component {
 
   static propTypes = {
+    isLoading: PropTypes.bool,
     isOpen: PropTypes.bool.isRequired,
     onRequestClose: PropTypes.func.isRequired,
     userId: PropTypes.string,
@@ -32,16 +34,25 @@ export class CreateEventModal extends React.Component {
     super();
     autoBind(this);
 
+    this.state = { isLoading: false };
     this.dateStamp = new Date();
     this.startTimeStamp = new Date();
     this.endTimeStamp = new Date();
+
   }
 
   addNewEvent() {
     const { name, description, dateStamp, startTimeStamp, endTimeStamp, advices, locationString } = this;
     const { userId, onRequestClose } = this.props;
     const searchTerm = name.split(" ")[0];
-    if (!this.props.userId) { return; }
+
+    if (!this.props.userId) { 
+      return;
+    }
+
+    if(name === undefined) {
+      setTimeout( () => {this.disabledProgressCircle(), 3000 } );
+    }
 
     getPhoto(searchTerm)
     .then(blob => {
@@ -49,10 +60,12 @@ export class CreateEventModal extends React.Component {
     })
     .then(url => {
       store.dispatch(addEvent(name, description, url, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
+      this.disabledProgressCircle();
       onRequestClose();
     })
     .catch(() => {
       store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
+      this.disabledProgressCircle();
       onRequestClose();
     });
   }
@@ -71,6 +84,34 @@ export class CreateEventModal extends React.Component {
   endTimeChange(placeholder, date) {
     this.endTimeStamp.setHours(date.getHours());
     this.endTimeStamp.setMinutes(date.getMinutes());
+  }
+
+  disabledProgressCircle() {
+    this.setState( {isLoading: false} );
+  }
+
+  renderProgressCircle() {
+    if(this.props.userId){
+      if(this.state.isLoading) {
+        return ( 
+          <div>
+            <CircularProgress />
+          </div> 
+        );
+      }
+      return (
+        <div>
+          <button type='submit' className="create-btn" onClick={() => { this.setState({ isLoading: true }); this.addNewEvent(); }}>CREATE</button>
+        </div>
+      );   
+    }
+    else {
+      return (
+        <div>
+          <button type='submit' className="create-btn">CREATE</button>
+        </div>
+      )
+    }
   }
 
   render() {
@@ -101,7 +142,7 @@ export class CreateEventModal extends React.Component {
           onRequestClose={this.props.onRequestClose}
           open={this.props.isOpen}>
           <div>
-            <a href="#" onClick={this.props.onRequestClose} className="close-btn">&times;</a>
+            <a href="#" onClick={() => { this.props.onRequestClose(); this.setState({ isLoading: false }); }} className="close-btn">&times;</a>
             <h3>Create an Event</h3>
             <div className="row-1">
               <div className="event-title">
@@ -215,7 +256,7 @@ export class CreateEventModal extends React.Component {
               </div>
             </div>
             <div className="row-4">
-              <button type='submit' className="create-btn" onClick={() => {this.addNewEvent()}}>CREATE</button>
+              {this.renderProgressCircle()}
             </div>
           </div>
         </Dialog>
