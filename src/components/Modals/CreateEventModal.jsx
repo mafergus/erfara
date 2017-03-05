@@ -38,36 +38,37 @@ export class CreateEventModal extends React.Component {
     this.dateStamp = new Date();
     this.startTimeStamp = new Date();
     this.endTimeStamp = new Date();
-
   }
 
   addNewEvent() {
     const { name, description, dateStamp, startTimeStamp, endTimeStamp, advices, locationString } = this;
-    const { userId, onRequestClose } = this.props;
-    const searchTerm = name.split(" ")[0];
+    const { userId, onRequestClose } = this.props;  
 
     if (!this.props.userId) { 
+      this.disabledProgressCircle();
       return;
     }
-
-    if(name === undefined) {
-      setTimeout( () => {this.disabledProgressCircle(), 3000 } );
+    
+    if(!name || !description || !dateStamp || !startTimeStamp || !endTimeStamp || !advices || !locationString) {
+      setTimeout( () => { this.disabledProgressCircle(); }, 2000 );
+      return;
+    } else {
+      const searchTerm = name.split(" ")[0];
+      getPhoto(searchTerm)
+      .then(blob => {
+        return uploadFile(blob);
+      })
+      .then(url => {
+        store.dispatch(addEvent(name, description, url, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
+        this.disabledProgressCircle();
+        onRequestClose();
+      })
+      .catch(() => {
+        store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
+        this.disabledProgressCircle();
+        onRequestClose();
+      });
     }
-
-    getPhoto(searchTerm)
-    .then(blob => {
-      return uploadFile(blob);
-    })
-    .then(url => {
-      store.dispatch(addEvent(name, description, url, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
-      this.disabledProgressCircle();
-      onRequestClose();
-    })
-    .catch(() => {
-      store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
-      this.disabledProgressCircle();
-      onRequestClose();
-    });
   }
 
   dateChange(placeholder, date) {
