@@ -23,7 +23,8 @@ export default class HomePage extends React.Component {
 
   renderMap() {
     return <div style={{ width: "100%", height: 240 }}>
-      <GoogleMap 
+      <GoogleMap
+        bootstrapURLKeys={{ key: "AIzaSyAlndrl6ZoeFfv0UURwByPWrxPbpYBAXEk" }}
         zoom={this.props.zoom}
         center={this.props.center}
       >
