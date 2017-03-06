@@ -15,5 +15,8 @@ module.exports = {
       "jsx": true
     }
   },
+  "rules": {
+    "no-debugger": 1
+  },
   "extends": ["eslint:recommended", "plugin:react/recommended"],
 };

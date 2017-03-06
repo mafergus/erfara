@@ -157,40 +157,14 @@ class App extends React.Component {
   }
 
   renderContent() {
-    const styles = this.getStyles();
-    const router = this.context.router;
-    const title =
-      router.isActive('/get-started') ? 'Get Started' :
-      router.isActive('/customization') ? 'Customization' :
-      router.isActive('/components') ? 'Components' :
-      router.isActive('/discover-more') ? 'Discover More' : '';
-    const { prepareStyles } = this.state.muiTheme;
+    // const styles = this.getStyles();
+    // const { prepareStyles } = this.state.muiTheme;
     const { children } = this.props;
 
-    return title !== '' ?
-      <div style={prepareStyles(styles.root)}>
-        <div style={prepareStyles(styles.content)}>
-          {React.cloneElement(children, {
-            onChangeMuiTheme: this.handleChangeMuiTheme,
-          })}
-        </div>
-      </div> :
-      children
+    return children;
   }
 
   render() {
-    const styles = this.getStyles();
-    const router = this.context.router;
-    const title =
-      router.isActive('/get-started') ? 'Get Started' :
-      router.isActive('/customization') ? 'Customization' :
-      router.isActive('/components') ? 'Components' :
-      router.isActive('/discover-more') ? 'Discover More' : '';
-    if (this.props.width === LARGE && title !== '') {
-      styles.root.paddingLeft = 256;
-      styles.footer.paddingLeft = 256;
-    }
-
     const unreadMessages = this.props.unreadMessages && this.props.unreadMessages > 0 ? 
       `(${this.props.unreadMessages}) Erfara` : 
       "Erfara";
@@ -199,7 +173,9 @@ class App extends React.Component {
       <div>
         <Title render={unreadMessages} />
         <AppBar />
-        {this.renderContent()}
+        <div style={{ position: "absolute", top: 63, bottom: 0, left: 0, width: "100%" }}>
+          {this.renderContent()}
+        </div>
         {this.renderFAB()}
         <CreateEventModal isOpen={this.state.eventModalOpen} onRequestClose={ () => this.setState({ eventModalOpen: false }) }/>
       </div>

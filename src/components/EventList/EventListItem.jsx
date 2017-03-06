@@ -29,6 +29,7 @@ export class EventListItem extends React.Component {
     getUser: PropTypes.func.isRequired,
     muiTheme: PropTypes.any,
     isFeatured: PropTypes.bool,
+    itemStyle: PropTypes.object,
   };
 
   static defaultProps = {
@@ -78,9 +79,9 @@ export class EventListItem extends React.Component {
   }
 
   render() {
-    const { event, eventUid, isFeatured } = this.props;
+    const { event, eventUid, isFeatured, itemStyle } = this.props;
     return <Link to={`/event/${eventUid}`} style={{ textDecoration: "none" }}>
-      <div style={{ width: isFeatured ? 720 : 333, height: 250 }} className="shadow border hoverable">
+      <div style={{ width: isFeatured ? 720 : 333, height: 250, ...itemStyle }} className="shadow border hoverable">
         <img src={event.photo} alt="Event" style={{ width: "100%", height: 181, objectFit: "cover" }} />
         {this.renderEventDetails()}
       </div>

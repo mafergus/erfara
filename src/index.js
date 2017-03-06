@@ -1,6 +1,6 @@
 import './stylesheets/main.css';
 require('./stylesheets/main.scss');
-import AppRoutes from './AppRoutes';
+import routes from './AppRoutes';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import store from './store/store';
@@ -20,7 +20,7 @@ const main = (
     <Router
       history={browserHistory}
       onUpdate={() => window.scrollTo(0, 0)}>
-      {AppRoutes}
+      {routes(store)}
     </Router>
   </Provider>
 );

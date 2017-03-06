@@ -27,9 +27,9 @@ export default class Attendees extends React.Component {
     if (extended) {
       children = attendees.map(user => user && <img alt="Attendee" key={user.uid} style={{ height: 26, width: 26, borderRadius: "50%", objectFit: "cover", marginRight: PADDING }} src={user.photo}/>);
     } else {
-      children.push(<img alt="Attendee" style={{ height: 26, width: 26, borderRadius: "50%", objectFit: "cover", marginRight: PADDING }} src={attendees[0] && attendees[0].photo}/>);
+      children.push(attendees[0] && <img alt="Attendee" key={attendees[0].uid} style={{ height: 26, width: 26, borderRadius: "50%", objectFit: "cover", marginRight: PADDING }} src={attendees[0] && attendees[0].photo}/>);
       if (attendees.length > 1) {
-        children.push(<div style={{ height: 29, width: 29, borderRadius: "50%", backgroundColor: "rgba(0, 0, 0, 0.12)", display: "inline-block", marginRight: PADDING }}>
+        children.push(<div key="123" style={{ height: 29, width: 29, borderRadius: "50%", backgroundColor: "rgba(0, 0, 0, 0.12)", display: "inline-block", marginRight: PADDING }}>
           <span style={{ color: lightBlack, verticalAlign: "middle", fontSize: "0.8em" }}>{`+${attendees.length-1}`}</span>
         </div>);
       }

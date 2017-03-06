@@ -27,7 +27,9 @@ export class EventsList extends React.Component {
     getEvents: PropTypes.func.isRequired,
     getUsers: PropTypes.func.isRequired,
     style: PropTypes.object,
+    itemStyle: PropTypes.object,
     events: ImmutablePropTypes.map.isRequired,
+    header: PropTypes.node,
     hasFeatured: PropTypes.bool,
     cols: PropTypes.number,
     colPadding: PropTypes.number,
@@ -53,23 +55,30 @@ export class EventsList extends React.Component {
   }
 
   render() {
-    const { cols, events, style, hasFeatured, colPadding, rowPadding, muiTheme } = this.props;
+    const { cols, events, style, hasFeatured, colPadding, rowPadding, muiTheme, itemStyle, header } = this.props;
     const STYLE = {
-      ...style,
-      width: "720px",
-      paddingTop: 20,
+      width: 720,
+      paddingTop: 0,
       position: "relative",
       marginLeft: "auto",
       marginRight: "auto",
+      ...style,
     }
     const rows = [];
     let items = [];
     let processedFeatured = false;
     events.forEach((item, key) => {
       if (hasFeatured && !processedFeatured) {
-        const featured = [];
-        featured.push(<EventListItem muiTheme={muiTheme} key={key} eventUid={key} event={item} isFeatured/>);
-        rows.push(<Row key={rows.length} rowPadding={rowPadding}>{featured}</Row>);
+        rows.push(<Row key={rows.length} rowPadding={rowPadding}>
+            [<EventListItem
+              itemStyle={itemStyle}
+              muiTheme={muiTheme}
+              key={key}
+              eventUid={key}
+              event={item}
+              isFeatured
+            />]
+          </Row>);
         processedFeatured = true;
         return;
       }
@@ -77,10 +86,13 @@ export class EventsList extends React.Component {
         rows.push(<Row key={rows.length}>{items}</Row>);
         items = [];
       }
-      items.push(<EventListItem muiTheme={muiTheme} key={key} eventUid={key} event={item} />);
+      items.push(<EventListItem itemStyle={itemStyle} muiTheme={muiTheme} key={key} eventUid={key} event={item} />);
     });
     if (items.length !== 0) { rows.push(<Row key={rows.length} colPadding={colPadding} rowPadding={rowPadding}>{items}</Row>) }
-    return <div style={STYLE}>{rows}</div>;
+    return <div style={STYLE}>
+      <div style={{ width: 1150, margin: "0px auto 20px auto" }}>{header}</div>
+      {rows}
+    </div>;
   }
 }
 
