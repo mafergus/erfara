@@ -20,7 +20,7 @@ const main = (
     <Router
       history={browserHistory}
       onUpdate={() => window.scrollTo(0, 0)}>
-      {AppRoutes}
+      {AppRoutes()}
     </Router>
   </Provider>
 );
