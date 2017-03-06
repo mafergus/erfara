@@ -34,7 +34,7 @@ export class CreateEventModal extends React.Component {
     super();
     autoBind(this);
 
-    this.state = { isLoading: false, isOpen: true };
+    this.state = { isLoading: false };
     this.dateStamp = new Date();
     this.startTimeStamp = new Date();
     this.endTimeStamp = new Date();
@@ -48,9 +48,10 @@ export class CreateEventModal extends React.Component {
       this.disabledProgressCircle();
       return;
     }
-    
-    if(!name || !description || !dateStamp || !startTimeStamp || !endTimeStamp || !advices || !locationString) {
+
+    if(!name || !description || !advices || !locationString) {
       setTimeout( () => { this.disabledProgressCircle(); }, 2000 );
+      alert("Please fill all fields");
       return;
     } else {
       const searchTerm = name.split(" ")[0];
@@ -114,7 +115,7 @@ export class CreateEventModal extends React.Component {
     else {
       return (
         <div>
-          <button type='submit' className="create-btn" onClick={() => { this.openLogInBox(); }}>PLEASE LOG IN TO CREATE EVENT</button>
+          <button type='submit' className="create-btn" onClick={() => { this.openLogInBox(); }}>LOG IN</button>
         </div>
       )
     }
@@ -137,6 +138,9 @@ export class CreateEventModal extends React.Component {
         paddingLeft:"10px",
         width: "inherit",
         fontSize:"12px"
+      },
+      errorText: {
+        marginTop: "10px"
       }
     }
 
@@ -162,7 +166,7 @@ export class CreateEventModal extends React.Component {
                     hintStyle={style.hintStyle}
                     underlineShow={false}
                     style={style.textFieldStyle}
-                    onChange={(event, value) => { this.name = value; }}
+                    onChange={(event, value) => { this.name = value;}}
                   />
                 </div>
               </div>
