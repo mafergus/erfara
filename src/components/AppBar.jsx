@@ -2,6 +2,7 @@ import React, { PropTypes } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
+import firebase from "firebase";
 import MaterialUIAppBar from 'material-ui/AppBar';
 import Badge from 'material-ui/Badge';
 import IconButton from 'material-ui/IconButton';
@@ -11,6 +12,7 @@ import { white, lightBlack, orange500, orange200 } from 'material-ui/styles/colo
 import ErfaraIcon from 'components/ErfaraIcon';
 import AuthModal from 'components/auth/AuthModal';
 import LoggedInUserComponent from "components/LoggedInUserComponent";
+import store from "store/store";
 import { addUser } from "actions/userActions";
 import { getUnreadMessageCount } from "utils/helpers";
 
@@ -62,7 +64,8 @@ export class AppBar extends React.Component {
   componentWillMount() {
     const authedUser = JSON.parse(localStorage.getItem("authedUser"));
     if (authedUser) {
-      this.props.addUser(authedUser);
+      store.dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user: authedUser });
+      firebase.onAuthSuccess(authedUser.uid);
     }
   }
 
