@@ -7,6 +7,7 @@ import TextField from "material-ui/TextField";
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import CircularProgress from 'material-ui/CircularProgress';
+import RaisedButton from 'material-ui/RaisedButton';
 import { addEvent } from "actions/eventActions";
 import { getPhoto, uploadFile } from "utils/Api";
 import "components/Modals/CreateEventModal.css"
@@ -94,6 +95,7 @@ export class CreateEventModal extends React.Component {
 
 
   renderProgressCircle() {
+
     if(this.props.userId){
       if(this.state.isLoading) {
         return ( 
@@ -103,16 +105,22 @@ export class CreateEventModal extends React.Component {
         );
       }
       return (
-        <div>
-          <button type='submit' className="create-btn" onClick={() => { this.setState({ isLoading: true }); this.addNewEvent(); }}>CREATE</button>
-        </div>
+        <RaisedButton 
+          label="CREATE"
+          primary={true}
+          className="create-btn"
+          onClick={() => { this.setState({ isLoading: true }); this.addNewEvent(); }}
+        />
       );   
     }
     else {
       return (
-        <div>
-          <button type='submit' className="create-btn" onClick={() => { this.props.onRequestClose(); }}>LOG IN</button>
-        </div>
+        <RaisedButton 
+          label="LOG IN"
+          primary={true}
+          className="create-btn"
+          onClick={ () => { this.props.onRequestClose(); }}
+        />
       )
     }
   }
