@@ -1,8 +1,6 @@
 import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import FullWidthSection from 'components/FullWidthSection';
-import EventDescription from "components/EventPage/EventDescription";
 import EventDetails from "components/EventPage/EventDetails";
 import UserList from "components/UserList";
 import { getEvent, rsvp } from "actions/eventActions";
@@ -78,15 +76,19 @@ export class EventPage extends React.Component {
     // if (!this.event) { return <div></div> };
     const { event, owner, attendees, isRSVPD } = this.props;
     if (!event || !owner) { return <div/>; }
-    return <FullWidthSection>
-      <div style={{ width: "40%", margin: "0 auto", position: "relative" }}>
-        <UserList style={ATTENDEES_LIST} title="Attendees" users={attendees}/>
-        <EventHero event={event} owner={owner} onRSVPClick={this.onRSVP} isRSVPD={isRSVPD} />
-        <EventDetails event={event}/>
-        <EventDescription event={event} />
-        <Feed style={{ width: "100%", backgroundColor: "white" }} eventId={this.props.params.id}/>
+    return <div style={{ width: "100%", position: "relative" }}>
+      <UserList style={ATTENDEES_LIST} title="Attendees" users={attendees}/>
+      <EventHero event={event} owner={owner} onRSVPClick={this.onRSVP} isRSVPD={isRSVPD} />
+      <div style={{ width: "75%", margin: "35px auto 0px auto" }}>
+        <EventDetails style={{ marginBottom: 40 }} event={event}/>
+         <div style={{ height: "100%", width: "25%", display: "inline-block" }}>
+          <UserList title="going" users={attendees} /> 
+        </div>
+        <div style={{ height: "100%", width: "75%", display: "inline-block", padding: "0 80px" }}>
+          <Feed style={{ width: "100%", backgroundColor: "white" }} eventId={this.props.params.id}/>
+        </div>
       </div>
-    </FullWidthSection>;
+    </div>;
   }
 }
 

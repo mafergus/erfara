@@ -1,3 +1,121 @@
+@font-face {
+    font-family: 'LobsterTwo-Regular'; /*a name to be used later*/
+    src: url('../fonts/LobsterTwo-Regular.ttf');
+    -webkit-font-smoothing: antialiased;
+}
+
+@font-face {
+    font-family: 'Roboto-Regular'; /*a name to be used later*/
+    src: url('../assets/Roboto-Regular.ttf');
+    -webkit-font-smoothing: antialiased;
+}
+
+@font-face {
+    font-family: 'Roboto-Medium'; /*a name to be used later*/
+    src: url('../assets/Roboto-Medium.ttf'); /*URL to font*/
+        -webkit-font-smoothing: antialiased;
+}
+
+@font-face {
+    font-family: 'Roboto-Thin'; /*a name to be used later*/
+    src: url('../assets/Roboto-Thin.ttf'); /*URL to font*/
+        -webkit-font-smoothing: antialiased;
+}
+
+@font-face {
+    font-family: 'RobotoCondensed-LightItalic'; /*a name to be used later*/
+    src: url('../assets/RobotoCondensed-LightItalic.ttf'); /*URL to font*/
+        -webkit-font-smoothing: antialiased;
+}
+
+@font-face {
+    font-family: 'Roboto-Light'; /*a name to be used later*/
+    src: url('../assets/Roboto-Light.ttf'); /*URL to font*/
+        -webkit-font-smoothing: antialiased;
+}
+
+@font-face {
+    font-family: 'Roboto-Bold'; /*a name to be used later*/
+    src: url('../assets/Roboto-Bold.ttf'); /*URL to font*/
+        -webkit-font-smoothing: antialiased;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  color: #424242;
+  background-color: #f1efea;
+  font-family: Roboto-Regular;
+  font-weight: normal;
+  color: white;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+hr {
+  height: 1px;
+  border-width: 0;
+  background-color: #EEEEEE;
+}
+
+p, h1 {
+  margin: 0px;
+}
+
+.app {
+  width: 100%;
+  height: 100%;
+}
+
+/* ######################################################################## */
+/* Main */
+/* ######################################################################## */
+
+.heroImage {
+  background-image: url("../images/sun_hero.png");
+  background-size: cover;
+  /*background-blend-mode: multiply;*/
+  /*background-color: #F39C11;*/
+}
+
+.erfaraFont {
+  font-family: "LobsterTwo-Regular";
+}
+
+#auth-div {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: none;
+}
+
+#main-div {
+  width: 100%;
+  height: 100%;
+  margin-top: 100px;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+/* ################################ */
+
 .sd-date {
   width: percentage(1/7);
   float: left;
@@ -39,6 +157,10 @@
   &:hover {
     background-color: #CCCCCC;
   }
+}
+
+.light-shadow {
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .shadow {
