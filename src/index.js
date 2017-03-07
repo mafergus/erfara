@@ -1,4 +1,3 @@
-import './stylesheets/main.css';
 require('./stylesheets/main.scss');
 import routes from './AppRoutes';
 import React from 'react';

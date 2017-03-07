@@ -1,6 +1,6 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
-import { darkBlack } from "material-ui/styles/colors";
+import { erfaraBlack } from "utils/colors";
 
 export default class PeopleList extends React.Component {
 
@@ -17,14 +17,9 @@ export default class PeopleList extends React.Component {
 
   render() {
     const { people, peopleType, style } = this.props;
-    const STYLE = {
-      ...style,
-      padding: "0 0 0 0",
-      borderRadius: "1%",
-    }
-    return <div className="attendeesList border" style={STYLE}>
-      <a style={{ fontSize: "1em", color: darkBlack, margin: "0.5em 5em 0.5em 0", lineHeight: "2em", width: "100%", paddingLeft: "0.7em" }}>{people.length} {peopleType}</a>
-      <hr style={{ margin: "0 0.4em 0 0.4em" }}/>
+    return <div className="attendeesList border" style={{ ...style, backgroundColor: "white", padding: "1.3em 0 0.5em 0" }}>
+      <span style={{ color: erfaraBlack, fontSize: "1em", padding: "0em 1.5em" }}>{people.length} {peopleType}</span>
+      <hr style={{ margin: "10px 0px 10px 0px", padding: "0em 1.5em" }} />
       {people}
     </div>;
   }
