@@ -92,10 +92,6 @@ export class CreateEventModal extends React.Component {
     this.setState( {isLoading: false} );
   }
 
-  openLogInBox () {
-    const { onRequestClose } = this.props;
-    onRequestClose();
-  }
 
   renderProgressCircle() {
     if(this.props.userId){
@@ -115,7 +111,7 @@ export class CreateEventModal extends React.Component {
     else {
       return (
         <div>
-          <button type='submit' className="create-btn" onClick={() => { this.openLogInBox(); }}>LOG IN</button>
+          <button type='submit' className="create-btn" onClick={() => { this.props.onRequestClose(); }}>LOG IN</button>
         </div>
       )
     }
