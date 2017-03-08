@@ -49,6 +49,7 @@ h3 {
 
 /*CREATE BUTTON*/
 .create-btn {
+  cursor: default;
   width: 304px;
   height: 36px;
   border: none;

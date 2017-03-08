@@ -10,7 +10,8 @@ import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import { addEvent } from "actions/eventActions";
 import { getPhoto, uploadFile } from "utils/Api";
-import "components/Modals/CreateEventModal.css"
+import SearchBox from './GoogleSearch';
+import "components/Modals/CreateEventModal.css";
 
 const PLACEHOLDER_PHOTO = "http://files.parsetfss.com/a5e80e30-a275-49f2-989e-e218e12017db/tfss-02ed6157-7aa6-4ffa-b530-16f711fb8f59-muir-woods.jpg";
 
@@ -19,6 +20,7 @@ function mapStateToProps(state) {
     userId: state.authedUser && state.authedUser.uid,
   };
 }
+
 /**
  * A modal dialog can only be closed by selecting one of the actions.
  */
@@ -175,19 +177,13 @@ export class CreateEventModal extends React.Component {
                 </div>
               </div>
               <div className="event-location">
-              <div className="label">
-                <label>Location</label>
-              </div>
-              <div className="box">
-                <TextField
-                  name="location"
-                  hintText="Add a place or address"
-                  hintStyle={style.hintStyle}
-                  underlineShow={false}
-                  style={style.textFieldStyle}
-                  onChange={(event, value) => { this.locationString = value; }}
-                />
-              </div>
+                <div className="label">
+                  <label>Location</label>
+                </div>
+                <div className="box">
+
+                  <SearchBox />
+                </div>
               </div>
             </div>
             <div className="row-2">
@@ -278,5 +274,14 @@ export class CreateEventModal extends React.Component {
     );
   }
 }
+
+// {<TextField
+//    name="location"
+//    hintText="Add a place or address"
+//    hintStyle={style.hintStyle}
+//    underlineShow={false}
+//    style={style.textFieldStyle}
+//    onChange={(event, value) => { this.locationString = value; }}
+// />}
 
 export default connect(mapStateToProps)(CreateEventModal);
