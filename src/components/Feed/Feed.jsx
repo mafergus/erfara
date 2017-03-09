@@ -5,6 +5,7 @@ import TextField from "material-ui/TextField";
 import { addEventMessage } from "actions/eventActions";
 import store from "store/store";
 import FeedItem from "components/Feed/FeedItem";
+import { addFeedReply } from "utils/Api";
 
 function mapStateToProps(state, props) {
   return {
@@ -17,7 +18,7 @@ export class Feed extends React.Component {
 
   static propTypes = {
     className: PropTypes.string,
-    items: PropTypes.array,
+    items: PropTypes.object,
     style: PropTypes.object,
     eventId: PropTypes.string,
     authedUser: PropTypes.object,
@@ -29,20 +30,16 @@ export class Feed extends React.Component {
     this.state = { message: "" };
   }
 
-  onSendClicked() {
-    // this.props.onSend(this.state.message);
-    store.dispatch(addEventMessage(this.props.eventId, this.props.authedUser.uid, this.state.message, new Date()));
-    this.setState({ message: "" });
-  }
-
   onKeyPress(event) {
     if (event.charCode === 13) { // enter key pressed
-      this.onSendClicked();  
+      store.dispatch(addEventMessage(this.props.eventId, this.props.authedUser.uid, this.state.message, new Date()));
+      this.setState({ message: "" });
     } 
   }
 
-  handleChange(event) {
-    this.setState({value: event.target.value});
+  onReplySubmitted(itemId, text) {
+    const { eventId, authedUser } = this.props;
+    addFeedReply(eventId, authedUser.uid, text, new Date(), itemId);
   }
 
   renderMessageBar() {
@@ -71,7 +68,7 @@ export class Feed extends React.Component {
     return <div className={className} style={{ ...style, backgroundColor: "white" }}>
       {this.renderMessageBar()}
       <hr style={{ margin: "0.8em 0em" }}/>
-      {items && Object.entries(items).map(item => <FeedItem key={item[0]} userId={item[1].userId} feedItem={item[1]} />)}
+      {items && Object.entries(items).map(item => <FeedItem key={item[0]} userId={item[1].userId} feedItem={item[1]} feedItemId={item[0]} onReply={this.onReplySubmitted} />)}
     </div>;
   }
 }
