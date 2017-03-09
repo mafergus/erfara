@@ -94,6 +94,19 @@ export function addFeedReply(eventId, userId, message, timestamp, parentId) {
   return firebase.database().ref().update(updates);
 }
 
+export function rsvp(event, eventId, userId, rsvpStatus) {
+  if (!event.attendees) { event.attendees = {}; }
+  if (rsvpStatus && !Object.keys(event.attendees).includes(userId)) {
+    event.attendees[userId] = true;
+  } else {
+    delete event.attendees[userId];
+  }
+
+  var updates = {};
+  updates["/events/" + eventId + "/attendees"] = event.attendees;
+  return firebase.database().ref().update(updates);
+}
+
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);

@@ -31,7 +31,7 @@ export class Feed extends React.Component {
   }
 
   onKeyPress(event) {
-    if (event.charCode === 13) { // enter key pressed
+    if (event.charCode === 13 && this.state.message.length > 2) { // enter key pressed
       store.dispatch(addEventMessage(this.props.eventId, this.props.authedUser.uid, this.state.message, new Date()));
       this.setState({ message: "" });
     } 

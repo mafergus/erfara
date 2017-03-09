@@ -62,18 +62,3 @@ export function addEventMessage(eventId, userId, message, timestamp) {
     return firebase.database().ref().update(updates);
   }
 }
-
-export function rsvp(event, eventId, userId, rsvpStatus) {
-  return () => {
-    if (!event.attendees) { event.attendees = {}; }
-    if (rsvpStatus && !Object.keys(event.attendees).includes(userId)) {
-      event.attendees[userId] = true;
-    } else {
-      delete event.attendees[userId];
-    }
-
-    var updates = {};
-    updates["/events/" + eventId + "/attendees"] = event.attendees;
-    return firebase.database().ref().update(updates);
-  }
-}
