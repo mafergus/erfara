@@ -25,7 +25,7 @@ export default class EventDetails extends React.Component {
 
   renderListItem(Icon, title, subtitle) {
     return <div style={{ width: "100%", display: "flex", marginBottom: 32 }}>
-      <div style={{ height: "100%", margin: "6px 12px 0px 0px" }}>
+      <div style={{ height: "100%", margin: "6px 18px 0px 0px" }}>
         <Icon style={{ color: darkGray }}/>
       </div>
       <div style={{ flexGrow: "1" }}>
