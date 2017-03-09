@@ -79,6 +79,21 @@ export function uploadFile(file) {
   });
 }
 
+export function addFeedReply(eventId, userId, message, timestamp, parentId) {
+  const url = `/events/${eventId}/feed/${parentId}/replies/`;
+  const messageData = {
+    message,
+    userId,
+    timestamp,
+  };
+  const newEventMessageKey = firebase.database().ref().child(url).push().key;
+
+  var updates = {};
+  updates[url + newEventMessageKey] = messageData;
+
+  return firebase.database().ref().update(updates);
+}
+
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);

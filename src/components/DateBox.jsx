@@ -27,6 +27,6 @@ DateBox.defaultProps = {
 
 DateBox.propTypes = {
   style: PropTypes.object,
-  timestamp: PropTypes.string,
+  timestamp: PropTypes.object,
   textColor: PropTypes.string,
 };

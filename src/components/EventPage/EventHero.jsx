@@ -3,23 +3,6 @@ import autoBind from "react-autobind";
 import DateBox from "components/DateBox";
 import RaisedButton from 'material-ui/RaisedButton';
 
-// const H3STYLE = {
-//   fontSize: "1.8em",
-//   fontWeight: "normal",
-//   margin: "0 auto",
-//   marginBottom: "0.3em",
-// };
-
-// const IMG_STYLE = {
-//   borderRadius: "50%",
-//   height: "30px",
-//   width: "30px",
-//   margin: "0 auto",
-//   marginRight: "0.6em",
-//   objectFit: "cover",
-//   verticalAlign: "middle",
-// };
-
 const HERO_STYLE = {
   position: "relative",
   height: 200,
