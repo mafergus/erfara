@@ -49,21 +49,21 @@ h3 {
 
 /*CREATE BUTTON*/
 .create-btn {
+  cursor: default;
   width: 304px;
-  height: 50px;
-  background: #BDBDBD;
+  height: 36px;
   border: none;
   color: #FFFFFF;
   font-family: .AppleSystemUIFont;
   font-size: 14px;
   text-align: center;
 }
-.create-btn:focus {
+/*.create-btn:focus {
   outline:0;
 }
 .create-btn:hover {
   background: orange;
-}
+}*/
 
 /* TEXTFIELD FIELD POSITIONS */
 .event-title, .event-date {

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { faintBlack } from "material-ui/styles/colors";
 import TextField from "material-ui/TextField";
-import { addUserFeedback } from "actions/userActions";
+import { addUserFeedback } from "utils/Api";
 import store from "store/store";
 import UserFeedItem from "components/UserFeed/UserFeedItem";
 
@@ -68,11 +68,11 @@ export class UserFeed extends React.Component {
   }
 
   render() {
-    const { style } = this.props;
+    const { style, authedUser } = this.props;
     const feed = this.props.user.feed;
     return <div style={{ ...style, borderTop: `1px solid ${faintBlack}` }}>
       {feed && Object.entries(feed).map(item => this.renderFeedItem(item[0], item[1]))}
-      {this.renderMessageBar()}
+      { authedUser.uid ? this.renderMessageBar() : null }
     </div>;
   }
 }

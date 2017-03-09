@@ -38,7 +38,6 @@ export class UserFeedItem extends React.Component {
   }
 
   render() {
-    //const { feedItem, user } = this.props;
     const { user } = this.props;
     const timeStr = formatDate(this.props.feedItem.timestamp, false);
     return (
@@ -56,11 +55,6 @@ export class UserFeedItem extends React.Component {
         <hr/>
       </div> 
     );
-    // return (
-    //   <div>
-    //     <h2 style={{ color: darkBlack }}>{this.props.feedItem.feedback}</h2>
-    //   </div>
-    // );
   }
 }
 

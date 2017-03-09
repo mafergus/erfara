@@ -1,14 +1,17 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import store from "store/store";
 import Dialog from 'material-ui/Dialog';
 import autoBind from 'react-autobind';
 import TextField from "material-ui/TextField";
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
-import store from "store/store";
-import { addEvent } from "actions/eventActions";
+import CircularProgress from 'material-ui/CircularProgress';
+import RaisedButton from 'material-ui/RaisedButton';
+import { addEvent } from "utils/Api";
 import { getPhoto, uploadFile } from "utils/Api";
-import "components/Modals/CreateEventModal.css"
+import SearchBox from 'components/Modals/LocationSearch';
+import "components/Modals/CreateEventModal.css";
 
 const PLACEHOLDER_PHOTO = "http://files.parsetfss.com/a5e80e30-a275-49f2-989e-e218e12017db/tfss-02ed6157-7aa6-4ffa-b530-16f711fb8f59-muir-woods.jpg";
 
@@ -17,12 +20,14 @@ function mapStateToProps(state) {
     userId: state.authedUser && state.authedUser.uid,
   };
 }
+
 /**
  * A modal dialog can only be closed by selecting one of the actions.
  */
 export class CreateEventModal extends React.Component {
 
   static propTypes = {
+    isLoading: PropTypes.bool,
     isOpen: PropTypes.bool.isRequired,
     onRequestClose: PropTypes.func.isRequired,
     userId: PropTypes.string,
@@ -32,6 +37,7 @@ export class CreateEventModal extends React.Component {
     super();
     autoBind(this);
 
+    this.state = { isLoading: false };
     this.dateStamp = new Date();
     this.startTimeStamp = new Date();
     this.endTimeStamp = new Date();
@@ -40,21 +46,33 @@ export class CreateEventModal extends React.Component {
   addNewEvent() {
     const { name, description, dateStamp, startTimeStamp, endTimeStamp, advices, locationString } = this;
     const { userId, onRequestClose } = this.props;
-    const searchTerm = name.split(" ")[0];
-    if (!this.props.userId) { return; }
 
-    getPhoto(searchTerm)
-    .then(blob => {
-      return uploadFile(blob);
-    })
-    .then(url => {
-      store.dispatch(addEvent(name, description, url, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
-      onRequestClose();
-    })
-    .catch(() => {
-      store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
-      onRequestClose();
-    });
+    if (!this.props.userId) { 
+      this.disabledProgressCircle();
+      return;
+    }
+
+    if(!name || !description || !advices || !locationString) {
+      setTimeout( () => { this.disabledProgressCircle(); }, 2000 );
+      alert("Please fill all fields");
+      return;
+    } else {
+      const searchTerm = name.split(" ")[0];
+      getPhoto(searchTerm)
+      .then(blob => {
+        return uploadFile(blob);
+      })
+      .then(url => {
+        store.dispatch(addEvent(name, description, url, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
+        this.disabledProgressCircle();
+        onRequestClose();
+      })
+      .catch(() => {
+        store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
+        this.disabledProgressCircle();
+        onRequestClose();
+      });
+    }
   }
 
   dateChange(placeholder, date) {
@@ -71,6 +89,42 @@ export class CreateEventModal extends React.Component {
   endTimeChange(placeholder, date) {
     this.endTimeStamp.setHours(date.getHours());
     this.endTimeStamp.setMinutes(date.getMinutes());
+  }
+
+  disabledProgressCircle() {
+    this.setState( {isLoading: false} );
+  }
+
+
+  renderProgressCircle() {
+
+    if(this.props.userId){
+      if(this.state.isLoading) {
+        return ( 
+          <div>
+            <CircularProgress />
+          </div> 
+        );
+      }
+      return (
+        <RaisedButton 
+          label="CREATE"
+          primary={true}
+          className="create-btn"
+          onClick={() => { this.setState({ isLoading: true }); this.addNewEvent(); }}
+        />
+      );   
+    }
+    else {
+      return (
+        <RaisedButton 
+          label="LOG IN"
+          primary={true}
+          className="create-btn"
+          onClick={ () => { this.props.onRequestClose(); }}
+        />
+      )
+    }
   }
 
   render() {
@@ -90,6 +144,9 @@ export class CreateEventModal extends React.Component {
         paddingLeft:"10px",
         width: "inherit",
         fontSize:"12px"
+      },
+      errorText: {
+        marginTop: "10px"
       }
     }
 
@@ -101,7 +158,7 @@ export class CreateEventModal extends React.Component {
           onRequestClose={this.props.onRequestClose}
           open={this.props.isOpen}>
           <div>
-            <a href="#" onClick={this.props.onRequestClose} className="close-btn">&times;</a>
+            <a href="#" onClick={() => { this.props.onRequestClose(); this.setState({ isLoading: false }); }} className="close-btn">&times;</a>
             <h3>Create an Event</h3>
             <div className="row-1">
               <div className="event-title">
@@ -115,24 +172,17 @@ export class CreateEventModal extends React.Component {
                     hintStyle={style.hintStyle}
                     underlineShow={false}
                     style={style.textFieldStyle}
-                    onChange={(event, value) => { this.name = value; }}
+                    onChange={(event, value) => { this.name = value;}}
                   />
                 </div>
               </div>
               <div className="event-location">
-              <div className="label">
-                <label>Location</label>
-              </div>
-              <div className="box">
-                <TextField
-                  name="location"
-                  hintText="Add a place or address"
-                  hintStyle={style.hintStyle}
-                  underlineShow={false}
-                  style={style.textFieldStyle}
-                  onChange={(event, value) => { this.locationString = value; }}
-                />
-              </div>
+                <div className="label">
+                  <label>Location</label>
+                </div>
+                <div className="box">
+                  <SearchBox />
+                </div>
               </div>
             </div>
             <div className="row-2">
@@ -215,7 +265,7 @@ export class CreateEventModal extends React.Component {
               </div>
             </div>
             <div className="row-4">
-              <button type='submit' className="create-btn" onClick={() => {this.addNewEvent()}}>CREATE</button>
+              {this.renderProgressCircle()}
             </div>
           </div>
         </Dialog>
@@ -223,5 +273,14 @@ export class CreateEventModal extends React.Component {
     );
   }
 }
+
+// {<TextField
+//    name="location"
+//    hintText="Add a place or address"
+//    hintStyle={style.hintStyle}
+//    underlineShow={false}
+//    style={style.textFieldStyle}
+//    onChange={(event, value) => { this.locationString = value; }}
+// />}
 
 export default connect(mapStateToProps)(CreateEventModal);
