@@ -3,7 +3,7 @@ import firebase from 'actions/database';
 import Dialog from 'material-ui/Dialog';
 import { lightBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
-import { addUser } from "actions/userActions";
+import { addUser } from "utils/Api";
 import { addMessage } from "actions/messageActions";
 import { getPhoto, uploadFile, checkUserExists } from "utils/Api";
 import store from "store/store";
