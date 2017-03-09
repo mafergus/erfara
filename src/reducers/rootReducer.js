@@ -1,10 +1,12 @@
 import { combineReducers } from "redux";
-import { eventsReducer } from './eventsReducer';
-import { authedUserReducer } from "./authedUserReducer";
-import { usersReducer } from "./usersReducer";
+import { eventsReducer } from 'reducers/eventsReducer';
+import { authedUserReducer } from "reducers/authedUserReducer";
+import { usersReducer } from "reducers/usersReducer";
+import { locationSearchReducer } from "reducers/locationSearchReducer";
 
 const rootReducer = combineReducers({
   authedUser: authedUserReducer,
+  locationSearch: locationSearchReducer,
   events: eventsReducer,
   users: usersReducer,
 });
