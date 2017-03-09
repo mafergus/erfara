@@ -8,9 +8,9 @@ import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
-import { addEvent } from "actions/eventActions";
+import { addEvent } from "utils/Api";
 import { getPhoto, uploadFile } from "utils/Api";
-import SearchBox from './GoogleSearch';
+import SearchBox from 'components/Modals/LocationSearch';
 import "components/Modals/CreateEventModal.css";
 
 const PLACEHOLDER_PHOTO = "http://files.parsetfss.com/a5e80e30-a275-49f2-989e-e218e12017db/tfss-02ed6157-7aa6-4ffa-b530-16f711fb8f59-muir-woods.jpg";
@@ -181,7 +181,6 @@ export class CreateEventModal extends React.Component {
                   <label>Location</label>
                 </div>
                 <div className="box">
-
                   <SearchBox />
                 </div>
               </div>

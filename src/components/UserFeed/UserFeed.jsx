@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { faintBlack } from "material-ui/styles/colors";
 import TextField from "material-ui/TextField";
-import { addUserFeedback } from "actions/userActions";
+import { addUserFeedback } from "utils/Api";
 import store from "store/store";
 import UserFeedItem from "components/UserFeed/UserFeedItem";
 
