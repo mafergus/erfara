@@ -4,8 +4,8 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router";
 import { getUser } from "actions/userActions";
-import { getShortMonth } from "utils/dateTimeHelpers";
 import Attendees from "components/EventList/Attendees";
+import DateBox from "components/DateBox";
 
 function mapStateToProps(state, props) {
   const event = state.events.get(props.eventUid);
@@ -48,23 +48,11 @@ export class EventListItem extends React.Component {
     }
   }
 
-  renderDate(timestamp) {
-    const { muiTheme } = this.props;
-    return <div style={{ height: "100%", width: 70, display: "inline-block", borderRight: "1px solid rgba(0, 0, 0, 0.06)" }}>
-      <div style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ marginTop: "auto", marginBottom: "auto" }}>
-          <p style={{ fontSize: "0.8em", fontWeight: "300", color: muiTheme.palette.accent1Color }}>{getShortMonth(timestamp)}</p>
-          <p style={{ fontSize: "1.1em", fontWeight: "200", color: muiTheme.palette.accent1Color }}>{timestamp.getDate()}</p>
-        </div>
-      </div>
-    </div>;
-  }
-
   renderEventDetails() {
-    const { event, attendees, isFeatured } = this.props;
+    const { event, attendees, isFeatured, muiTheme } = this.props;
     const timestamp = new Date(event.date);
     return <div style={{ width: "100%", height: 70, marginTop: -5, position: "relative", display: "flex", alignItems: "center", backgroundColor: "white" }}>
-      {this.renderDate(timestamp)}
+      <DateBox muiTheme={muiTheme.palette.accent1Color} timestamp={timestamp} />
       <div style={{ height: "100%", flexGrow: "1", display: "flex", alignItems: "center", paddingLeft: 13 }}>
         <p style={{ color: "#424242", textAlign: "left" }}>
           <span style={{ fontSize: "1em" }}>{event.title}</span>

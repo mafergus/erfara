@@ -122,21 +122,6 @@ export function addEventMessage(eventId, userId, message, timestamp) {
   }
 }
 
-export function rsvp(event, eventId, userId, rsvpStatus) {
-  return () => {
-    if (!event.attendees) { event.attendees = {}; }
-    if (rsvpStatus && !Object.keys(event.attendees).includes(userId)) {
-      event.attendees[userId] = true;
-    } else {
-      delete event.attendees[userId];
-    }
-
-    var updates = {};
-    updates["/events/" + eventId + "/attendees"] = event.attendees;
-    return firebase.database().ref().update(updates);
-  }
-}
-
 export function uploadFile(file) {
   return new Promise((resolve, reject) => {
     var storageRef = firebase.storage().ref();
@@ -169,6 +154,34 @@ export function uploadFile(file) {
       resolve(uploadTask.snapshot.downloadURL);
     });
   });
+}
+
+export function addFeedReply(eventId, userId, message, timestamp, parentId) {
+  const url = `/events/${eventId}/feed/${parentId}/replies/`;
+  const messageData = {
+    message,
+    userId,
+    timestamp,
+  };
+  const newEventMessageKey = firebase.database().ref().child(url).push().key;
+
+  var updates = {};
+  updates[url + newEventMessageKey] = messageData;
+
+  return firebase.database().ref().update(updates);
+}
+
+export function rsvp(event, eventId, userId, rsvpStatus) {
+  if (!event.attendees) { event.attendees = {}; }
+  if (rsvpStatus && !Object.keys(event.attendees).includes(userId)) {
+    event.attendees[userId] = true;
+  } else {
+    delete event.attendees[userId];
+  }
+
+  var updates = {};
+  updates["/events/" + eventId + "/attendees"] = event.attendees;
+  return firebase.database().ref().update(updates);
 }
 
 export function addEvent(title, description, photo, date, startTime, endTime, advices, locationString, userId) {

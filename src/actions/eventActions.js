@@ -17,4 +17,3 @@ export function getEvent(id) {
     });
   }
 }
-
