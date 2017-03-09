@@ -49,7 +49,7 @@ export class FeedItem extends React.Component {
 
   onKeyPress(event) {
     const { onReply, feedItemId } = this.props;
-    if (event.charCode === 13) { // enter key pressed
+    if (event.charCode === 13 && this.state.reply.length > 2) { // enter key pressed
       onReply(feedItemId, this.state.reply);
       this.setState({ 
         reply: "",

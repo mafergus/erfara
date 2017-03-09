@@ -9,8 +9,6 @@ const HERO_STYLE = {
   width: "100%",
   backgroundSize: "cover",
   backgroundPosition: "50% 40%",
-  /*background-blend-mode: multiply;*/
-  /*background-color: #F39C11;*/
   objectFit: "cover",
 };
 
@@ -30,9 +28,9 @@ export default class EventHero extends React.Component {
   }
   
   render() {
-    const { event } = this.props;
+    const { event, isRSVPD, onRSVPClick } = this.props;
     const timestamp = new Date(event.date);
-    // const rsvp = isRSVPD ? "RSVP -" : "RSVP +";
+    const joinLabel = isRSVPD ? "Leave" : "Join";
     return <div style={{ ...HERO_STYLE, backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url('${event.photo}')`, borderBottom: "1px solid rgba(0, 0, 0, 0.08)" }} >
       <div style={{ width: "75%", height: "100%", position: "relative", margin: "0 auto" }}>
         <div style={{ height: 70, position: "absolute", bottom: 0, left: 0, right: 0 }}>
@@ -43,8 +41,7 @@ export default class EventHero extends React.Component {
             </div>
           </div>
           <div style={{ float: "right", height: "100%", display: "flex", alignItems: "center" }}>
-            <RaisedButton label="Save" style={{ marginRight: 20 }}/>
-            <RaisedButton label="Join" primary />
+            <RaisedButton label={joinLabel} onClick={onRSVPClick} primary />
           </div>
         </div>
       </div>
