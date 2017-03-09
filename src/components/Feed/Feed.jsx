@@ -2,7 +2,7 @@ import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import TextField from "material-ui/TextField";
-import { addEventMessage } from "actions/eventActions";
+import { addEventMessage } from "utils/Api";
 import store from "store/store";
 import FeedItem from "components/Feed/FeedItem";
 import { addFeedReply } from "utils/Api";
