@@ -7,6 +7,7 @@ import { getEvent, rsvp } from "actions/eventActions";
 import EventHero from "components/EventPage/EventHero";
 import Feed from "components/Feed/Feed";
 import store from "store/store";
+import { erfaraBlack } from "utils/colors";
 
 const ATTENDEES_LIST = {
   position: "absolute",
@@ -27,8 +28,8 @@ function mapStateToProps(state, props) {
   }
   return {
     authedUser: state.authedUser,
-    event: event,
-    owner: owner,
+    event,
+    owner,
     attendees: leUsers,
     isRSVPD: isRSVPD,
   };
@@ -75,17 +76,19 @@ export class EventPage extends React.Component {
   render() {
     // if (!this.event) { return <div></div> };
     const { event, owner, attendees, isRSVPD } = this.props;
-    if (!event || !owner) { return <div/>; }
+    if (!event || !owner) { return null; }
     return <div style={{ width: "100%", position: "relative" }}>
       <UserList style={ATTENDEES_LIST} title="Attendees" users={attendees}/>
       <EventHero event={event} owner={owner} onRSVPClick={this.onRSVP} isRSVPD={isRSVPD} />
       <div style={{ width: "75%", margin: "35px auto 0px auto" }}>
-        <EventDetails style={{ marginBottom: 40 }} event={event}/>
-         <div style={{ height: "100%", width: "25%", display: "inline-block" }}>
-          <UserList title="going" users={attendees} /> 
-        </div>
-        <div style={{ height: "100%", width: "75%", display: "inline-block", padding: "0 80px" }}>
-          <Feed style={{ width: "100%", backgroundColor: "white" }} eventId={this.props.params.id}/>
+        <EventDetails style={{ marginBottom: 20 }} event={event}/>
+        <div>
+          <UserList title="going" users={attendees} className="light-shadow border" style={{ height: "100%", width: "24%", marginRight: "2%", display: "inline-block", verticalAlign: "top" }}/> 
+          <div className="light-shadow border" style={{ height: "100%", width: "50%", display: "inline-block", marginBottom: 50, backgroundColor: "white", padding: "0.9em 1.5em" }}>
+            <span style={{ color: erfaraBlack, fontSize: "1em" }}>Discussion</span>
+            <hr style={{ margin: "0.8em 0em" }} />
+            <Feed eventId={this.props.params.id}/>
+          </div>
         </div>
       </div>
     </div>;

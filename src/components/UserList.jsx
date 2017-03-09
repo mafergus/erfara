@@ -12,6 +12,7 @@ export default class UserList extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     users: PropTypes.any,
+    className: PropTypes.string,
     style: PropTypes.object,
   };
 
@@ -21,7 +22,7 @@ export default class UserList extends React.Component {
   }
 
   render() {
-    const { users, title, style } = this.props;
+    const { users, title, style, className } = this.props;
     let items = [];
     users && users.forEach(item => {
       items.push(<AttendeeListItem
@@ -33,7 +34,7 @@ export default class UserList extends React.Component {
         image={item && item.photo}
         />);
     });
-    return <PeopleList people={items} peopleType={title} style={style} />
+    return <PeopleList people={items} peopleType={title} style={style} className={className} />
   }
   
 }
