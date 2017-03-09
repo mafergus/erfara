@@ -13,7 +13,7 @@ import ErfaraIcon from 'components/ErfaraIcon';
 import AuthModal from 'components/auth/AuthModal';
 import LoggedInUserComponent from "components/LoggedInUserComponent";
 import store from "store/store";
-import { addUser } from "actions/userActions";
+import { addUser } from "utils/Api";
 import { getUnreadMessageCount } from "utils/helpers";
 
 const STYLE = {

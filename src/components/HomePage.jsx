@@ -3,6 +3,8 @@ import autoBind from "react-autobind";
 import GoogleMap from 'google-map-react';
 import EventsList from "components/EventList/EventList";
 import { erfaraBlack } from "utils/colors";
+import { getPlaces, autoCompletePlaces } from "utils/Api";
+import { DEFAULT_LOCATION } from "utils/constants";
 
 export default class HomePage extends React.Component {
 
@@ -12,13 +14,21 @@ export default class HomePage extends React.Component {
   };
 
   static defaultProps = {
-    center: [37.65459, -122.2037],
+    center: DEFAULT_LOCATION,
     zoom: 10,
   };
   
   constructor() {
     super();
     autoBind(this);
+  }
+
+  componentDidMount() {
+    getPlaces("san");
+    autoCompletePlaces("san").then(json => {
+      const predictions = json.predictions;
+      return predictions;
+    });
   }
 
   renderMap() {
