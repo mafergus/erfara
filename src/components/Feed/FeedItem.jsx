@@ -3,12 +3,14 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { bindActionCreators } from "redux";
 import { darkBlack, lightBlack, minBlack } from "material-ui/styles/colors";
-import { darkGray } from "utils/colors";
+import { erfaraBlack } from "utils/colors";
 import { getUser } from "actions/userActions";
+import TextField from "material-ui/TextField";
 import Moment from "moment";
 
 function mapStateToProps(state, props) {
   return {
+    authedUser: state.authedUser,
     user: state.users.get(props.userId),
   };
 }
@@ -20,6 +22,7 @@ function mapDispatchToProps(dispatch) {
 export class FeedItem extends React.Component {
 
   static propTypes = {
+    authedUser: PropTypes.object,
     feedItem: PropTypes.object,
     getUser: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
@@ -29,6 +32,11 @@ export class FeedItem extends React.Component {
   constructor() {
     super();
     autoBind(this);
+
+    this.state = {
+      isReplyOpen: false,
+      reply: "",
+    };
   }
 
   componentWillMount() {
@@ -36,6 +44,29 @@ export class FeedItem extends React.Component {
     if (userId) {
       getUser(userId);
     }
+  }
+
+  onKeyPress(event) {
+    if (event.charCode === 13) { // enter key pressed
+      alert(this.state.reply);
+    } 
+  }
+
+  renderReplyBox() {
+    const { authedUser } = this.props;
+    return <div className="border" style={{ width: "100%", display: "flex", alignItems: "center", height: 60, marginBottom: 15 }}>
+      <img alt="You" style={{ height: 30, width: 30, margin: "0px 7px 0px 12px", borderRadius: "50%" }} src={authedUser.photo}/>
+      <TextField 
+        hintText="Reply"
+        hintStyle={{ fontSize: "0.9em" }}
+        inputStyle={{ color: erfaraBlack }}
+        underlineShow={false}
+        value={this.state.reply}
+        style={{ flexGrow: "1", margin: "0px 15px" }}
+        onKeyPress={this.onKeyPress}
+        onChange={(event, value) => { this.setState({ reply: value }) }}
+      />
+    </div>;
   }
 
   render() {
@@ -52,7 +83,8 @@ export class FeedItem extends React.Component {
             <span style={{ float: "right", color: minBlack, fontWeight: "500", fontSize: "0.75em" }}>{moment.fromNow()}</span>
           </div>
           <span style={{ color: lightBlack }}>{feedItem.message}</span>
-          <div style={{ padding: "1.4em 0em", fontSize: "0.9em" }}><span className="hoverable" style={{ color: darkGray }} onClick={() => alert("BOOM")}>Reply</span></div>
+          <div style={{ padding: "1.4em 0em", fontSize: "0.9em" }}><span className="reply-box" onClick={() => this.setState({ isReplyOpen: !this.state.isReplyOpen })}>Reply</span></div>
+          {this.state.isReplyOpen && this.renderReplyBox() }
         </div>
       </div>
       <hr/>

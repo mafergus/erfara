@@ -196,6 +196,14 @@ p, h1 {
   cursor: se-resize;
 }
 
+.reply-box {
+  color: #9E9E9E;
+
+  &:hover {
+    color: #6E6E6E;
+  }
+}
+
 .messaging-pane {
 
   .background-image {
