@@ -31,13 +31,30 @@ export default class LocationSearch extends React.Component {
   }
 
   render() {
-    return <div>
-      <TextField 
-        name="Search location"
-        hintText="Search location"
-        onChange={(event, value) => this.gotText(event, value)}
-      />
-    </div>;
+    const style = {
+      textFieldStyle: {
+        paddingLeft:"10px",
+        width: "295px",
+        fontSize:"12px"
+      },
+      hintStyle: {
+        color: "#BDBDBD", 
+        fontFamily: ".AppleSystemUIFont",
+        fontSize: "12px"
+      }
+    }
+    return (
+      <div>
+        <TextField 
+          name="Search location"
+          hintText="Search location"
+          hintStyle={style.hintStyle}
+          underlineShow={false}
+          style={style.textFieldStyle}
+          onChange={(event, value) => this.gotText(event, value)}
+        />
+      </div>
+    );
   }
 }
 
