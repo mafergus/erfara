@@ -274,13 +274,4 @@ export class CreateEventModal extends React.Component {
   }
 }
 
-// {<TextField
-//    name="location"
-//    hintText="Add a place or address"
-//    hintStyle={style.hintStyle}
-//    underlineShow={false}
-//    style={style.textFieldStyle}
-//    onChange={(event, value) => { this.locationString = value; }}
-// />}
-
 export default connect(mapStateToProps)(CreateEventModal);
