@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 
 function mapStateToProps(state) {
   return {
+    authedUser: state.authedUser,
     locationSearch: state.locationSearch
   };
 }
@@ -15,6 +16,7 @@ function mapStateToProps(state) {
 export class LocationSearch extends React.Component {
   static propTypes = {
     text: PropTypes.string,
+    authedUser: PropTypes.object,
     locationSearch: PropTypes.array,
   };
 
@@ -29,7 +31,7 @@ export class LocationSearch extends React.Component {
   }
 
   gotText(value, dataSource, params) {
-    if (params) {
+    if (params && this.props.authedUser.uid) {
       this.text = value;
       if (this.text.length > 2 || this.text.length === 0) { 
         autoCompletePlaces(this.text).then(json => {
