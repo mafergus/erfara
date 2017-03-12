@@ -31,21 +31,24 @@ export class CreateEventModal extends React.Component {
     isOpen: PropTypes.bool.isRequired,
     onRequestClose: PropTypes.func.isRequired,
     userId: PropTypes.string,
+    locationFromSearchBox: PropTypes.string
   };
 
   constructor() {
     super();
     autoBind(this);
 
-    this.state = { isLoading: false };
+    this.state = { isLoading: false , locationFromSearchBox: "" };
     this.dateStamp = new Date();
     this.startTimeStamp = new Date();
     this.endTimeStamp = new Date();
   }
 
   addNewEvent() {
-    const { name, description, dateStamp, startTimeStamp, endTimeStamp, advices, locationString } = this;
+    const { name, description, dateStamp, startTimeStamp, endTimeStamp, advices } = this;
     const { userId, onRequestClose } = this.props;
+    const locationString = this.state.locationFromSearchBox;
+    console.log(name, description, dateStamp, startTimeStamp, endTimeStamp, advices, locationString);
 
     if (!this.props.userId) { 
       this.disabledProgressCircle();
@@ -74,6 +77,10 @@ export class CreateEventModal extends React.Component {
       });
     }
   }
+  locationChange(value) {
+    console.log("Location change is invoked", value);
+    this.setState({locationFromSearchBox: value });
+  }
 
   dateChange(placeholder, date) {
     this.dateStamp.setFullYear(date.getFullYear());
@@ -97,7 +104,6 @@ export class CreateEventModal extends React.Component {
 
 
   renderProgressCircle() {
-
     if(this.props.userId){
       if(this.state.isLoading) {
         return ( 
@@ -181,7 +187,7 @@ export class CreateEventModal extends React.Component {
                   <label>Location</label>
                 </div>
                 <div className="box">
-                  <SearchBox />
+                  <SearchBox onSelectLocation={this.locationChange}/>
                 </div>
               </div>
             </div>
