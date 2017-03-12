@@ -13,11 +13,13 @@ function mapStateToProps(state) {
   };
 }
 
+
 export class LocationSearch extends React.Component {
   static propTypes = {
     text: PropTypes.string,
     authedUser: PropTypes.object,
     locationSearch: PropTypes.array,
+    onSelectLocation: PropTypes.func
   };
 
   constructor() {
@@ -26,8 +28,12 @@ export class LocationSearch extends React.Component {
 
     this.text = "";
     this.state = {
-      isListOpen: true
-    }
+      locationString :"",
+    };
+  }
+
+  sendLocationToModal(input) {
+    this.props.onSelectLocation(input);
   }
 
   gotText(value, dataSource, params) {
@@ -69,6 +75,7 @@ export class LocationSearch extends React.Component {
           listStyle={{width:'301px' ,marginLeft:"-8px"}}
           underlineShow={false}
           onUpdateInput={(value, dataSource, params) => {this.gotText(value, dataSource, params)}}
+          onNewRequest={(chosenItem) => { this.sendLocationToModal(chosenItem.description);}}
         />
       </div>
     );
