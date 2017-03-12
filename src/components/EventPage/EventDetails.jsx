@@ -46,7 +46,7 @@ export default class EventDetails extends React.Component {
           <span style={{ color: erfaraBlack, fontSize: "1em" }}>Time and Plan</span>
           <hr style={{ margin: "10px 0px 20px 0px" }} />
           {this.renderListItem(Alarm, dateStr, startTimeStr + "-" + endTimeStr)}
-          {this.renderListItem(Place, event.locationString, "850 Russet Dr, Sunnyvale, CA 94087")}
+          {this.renderListItem(Place, event.locationString)}
         </div>
         <div style={{ height: "100%", width: "50%", display: "inline-block", padding: "0 80px" }}>
           <span style={{ color: erfaraBlack, fontSize: "1em" }}>Details</span>
