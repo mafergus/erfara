@@ -48,7 +48,6 @@ export class CreateEventModal extends React.Component {
     const { name, description, dateStamp, startTimeStamp, endTimeStamp, advices } = this;
     const { userId, onRequestClose } = this.props;
     const locationString = this.state.locationFromSearchBox;
-    console.log(name, description, dateStamp, startTimeStamp, endTimeStamp, advices, locationString);
 
     if (!this.props.userId) { 
       this.disabledProgressCircle();
@@ -78,7 +77,6 @@ export class CreateEventModal extends React.Component {
     }
   }
   locationChange(value) {
-    console.log("Location change is invoked", value);
     this.setState({locationFromSearchBox: value });
   }
 
