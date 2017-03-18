@@ -1,5 +1,4 @@
 import React, { PropTypes } from "react";
-import ImmutablePropTypes from "react-immutable-proptypes";
 import autoBind from "react-autobind";
 import { connect } from 'react-redux';
 import muiThemeable from 'material-ui/styles/muiThemeable';
@@ -8,9 +7,16 @@ import { getUsers } from "actions/userActions";
 import EventListItem from "components/EventList/EventListItem";
 import Row from "components/GridList/Row";
 
+function orderByDate(arr) {
+  return arr.slice().sort(function (a, b) {
+    return a[1]["date"] < b[1]["date"] ? -1 : 1;
+  });
+}
+
 function mapStateToProps(state) {
+  const sortedEvents = orderByDate(Object.entries(state.events.toJS()));
   return {
-    events: state.events,
+    events: sortedEvents,
   };
 }
 
@@ -28,7 +34,7 @@ export class EventsList extends React.Component {
     getUsers: PropTypes.func.isRequired,
     style: PropTypes.object,
     itemStyle: PropTypes.object,
-    events: ImmutablePropTypes.map.isRequired,
+    events: PropTypes.array,
     header: PropTypes.node,
     hasFeatured: PropTypes.bool,
     cols: PropTypes.number,
@@ -67,15 +73,15 @@ export class EventsList extends React.Component {
     const rows = [];
     let items = [];
     let processedFeatured = false;
-    events.forEach((item, key) => {
+    events.forEach(item => {
       if (hasFeatured && !processedFeatured) {
         rows.push(<Row key={rows.length} rowPadding={rowPadding}>
             [<EventListItem
               itemStyle={itemStyle}
               muiTheme={muiTheme}
-              key={key}
-              eventUid={key}
-              event={item}
+              key={item[0]}
+              eventUid={item[0]}
+              event={item[1]}
               isFeatured
             />]
           </Row>);
@@ -86,7 +92,7 @@ export class EventsList extends React.Component {
         rows.push(<Row key={rows.length}>{items}</Row>);
         items = [];
       }
-      items.push(<EventListItem itemStyle={itemStyle} muiTheme={muiTheme} key={key} eventUid={key} event={item} />);
+      items.push(<EventListItem itemStyle={itemStyle} muiTheme={muiTheme} key={item[0]} eventUid={item[0]} event={item[1]} />);
     });
     if (items.length !== 0) { rows.push(<Row key={rows.length} colPadding={colPadding} rowPadding={rowPadding}>{items}</Row>) }
     return <div style={STYLE}>

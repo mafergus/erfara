@@ -58,21 +58,48 @@ export function addUser(user) {
   }
 }
 
-export function addUserFeedback(senderId, recipientId, feedback, timestamp) {
-  return () => {
-    const url = `/users/${recipientId}/feed/`;
-    const feedData = {
-      feedback,
-      userId: senderId,
-      timestamp,
-    };
-    const newUserFeedbackKey = firebase.database().ref().child(url).push().key;
+export function followUser(followerId, userId) {
+  var updates = {};
+  updates["/users/" + userId + "/followers/" + followerId] = true;
+  updates["/users/" + followerId + "/following/" + userId] = true;
+  return firebase.database().ref().update(updates);
+}
 
-    var updates = {};
-    updates[url + newUserFeedbackKey] = feedData;
+export function unfollowUser(followerId, userId) {
+  var updates = {};
+  updates["/users/" + userId + "/followers/" + followerId] = null;
+  updates["/users/" + followerId + "/following/" + userId] = null;
+  return firebase.database().ref().update(updates);
+}
 
-    return firebase.database().ref().update(updates);
-  }
+export function addUserFeedback(senderId, recipientId, message, timestamp) {
+  const url = `/users/${recipientId}/feed/`;
+  const feedData = {
+    message,
+    userId: senderId,
+    timestamp,
+  };
+  const newUserFeedbackKey = firebase.database().ref().child(url).push().key;
+
+  var updates = {};
+  updates[url + newUserFeedbackKey] = feedData;
+
+  return firebase.database().ref().update(updates);
+}
+
+export function addUserFeedReply(senderId, userId, message, timestamp, parentId) {
+  const url = `/users/${userId}/feed/${parentId}/replies/`;
+  const messageData = {
+    message,
+    userId: senderId,
+    timestamp,
+  };
+  const newEventMessageKey = firebase.database().ref().child(url).push().key;
+
+  var updates = {};
+  updates[url + newEventMessageKey] = messageData;
+
+  return firebase.database().ref().update(updates);
 }
 
 export function getPhoto(searchTerm) {
@@ -171,16 +198,17 @@ export function addFeedReply(eventId, userId, message, timestamp, parentId) {
   return firebase.database().ref().update(updates);
 }
 
-export function rsvp(event, eventId, userId, rsvpStatus) {
-  if (!event.attendees) { event.attendees = {}; }
-  if (rsvpStatus && !Object.keys(event.attendees).includes(userId)) {
-    event.attendees[userId] = true;
-  } else {
-    delete event.attendees[userId];
-  }
-
+export function joinEvent(eventId, userId) {
   var updates = {};
-  updates["/events/" + eventId + "/attendees"] = event.attendees;
+  updates["/events/" + eventId + "/attendees/" + userId] = true;
+  updates["/users/" + userId + "/attending/" + eventId] = true;
+  return firebase.database().ref().update(updates);
+}
+
+export function leaveEvent(eventId, userId) {
+  var updates = {};
+  updates["/events/" + eventId + "/attendees/" + userId] = null;
+  updates["/users/" + userId + "/attending/" + eventId] = null;
   return firebase.database().ref().update(updates);
 }
 

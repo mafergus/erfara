@@ -1,92 +1,77 @@
 import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import RaisedButton from 'material-ui/RaisedButton';
-import { getUser } from "actions/userActions";
-import FullWidthSection from 'components/FullWidthSection';
-import UserList from "components/UserList";
-import Hero from "components/Hero";
 import UserDetails from "components/UserPage/UserDetails";
-
-const H3STYLE = {
-  display: "inline-block",
-  fontSize: "1.8em",
-  fontWeight: "normal",
-  margin: "0 auto",
-};
-
-const IMG_STYLE = {
-  borderRadius: "50%",
-  height: "80px",
-  width: "80px",
-  margin: "0 auto",
-  objectFit: "cover",
-  verticalAlign: "middle",
-  marginRight: "1.5em",
-};
+import UserList from "components/UserList";
+import UserHero from "components/UserPage/UserHero";
+import UserFeed from "components/UserFeed/UserFeed";
+import EventList from "components/UserPage/EventList";
+import { erfaraBlack } from "utils/colors";
+import { followUser, unfollowUser } from "utils/Api";
 
 function mapStateToProps(state, props) {
   const user = state.users.get(props.params.id);
-  let buddies = [];
-  const leBuddies = user && user.buddies && state.users.filter(aUser => user.buddies.hasOwnProperty(aUser.uid));
-  leBuddies && leBuddies.forEach(item => {
-    buddies.push(item);
+  const followers = user && user.followers && Object.keys(user.followers).map(userId => state.users.get(userId));
+  const attending = {};
+  user && user.attending && Object.entries(user.attending).forEach(item => {
+    attending[item[0]] = state.events.get(item[0]);
   });
   return {
+    attending,
     authedUser: state.authedUser,
+    isFollowing: followers && Object.keys(user.followers).includes(state.authedUser.uid),
+    followers,
     user,
-    users: state.users,
-    buddies,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    getUser: () => dispatch(getUser),
   };
 }
 
 export class UserPage extends React.Component {
 
   static propTypes = {
-    buddies: PropTypes.array.isRequired,
-    getUser: PropTypes.func.isRequired,
+    attending: PropTypes.array,
+    authedUser: PropTypes.object.isRequired,
+    isFollowing: PropTypes.bool,
+    followers: PropTypes.array,
+    params: PropTypes.object,
     user: PropTypes.object,
-    users: PropTypes.array,
   };
-
+  
   constructor() {
     super();
-    autoBind(this); 
+    autoBind(this);
   }
 
-  getFollowers() {
-    const { user, users } = this.props;
-    const followers = [];
-    Object.entries(user.followers).forEach(item => {
-      const user = users.get(item[1]);
-      if (user) { followers.push(); }
-    });
-    return followers;
+  onFollowClick() {
+    const { authedUser, user, isFollowing } = this.props;
+    if (isFollowing) {
+      unfollowUser(authedUser.uid, user.uid);
+    } else {
+      followUser(authedUser.uid, user.uid);
+    }
   }
 
   render() {
-    const { user, buddies } = this.props;
-    if (!user) { return <div/>; }
-    return <FullWidthSection>
-      <div style={{ width: "40%", margin: "0 auto", position: "relative" }}>
-        <UserList users={buddies} title="Buddies" style={{ position: "absolute", top: "0", width: "200px", marginLeft: "-210px", backgroundColor: "white" }}/>
-        <Hero image={user.coverPhoto}>
-          <div style={{ position: "absolute", bottom: "12px", left: "12px" }}>
-            <img style={IMG_STYLE} src={user.photo} alt="User"/>
-            <h3 style={ H3STYLE }>{user.name}</h3>
+    const { user, followers, isFollowing, attending } = this.props;
+    if (!user) { return null; }
+    return <div style={{ width: "100%", position: "relative" }}>
+      <UserHero user={user} isFollowing={isFollowing} onFollowClick={() => this.onFollowClick()} onSendMessage={() => alert("send message")} />
+      <div style={{ width: "75%", margin: "35px auto 0px auto" }}>
+        <UserDetails style={{ marginBottom: 20 }} user={user}/>
+        <div>
+          <UserList title="followers" users={followers} className="light-shadow border" style={{ height: "100%", width: "24%", marginRight: "2%", display: "inline-block", verticalAlign: "top" }}/> 
+          <div className="light-shadow border" style={{ height: "100%", width: "48%", display: "inline-block", marginBottom: 50, backgroundColor: "white", padding: "0.9em 1.5em" }}>
+            <span style={{ color: erfaraBlack, fontSize: "1em" }}>Discussion</span>
+            <hr style={{ margin: "0.8em 0em" }} />
+            <UserFeed userId={user.uid} />
           </div>
-          <RaisedButton label="Add Friend" style={{ position: "absolute", right: "15px", bottom: "15px" }}/>
-        </Hero>
-        <UserDetails user={user}/>
+          <div style={{ width: "24%", marginLeft: "2%", display: "inline-block", height: "500px", verticalAlign: "top", float: "right" }}>
+            <EventList title="hosted" events={user.events}/>
+            <EventList title="attended" events={attending} style={{ marginTop: "1em" }}/>
+          </div>
+        </div>
       </div>
-    </FullWidthSection>;
+    </div>;
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserPage);
+export default connect(mapStateToProps)(UserPage);
