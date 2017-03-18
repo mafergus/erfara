@@ -43,7 +43,7 @@ export default class EventDetails extends React.Component {
     return (
       <div className="border light-shadow" style={{ ...style, backgroundColor: "white", padding: "1.7em 1.7em 0.9em 1.7em", display: "flex" }}>
         <div style={{ height: "100%", width: "25%", display: "inline-block" }}>
-          <span style={{ color: erfaraBlack, fontSize: "1em" }}>Time and Plan</span>
+          <span style={{ color: erfaraBlack, fontSize: "1em" }}>Time and Place</span>
           <hr style={{ margin: "10px 0px 20px 0px" }} />
           {this.renderListItem(Alarm, dateStr, startTimeStr + "-" + endTimeStr)}
           {this.renderListItem(Place, event.locationString)}
