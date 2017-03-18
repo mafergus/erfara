@@ -59,20 +59,33 @@ export function addUser(user) {
 }
 
 export function addUserFeedback(senderId, recipientId, feedback, timestamp) {
-  return () => {
-    const url = `/users/${recipientId}/feed/`;
-    const feedData = {
-      feedback,
-      userId: senderId,
-      timestamp,
-    };
-    const newUserFeedbackKey = firebase.database().ref().child(url).push().key;
+  const url = `/users/${recipientId}/feed/`;
+  const feedData = {
+    feedback,
+    userId: senderId,
+    timestamp,
+  };
+  const newUserFeedbackKey = firebase.database().ref().child(url).push().key;
 
-    var updates = {};
-    updates[url + newUserFeedbackKey] = feedData;
+  var updates = {};
+  updates[url + newUserFeedbackKey] = feedData;
 
-    return firebase.database().ref().update(updates);
-  }
+  return firebase.database().ref().update(updates);
+}
+
+export function addUserFeedReply(senderId, userId, message, timestamp, parentId) {
+  const url = `/users/${userId}/feed/${parentId}/replies/`;
+  const messageData = {
+    message,
+    userId: senderId,
+    timestamp,
+  };
+  const newEventMessageKey = firebase.database().ref().child(url).push().key;
+
+  var updates = {};
+  updates[url + newEventMessageKey] = messageData;
+
+  return firebase.database().ref().update(updates);
 }
 
 export function getPhoto(searchTerm) {
