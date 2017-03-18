@@ -58,10 +58,24 @@ export function addUser(user) {
   }
 }
 
-export function addUserFeedback(senderId, recipientId, feedback, timestamp) {
+export function followUser(followerId, userId) {
+  var updates = {};
+  updates["/users/" + userId + "/followers/" + followerId] = true;
+  updates["/users/" + followerId + "/following/" + userId] = true;
+  return firebase.database().ref().update(updates);
+}
+
+export function unfollowUser(followerId, userId) {
+  var updates = {};
+  updates["/users/" + userId + "/followers/" + followerId] = null;
+  updates["/users/" + followerId + "/following/" + userId] = null;
+  return firebase.database().ref().update(updates);
+}
+
+export function addUserFeedback(senderId, recipientId, message, timestamp) {
   const url = `/users/${recipientId}/feed/`;
   const feedData = {
-    feedback,
+    message,
     userId: senderId,
     timestamp,
   };

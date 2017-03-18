@@ -5,27 +5,17 @@ import UserDetails from "components/UserPage/UserDetails";
 import UserList from "components/UserList";
 import UserHero from "components/UserPage/UserHero";
 import UserFeed from "components/UserFeed/UserFeed";
+import EventList from "components/UserPage/EventList";
 import { erfaraBlack } from "utils/colors";
-
-const ATTENDEES_LIST = {
-  position: "absolute",
-  top: "0",
-  width: "200px",
-  marginLeft: "-210px",
-  backgroundColor: "white",
-};
+import { followUser, unfollowUser } from "utils/Api";
 
 function mapStateToProps(state, props) {
   const user = state.users.get(props.params.id);
-  const attending = state.events.map((item, key) => {
-    const attendees = Object.keys(item.attendees);
-    if (attendees.includes(state.authedUser.uid)) { 
-      return key;
-    }
-  });
+  const followers = user && user.followers && Object.keys(user.followers).map(userId => state.users.get(userId));
   return {
-    attending,
     authedUser: state.authedUser,
+    isFollowing: followers && Object.keys(user.followers).includes(state.authedUser.uid),
+    followers,
     user,
   };
 }
@@ -33,8 +23,9 @@ function mapStateToProps(state, props) {
 export class UserPage extends React.Component {
 
   static propTypes = {
-    attending: PropTypes.any,
     authedUser: PropTypes.object.isRequired,
+    isFollowing: PropTypes.bool,
+    followers: PropTypes.array,
     params: PropTypes.object,
     user: PropTypes.object,
   };
@@ -44,29 +35,31 @@ export class UserPage extends React.Component {
     autoBind(this);
   }
 
-  // onRSVP() {
-    // const { event, authedUser } = this.props;
-    // const eventId = this.props.params.id;
-    // rsvp(event, eventId, authedUser.uid, !this.props.isRSVPD);
-  // }
+  onFollowClick() {
+    const { authedUser, user, isFollowing } = this.props;
+    if (isFollowing) {
+      unfollowUser(authedUser.uid, user.uid);
+    } else {
+      followUser(authedUser.uid, user.uid);
+    }
+  }
 
   render() {
-    const { user } = this.props;
-    const followers = user && user.followers;
+    const { user, followers, isFollowing } = this.props;
     if (!user) { return null; }
     return <div style={{ width: "100%", position: "relative" }}>
-      <UserList style={ATTENDEES_LIST} title="Attendees" users={followers}/>
-      <UserHero user={user} isFollowing={false} onFollowClick={() => alert("follow clicked")} onSendMessage={() => alert("send message")} />
+      <UserHero user={user} isFollowing={isFollowing} onFollowClick={() => this.onFollowClick()} onSendMessage={() => alert("send message")} />
       <div style={{ width: "75%", margin: "35px auto 0px auto" }}>
         <UserDetails style={{ marginBottom: 20 }} user={user}/>
         <div>
-          <UserList title="going" users={followers} className="light-shadow border" style={{ height: "100%", width: "24%", marginRight: "2%", display: "inline-block", verticalAlign: "top" }}/> 
-          <div className="light-shadow border" style={{ height: "100%", width: "50%", display: "inline-block", marginBottom: 50, backgroundColor: "white", padding: "0.9em 1.5em" }}>
+          <UserList title="followers" users={followers} className="light-shadow border" style={{ height: "100%", width: "24%", marginRight: "2%", display: "inline-block", verticalAlign: "top" }}/> 
+          <div className="light-shadow border" style={{ height: "100%", width: "45%", display: "inline-block", marginBottom: 50, backgroundColor: "white", padding: "0.9em 1.5em" }}>
             <span style={{ color: erfaraBlack, fontSize: "1em" }}>Discussion</span>
             <hr style={{ margin: "0.8em 0em" }} />
             <UserFeed userId={user.uid} />
           </div>
-          <div style={{ backgroundColor: "blue", width: "24%", display: "inline-block", height: "500px", verticalAlign: "top" }}>
+          <div style={{ width: "24%", display: "inline-block", height: "500px", verticalAlign: "top", float: "right" }}>
+            <EventList title="events hosted" events={user.events}/>
           </div>
         </div>
       </div>
