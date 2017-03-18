@@ -4,7 +4,7 @@ import autoBind from "react-autobind";
 import EventDetails from "components/EventPage/EventDetails";
 import UserList from "components/UserList";
 import { getEvent } from "actions/eventActions";
-import { rsvp } from "utils/Api";
+import { joinEvent, leaveEvent } from "utils/Api";
 import EventHero from "components/EventPage/EventHero";
 import Feed from "components/Feed/Feed";
 import { erfaraBlack } from "utils/colors";
@@ -64,9 +64,13 @@ export class EventPage extends React.Component {
   }
 
   onRSVP() {
-    const { event, authedUser } = this.props;
+    const { authedUser } = this.props;
     const eventId = this.props.params.id;
-    rsvp(event, eventId, authedUser.uid, !this.props.isRSVPD);
+    if (this.props.isRSVPD) { 
+      leaveEvent(eventId, authedUser.uid);
+    } else {
+      joinEvent(eventId, authedUser.uid);
+    }
   }
 
   componentWillMount() {

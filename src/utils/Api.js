@@ -198,16 +198,17 @@ export function addFeedReply(eventId, userId, message, timestamp, parentId) {
   return firebase.database().ref().update(updates);
 }
 
-export function rsvp(event, eventId, userId, rsvpStatus) {
-  if (!event.attendees) { event.attendees = {}; }
-  if (rsvpStatus && !Object.keys(event.attendees).includes(userId)) {
-    event.attendees[userId] = true;
-  } else {
-    delete event.attendees[userId];
-  }
-
+export function joinEvent(eventId, userId) {
   var updates = {};
-  updates["/events/" + eventId + "/attendees"] = event.attendees;
+  updates["/events/" + eventId + "/attendees/" + userId] = true;
+  updates["/users/" + userId + "/attending/" + eventId] = true;
+  return firebase.database().ref().update(updates);
+}
+
+export function leaveEvent(eventId, userId) {
+  var updates = {};
+  updates["/events/" + eventId + "/attendees/" + userId] = null;
+  updates["/users/" + userId + "/attending/" + eventId] = null;
   return firebase.database().ref().update(updates);
 }
 

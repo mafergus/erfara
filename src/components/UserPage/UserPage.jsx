@@ -12,7 +12,12 @@ import { followUser, unfollowUser } from "utils/Api";
 function mapStateToProps(state, props) {
   const user = state.users.get(props.params.id);
   const followers = user && user.followers && Object.keys(user.followers).map(userId => state.users.get(userId));
+  const attending = {};
+  user && user.attending && Object.entries(user.attending).forEach(item => {
+    attending[item[0]] = state.events.get(item[0]);
+  });
   return {
+    attending,
     authedUser: state.authedUser,
     isFollowing: followers && Object.keys(user.followers).includes(state.authedUser.uid),
     followers,
@@ -23,6 +28,7 @@ function mapStateToProps(state, props) {
 export class UserPage extends React.Component {
 
   static propTypes = {
+    attending: PropTypes.array,
     authedUser: PropTypes.object.isRequired,
     isFollowing: PropTypes.bool,
     followers: PropTypes.array,
@@ -45,7 +51,7 @@ export class UserPage extends React.Component {
   }
 
   render() {
-    const { user, followers, isFollowing } = this.props;
+    const { user, followers, isFollowing, attending } = this.props;
     if (!user) { return null; }
     return <div style={{ width: "100%", position: "relative" }}>
       <UserHero user={user} isFollowing={isFollowing} onFollowClick={() => this.onFollowClick()} onSendMessage={() => alert("send message")} />
@@ -53,13 +59,14 @@ export class UserPage extends React.Component {
         <UserDetails style={{ marginBottom: 20 }} user={user}/>
         <div>
           <UserList title="followers" users={followers} className="light-shadow border" style={{ height: "100%", width: "24%", marginRight: "2%", display: "inline-block", verticalAlign: "top" }}/> 
-          <div className="light-shadow border" style={{ height: "100%", width: "45%", display: "inline-block", marginBottom: 50, backgroundColor: "white", padding: "0.9em 1.5em" }}>
+          <div className="light-shadow border" style={{ height: "100%", width: "48%", display: "inline-block", marginBottom: 50, backgroundColor: "white", padding: "0.9em 1.5em" }}>
             <span style={{ color: erfaraBlack, fontSize: "1em" }}>Discussion</span>
             <hr style={{ margin: "0.8em 0em" }} />
             <UserFeed userId={user.uid} />
           </div>
-          <div style={{ width: "24%", display: "inline-block", height: "500px", verticalAlign: "top", float: "right" }}>
-            <EventList title="events hosted" events={user.events}/>
+          <div style={{ width: "24%", marginLeft: "2%", display: "inline-block", height: "500px", verticalAlign: "top", float: "right" }}>
+            <EventList title="hosted" events={user.events}/>
+            <EventList title="attended" events={attending} style={{ marginTop: "1em" }}/>
           </div>
         </div>
       </div>
