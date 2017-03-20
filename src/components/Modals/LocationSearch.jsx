@@ -2,7 +2,7 @@ import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
 import AutoComplete from 'material-ui/AutoComplete';
 import { addLocationSearchResults } from "actions/locationSearchActions";
-import { autoCompletePlaces } from "utils/Api";
+import { autoCompletePlaces, getCoordinates } from "utils/Api";
 import store from "store/store";
 import { connect } from 'react-redux';
 
@@ -32,8 +32,11 @@ export class LocationSearch extends React.Component {
     };
   }
 
-  sendLocationToModal(input) {
-    this.props.onSelectLocation(input);
+  sendLocationToModal(location, id) {
+    getCoordinates(id).then(json => {
+      const coordinateObj = json.result.geometry.location;
+      this.props.onSelectLocation(location, coordinateObj);
+    })
   }
 
   gotText(value, dataSource, params) {
@@ -75,7 +78,7 @@ export class LocationSearch extends React.Component {
           listStyle={{width:'301px' ,marginLeft:"-8px"}}
           underlineShow={false}
           onUpdateInput={(value, dataSource, params) => {this.gotText(value, dataSource, params)}}
-          onNewRequest={(chosenItem) => { this.sendLocationToModal(chosenItem.description);}}
+          onNewRequest={(chosenItem) => { this.sendLocationToModal(chosenItem.description, chosenItem.place_id);}}
         />
       </div>
     );
