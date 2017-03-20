@@ -1,6 +1,5 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
-import { connect } from "react-redux";
 import GoogleMap from 'google-map-react';
 import EventsList from "components/EventList/EventList";
 import { erfaraBlack } from "utils/colors";
@@ -8,18 +7,13 @@ import { DEFAULT_LOCATION } from "utils/constants";
 import MapsPlace from "material-ui/svg-icons/maps/place"; 
 import { red500 } from 'material-ui/styles/colors';
 
-function mapStateToProps(state) {
-  return {
-    events: state.events
-  };
-}
-
-export class HomePage extends React.Component {
+export default class HomePage extends React.Component {
 
   static propTypes = {
     events: PropTypes.object,
     center: PropTypes.array.isRequired,
     zoom: PropTypes.number.isRequired,
+
   };
 
   static defaultProps = {
@@ -33,7 +27,7 @@ export class HomePage extends React.Component {
   }
 
   renderMap() {
-    const { events } = this.props;
+    const events = this.props.events;
     const Marker = events.filter(item => item.geoCoordinates)
                          .map((item, index) => <MapsPlace color={red500} lat={item.geoCoordinates.lat} lng={item.geoCoordinates.lng} key={index} />);
     return (
@@ -81,5 +75,3 @@ export class HomePage extends React.Component {
     </div>;
   }
 }
-
-export default connect(mapStateToProps)(HomePage);
