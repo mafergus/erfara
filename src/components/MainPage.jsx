@@ -6,6 +6,7 @@ import SplashPage from "components/SplashPage";
 function mapStateToProps(state) {
   return {
     isAuthed: state.authedUser && Object.keys(state.authedUser).length > 1,
+    events: state.events
   }
 }
 
@@ -13,11 +14,12 @@ export class MainPage extends React.Component {
 
   static propTypes = {
     isAuthed: PropTypes.bool.isRequired,
+    events: PropTypes.object
   }
   
   render() {
-    const { isAuthed } = this.props;
-    return isAuthed ? <HomePage /> : <SplashPage />;
+    const { isAuthed, events } = this.props;
+    return isAuthed ? <HomePage events={events} /> : <SplashPage />;
   }
 
 }

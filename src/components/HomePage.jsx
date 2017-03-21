@@ -3,43 +3,44 @@ import autoBind from "react-autobind";
 import GoogleMap from 'google-map-react';
 import EventsList from "components/EventList/EventList";
 import { erfaraBlack } from "utils/colors";
-import { getPlaces, autoCompletePlaces } from "utils/Api";
 import { DEFAULT_LOCATION } from "utils/constants";
+import MapsPlace from "material-ui/svg-icons/maps/place"; 
+import { red500 } from 'material-ui/styles/colors';
 
 export default class HomePage extends React.Component {
 
   static propTypes = {
+    events: PropTypes.object,
     center: PropTypes.array.isRequired,
     zoom: PropTypes.number.isRequired,
+
   };
 
   static defaultProps = {
     center: DEFAULT_LOCATION,
     zoom: 10,
   };
-  
+
   constructor() {
     super();
     autoBind(this);
   }
 
-  componentDidMount() {
-    getPlaces("san");
-    autoCompletePlaces("san").then(json => {
-      const predictions = json.predictions;
-      return predictions;
-    });
-  }
-
   renderMap() {
-    return <div style={{ width: "100%", height: 240 }}>
-      <GoogleMap
-        bootstrapURLKeys={{ key: "AIzaSyAlndrl6ZoeFfv0UURwByPWrxPbpYBAXEk" }}
-        zoom={this.props.zoom}
-        center={this.props.center}
-      >
-      </GoogleMap>
-    </div>;
+    const events = this.props.events;
+    const Marker = events.filter(item => item.geoCoordinates)
+                         .map((item, index) => <MapsPlace color={red500} lat={item.geoCoordinates.lat} lng={item.geoCoordinates.lng} key={index} />);
+    return (
+      <div style={{ width: "100%", height: 240 }}>
+        <GoogleMap
+          bootstrapURLKeys={{ key: "AIzaSyAlndrl6ZoeFfv0UURwByPWrxPbpYBAXEk" }}
+          zoom={this.props.zoom}
+          center={this.props.center}
+        >
+        {Marker}
+        </GoogleMap>
+      </div>
+    );
   }
 
   renderHeaders() {

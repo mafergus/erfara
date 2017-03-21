@@ -31,14 +31,15 @@ export class CreateEventModal extends React.Component {
     isOpen: PropTypes.bool.isRequired,
     onRequestClose: PropTypes.func.isRequired,
     userId: PropTypes.string,
-    locationFromSearchBox: PropTypes.string
+    locationFromSearchBox: PropTypes.string,
+    geoLocationFromSearchBox: PropTypes.object
   };
 
   constructor() {
     super();
     autoBind(this);
 
-    this.state = { isLoading: false , locationFromSearchBox: "" };
+    this.state = { isLoading: false, locationFromSearchBox: "", geoLocationFromSearchBox: {} };
     this.dateStamp = new Date();
     this.startTimeStamp = new Date();
     this.endTimeStamp = new Date();
@@ -48,6 +49,7 @@ export class CreateEventModal extends React.Component {
     const { name, description, dateStamp, startTimeStamp, endTimeStamp, advices } = this;
     const { userId, onRequestClose } = this.props;
     const locationString = this.state.locationFromSearchBox;
+    const geoLocation = this.state.geoLocationFromSearchBox;
 
     if (!this.props.userId) { 
       this.disabledProgressCircle();
@@ -65,19 +67,19 @@ export class CreateEventModal extends React.Component {
         return uploadFile(blob);
       })
       .then(url => {
-        store.dispatch(addEvent(name, description, url, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
+        store.dispatch(addEvent(name, description, url, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId, geoLocation));
         this.disabledProgressCircle();
         onRequestClose();
       })
       .catch(() => {
-        store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId));
+        store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId, geoLocation));
         this.disabledProgressCircle();
         onRequestClose();
       });
     }
   }
-  locationChange(value) {
-    this.setState({locationFromSearchBox: value });
+  locationChange(location, geoLocation) {
+    this.setState({locationFromSearchBox: location, geoLocationFromSearchBox: geoLocation});
   }
 
   dateChange(placeholder, date) {
