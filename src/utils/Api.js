@@ -12,6 +12,21 @@ export function getPlaces(searchTerm) {
   });
 }
 
+export function getCoordinates(searchTerm) {
+  return new Promise((resolve, reject) => {
+    fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${searchTerm}&key=${PLACES_API_KEY}`,
+      {mode: 'cors'}).then(response => {
+        if(response.ok) {
+          return response.json();
+        } else {
+          reject(new Error(response.statusText));
+        }
+      }).then(json => {
+        resolve(json);
+      });
+  });
+}
+
 export function autoCompletePlaces(searchTerm) {
   return new Promise((resolve, reject) => {
     fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?location=${DEFAULT_LOCATION}&radius=50000&input=${searchTerm}&types=geocode&key=${PLACES_API_KEY}`,
@@ -212,7 +227,7 @@ export function leaveEvent(eventId, userId) {
   return firebase.database().ref().update(updates);
 }
 
-export function addEvent(title, description, photo, date, startTime, endTime, advices, locationString, userId) {
+export function addEvent(title, description, photo, date, startTime, endTime, advices, locationString, userId, geoCoordinates) {
   return () => {
     let attendees = {};
     attendees[userId] = true;
@@ -226,6 +241,7 @@ export function addEvent(title, description, photo, date, startTime, endTime, ad
       advices,
       locationString,
       userId,
+      geoCoordinates,
       attendees,
     };
 
