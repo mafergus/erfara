@@ -42,7 +42,6 @@ export default class UserDetails extends React.Component {
     const age = user.birthday ? Moment().diff(user.birthday, "years") : 30;
     const location = user.location ? user.location : "Earth";
     const hometown = user.hometown ? user.hometown : "Earth";
-    debugger;
     return (
       <div className="border light-shadow" style={{ ...style, backgroundColor: "white", padding: "1.7em 1.7em 0.9em 1.7em", display: "flex" }}>
         <div style={{ height: "100%", width: "25%", display: "inline-block" }}>

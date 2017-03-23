@@ -26,7 +26,6 @@ export default class AuthModal extends React.Component {
 
   onSuccess(result) {
     const user = result.user;
-    console.log("Got user ", user);
     let userData = {
       name: user.displayName,
       uid: user.uid,
