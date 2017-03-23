@@ -3,7 +3,7 @@ import firebase from 'actions/database';
 import Dialog from 'material-ui/Dialog';
 import { lightBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
-import { addUser } from "utils/Api";
+import { addUser, getFacebookInfo } from "utils/Api";
 import { addMessage } from "actions/messageActions";
 import { getPhoto, uploadFile, checkUserExists } from "utils/Api";
 import store from "store/store";
@@ -26,6 +26,7 @@ export default class AuthModal extends React.Component {
 
   onSuccess(result) {
     const user = result.user;
+    console.log("Got user ", user);
     let userData = {
       name: user.displayName,
       uid: user.uid,
@@ -33,6 +34,12 @@ export default class AuthModal extends React.Component {
       photo: user.photoURL,
     };
     checkUserExists(user.uid)
+    .then(() => getFacebookInfo(result.credential.accessToken))
+    .then(json => {
+      userData["birthday"] = json.birthday;
+      userData["location"] = json.location.name;
+      userData["hometown"] = json.hometown.name;
+    })
     .then(() => getPhoto(), () => {
       store.dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user: userData });
       firebase.onAuthSuccess(userData.uid);
@@ -48,6 +55,10 @@ export default class AuthModal extends React.Component {
   handleSignUpFacebook() {
     this.props.handleClose();
     const provider = new firebase.auth.FacebookAuthProvider();
+    provider.addScope("user_birthday");
+    provider.addScope("user_hometown");
+    provider.addScope("user_location");
+    provider.addScope("user_about_me");
     firebase.auth().signInWithPopup(provider)
       .then(this.onSuccess);
   }
@@ -55,6 +66,7 @@ export default class AuthModal extends React.Component {
   handleSignUpGoogle() {
     this.props.handleClose();
     const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/plus.login');
     firebase.auth().signInWithPopup(provider)
       .then(this.onSuccess);
   }

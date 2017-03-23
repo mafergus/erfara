@@ -87,7 +87,7 @@ export class EventPage extends React.Component {
       <div style={{ width: "75%", margin: "35px auto 0px auto" }}>
         <EventDetails style={{ marginBottom: 20 }} event={event}/>
         <div>
-          <UserList title="going" users={attendees} className="light-shadow border" style={{ height: "100%", width: "24%", marginRight: "2%", display: "inline-block", verticalAlign: "top" }}/> 
+          <UserList title="going" users={attendees} isTitlePlural={false} className="light-shadow border" style={{ height: "100%", width: "24%", marginRight: "2%", display: "inline-block", verticalAlign: "top" }}/> 
           <div className="light-shadow border" style={{ height: "100%", width: "50%", display: "inline-block", marginBottom: 50, backgroundColor: "white", padding: "0.9em 1.5em" }}>
             <span style={{ color: erfaraBlack, fontSize: "1em" }}>Discussion</span>
             <hr style={{ margin: "0.8em 0em" }} />

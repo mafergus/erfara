@@ -5,9 +5,14 @@ import { erfaraBlack } from "utils/colors";
 
 export default class PeopleList extends React.Component {
 
+  static defaultProps = {
+    isTitlePlural: true,
+  };
+
   static propTypes = {
     people: PropTypes.array,
     peopleType: PropTypes.string,
+    isTitlePlural: PropTypes.bool,
     style: PropTypes.object,
     className: PropTypes.string,
   };
@@ -18,9 +23,9 @@ export default class PeopleList extends React.Component {
   }
 
   render() {
-    const { people, peopleType, style, className } = this.props;
+    const { people, peopleType, style, className, isTitlePlural } = this.props;
     return <div className={`attendeesList border ${className}`} style={{ ...style, backgroundColor: "white", padding: "0.9em 0 0.5em 0" }}>
-      <span style={{ color: erfaraBlack, fontSize: "1em", padding: "0em 1em" }}>{pluralize(peopleType, people.length, true)}</span>
+      <span style={{ color: erfaraBlack, fontSize: "1em", padding: "0em 1em" }}>{isTitlePlural ? pluralize(peopleType, people.length, true) : `${people.length} ${peopleType}`}</span>
       <hr style={{ margin: "0.8em 1em" }} />
       {people}
     </div>;
