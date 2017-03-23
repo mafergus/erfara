@@ -109,6 +109,7 @@ export class AppBar extends React.Component {
       right: 2,
       visibility: this.props.unreadCount === 0 ? 'hidden' : 'visible',
     };
+    if (!user) { return null; }
     return <div>
       <Badge
         style={{ padding: 0 }}
@@ -125,8 +126,8 @@ export class AppBar extends React.Component {
         </IconButton>
       </Badge>
       <LoggedInUserComponent 
-        name={user.name.split(" ")[0]}
-        image={user.photo}
+        name={user && user.name && user.name.split(" ")[0]}
+        image={user && user.photo}
       />
     </div>;
   }

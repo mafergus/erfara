@@ -5,6 +5,20 @@ const PIXABAY_KEY = "4423887-ab96e540ffbe404d644032133";
 const PLACES_API_KEY = "AIzaSyDcJGLjFf1tCJxOPHYU6mu_oFDDMsd1-zk";
 const PLACEHOLDER_PHOTO = "https://s-media-cache-ak0.pinimg.com/originals/96/bb/de/96bbdef0373c7e8e7899c01ae11aee91.jpg";
 
+export function getFacebookInfo(accessToken) {
+  return new Promise((resolve, reject) => {
+    fetch(`https://graph.facebook.com/me?fields=id,name,about,age_range,location,hometown,birthday&access_token=${accessToken}`).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        reject(new Error(response.statusText));
+      }
+    }).then(json => {
+      resolve(json);
+    });
+  });
+}
+
 export function getPlaces(searchTerm) {
   return new Promise(() => {
     fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${DEFAULT_LOCATION}&radius=50000&name=${searchTerm}&key=${PLACES_API_KEY}`,
@@ -64,7 +78,11 @@ export function addUser(user) {
     updates["users/" + user.uid + "/uid"] = user.uid;
     updates["users/" + user.uid + "/email"] = user.email;
     updates["users/" + user.uid + "/photo"] = user.photo;
+    updates["users/" + user.uid + "/birthday"] = user.birthday;
+    updates["users/" + user.uid + "/hometown"] = user.hometown;
+    updates["users/" + user.uid + "/location"] = user.location;
     updates["users/" + user.uid + "/coverPhoto"] = user.coverPhoto || PLACEHOLDER_PHOTO;
+    updates["users/"]
 
     firebase.database().ref().update(updates).then(() => {
       dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user });

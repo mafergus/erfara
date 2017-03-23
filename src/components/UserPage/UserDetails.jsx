@@ -5,6 +5,7 @@ import Home from 'material-ui/svg-icons/action/home';
 import Karma from 'material-ui/svg-icons/action/favorite-border';
 import Place from 'material-ui/svg-icons/maps/place';
 import Face from 'material-ui/svg-icons/action/face';
+import Moment from "moment";
 
 // const STYLE = {
 //   color: darkBlack,
@@ -37,15 +38,19 @@ export default class UserDetails extends React.Component {
   }
 
   render() {
-    const { style } = this.props;
+    const { style, user } = this.props;
+    const age = user.birthday ? Moment().diff(user.birthday, "years") : 30;
+    const location = user.location ? user.location : "Earth";
+    const hometown = user.hometown ? user.hometown : "Earth";
+    debugger;
     return (
       <div className="border light-shadow" style={{ ...style, backgroundColor: "white", padding: "1.7em 1.7em 0.9em 1.7em", display: "flex" }}>
         <div style={{ height: "100%", width: "25%", display: "inline-block" }}>
           <span style={{ color: erfaraBlack, fontSize: "1em" }}>Details</span>
           <hr style={{ margin: "10px 0px 20px 0px" }} />
-          {this.renderListItem(Home, "Lives in San Jose, CA")}
-          {this.renderListItem(Place, "From Paris, France")}
-          {this.renderListItem(Face, "30/M")}
+          {this.renderListItem(Home, "Lives in " + location)}
+          {this.renderListItem(Place, "From " + hometown)}
+          {this.renderListItem(Face, age + " years old")}
           {this.renderListItem(Karma, "78 Karma Points")}
         </div>
         <div style={{ height: "100%", width: "50%", display: "inline-block", padding: "0 80px" }}>

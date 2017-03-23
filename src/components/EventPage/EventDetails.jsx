@@ -30,7 +30,7 @@ export default class EventDetails extends React.Component {
       </div>
       <div style={{ flexGrow: "1" }}>
         <p style={{ color: erfaraBlack, fontSize: "0.9em", marginBottom: "0.4em" }}>{title}</p>
-        <p style={{ color: darkGray, fontSize: "0.8em" }}>{subtitle}</p>
+        {subtitle && <p style={{ color: darkGray, fontSize: "0.8em" }}>{subtitle}</p>}
       </div>
     </div>;
   }

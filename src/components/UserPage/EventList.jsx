@@ -34,7 +34,7 @@ export default class EventList extends React.Component {
       backgroundColor: "rgba(0,0,0,0.35)",
     };
     return <Link to={`/event/${eventId}`} style={{ textDecoration: "none" }}>
-      <div key={eventId} style={STYLE} >
+      <div key={eventId} style={STYLE} className="user-events-list-item">
         <p style={{ width: "100%", textAlign: "center", color: "white" }}>{event.title}</p>
       </div>
     </Link>;

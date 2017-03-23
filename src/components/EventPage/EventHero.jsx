@@ -40,7 +40,7 @@ export default class EventHero extends React.Component {
               <span style={{ fontSize: "1.7em", verticalAlign: "middle" }}>{event.title}</span>
             </div>
           </div>
-          <div style={{ float: "right", height: "100%", display: "flex", alignItems: "center" }}>
+          <div style={{ float: "right", height: "100%", display: "flex", alignItems: "flex-end", paddingBottom: 5 }}>
             <RaisedButton label={joinLabel} onClick={onRSVPClick} primary />
           </div>
         </div>
