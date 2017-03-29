@@ -30,6 +30,7 @@ export class EventListItem extends React.Component {
     muiTheme: PropTypes.any,
     isFeatured: PropTypes.bool,
     itemStyle: PropTypes.object,
+    popUp: PropTypes.bool
   };
 
   static defaultProps = {
@@ -51,6 +52,7 @@ export class EventListItem extends React.Component {
   renderEventDetails() {
     const { event, attendees, isFeatured, muiTheme } = this.props;
     const timestamp = new Date(event.date);
+
     return <div style={{ width: "100%", height: 70, marginTop: -5, position: "relative", display: "flex", alignItems: "center", backgroundColor: "white" }}>
       <DateBox muiTheme={muiTheme.palette.accent1Color} timestamp={timestamp} />
       <div style={{ height: "100%", flexGrow: "1", display: "flex", alignItems: "center", paddingLeft: 13 }}>
@@ -67,10 +69,10 @@ export class EventListItem extends React.Component {
   }
 
   render() {
-    const { event, eventUid, isFeatured, itemStyle } = this.props;
+    const { event, eventUid, isFeatured, itemStyle, popUp } = this.props;
     return <Link to={`/event/${eventUid}`} style={{ textDecoration: "none" }}>
-      <div style={{ width: isFeatured ? 720 : 333, height: 250, ...itemStyle }} className="shadow border hoverable">
-        <img src={event.photo} alt="Event" style={{ width: "100%", height: 181, objectFit: "cover" }} />
+      <div style={{ width: isFeatured ? 720 : 333, height: popUp ? 70 : 250, ...itemStyle }} className="shadow border hoverable">
+        <img src={event.photo} alt="Event" style={{ width: "100%", height: popUp ? 120 : 181, objectFit: "cover" }} />
         {this.renderEventDetails()}
       </div>
     </Link>;

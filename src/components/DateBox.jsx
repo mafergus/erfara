@@ -29,4 +29,5 @@ DateBox.propTypes = {
   style: PropTypes.object,
   timestamp: PropTypes.object,
   textColor: PropTypes.string,
+  popUp: PropTypes.bool
 };
