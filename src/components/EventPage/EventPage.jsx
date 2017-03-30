@@ -54,7 +54,7 @@ export class EventPage extends React.Component {
     getEvent: PropTypes.func.isRequired,
     params: PropTypes.object,
     isRSVPD: PropTypes.bool,
-    owner: PropTypes.object.isRequired,
+    owner: PropTypes.object,
     attendees: PropTypes.array.isRequired,
   };
   
