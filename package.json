@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "babel-preset-stage-0": "^6.16.0",
+    "bootstrap": "^3.3.7",
     "bootstrap-sass": "^3.3.7",
     "classnames": "^2.2.5",
     "components": "^0.1.0",
