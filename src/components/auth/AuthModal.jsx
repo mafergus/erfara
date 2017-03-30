@@ -43,11 +43,13 @@ export default class AuthModal extends React.Component {
       store.dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user: userData });
       firebase.onAuthSuccess(userData.uid);
     })
-    .then(blob => uploadFile(blob))
+    .then(blob => {
+      return uploadFile(blob)
+    })
     .then(url => {
       userData.coverPhoto = url;
       store.dispatch(addUser(userData));
-      store.dispatch(addMessage(userData.uid, "7hJGDkRieEfhPiMnu1HGDF8w59V2", "Welcome to Erfara!", new Date()));
+      store.dispatch(addMessage(userData.uid, "swB4xIn0FQNtdWUpMInJuFup6AD3", "Welcome to Erfara!", new Date()));
     });
   }
 
