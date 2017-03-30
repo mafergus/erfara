@@ -31,7 +31,10 @@ export function autoAddCategory(name) {
 }
 
 export function deleteCategory(key) {
-  return firebase.database().ref().remove("categories/" + key);
+  var updates = {};
+  updates["categories/" + key] = null;
+
+  return firebase.database().ref().update(updates);
 }
 
 export function updateCategory(key, name, image) {
