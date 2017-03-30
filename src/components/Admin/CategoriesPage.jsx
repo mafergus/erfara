@@ -39,7 +39,8 @@ export class CategoriesPage extends React.Component {
     firebase.database().ref('/categories').orderByChild("name").on('value', snapshot => {
       let categories = [];
       snapshot.forEach(child => {
-        categories.push(child.val());
+        const value = child.val()
+        categories.push({ ...value, id: child.key });
       });
       if (categories) {
         store.dispatch({ type: "GET_CATEGORIES_SUCCESS", categories });
@@ -73,6 +74,7 @@ export class CategoriesPage extends React.Component {
   }
 
   updateCategoryImage(image) {
+    this.setState({ photoLoading: true });
     const category = this.state.selectedCategory;
     fetch(image.webformatURL)
     .then(response => {
@@ -90,7 +92,6 @@ export class CategoriesPage extends React.Component {
   }
 
   updateCategoryName(event) {
-    this.setState({ photoLoading: true });
     const category = this.state.selectedCategory;
     if (event.charCode === 13) {
       updateCategory(category.id, this.state.newName, category.image);
@@ -102,17 +103,17 @@ export class CategoriesPage extends React.Component {
   }
 
   deleteCategory(category) {
-    deleteCategory(category.id);
+    deleteCategory(category);
     this.setState({ categoryModalOpen: false });
   }
 
-  renderModal() {
+  renderPhotosModal() {
     const { images } = this.props;
     let rowItems = [];
     return <Dialog
       style={{ zIndex: 9000 }}
       modal={false}
-      onRequestClose={() => this.setState({ photoDialogOpen: false })}
+      onRequestClose={() => this.setState({ photoDialogOpen: false, photoLoading: false })}
       open={this.state.photoDialogOpen}>
       <div style={{ overflowY: "scroll", width: "100%", height: 500 }}>
         {images.map(image => {
@@ -134,7 +135,7 @@ export class CategoriesPage extends React.Component {
     const category = this.state.selectedCategory;
     return <Dialog
       modal={false}
-      onRequestClose={() => this.setState({ categoryModalOpen: false })}
+      onRequestClose={() => this.setState({ categoryModalOpen: false, photoLoading: false, photoDialogOpen: false })}
       open={this.state.categoryModalOpen}>
       {this.state.photoLoading ? <CircularProgress /> :
        <div style={{ overflowY: "scroll", width: "100%", height: 500 }}>
@@ -148,13 +149,13 @@ export class CategoriesPage extends React.Component {
           onKeyPress={this.updateCategoryName}
         />
         <br/>
-        <RaisedButton onTouchTap={category => this.deleteCategory(category)} primary>Delete</RaisedButton>
+        <RaisedButton onTouchTap={this.deleteCategory.bind(null, category && category.id)} primary>Delete</RaisedButton>
       </div>}
     </Dialog>;
   }
 
   renderCategoryItem(key, category) {
-    return <div onClick={() => this.setState({ categoryModalOpen: true, selectedCategory: { ...category, id: key }}) } className="hoverable" style={{ height: 200, width: 200, backgroundImage: `url(${category.image})`, backgroundPosition: "50% 50%", backgroundSize: "cover", backgroundBlendMode: "multiply", backgroundColor: "rgba(0,0,0,0.35)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    return <div onClick={() => this.setState({ categoryModalOpen: true, selectedCategory: category }) } className="hoverable" style={{ height: 200, width: 200, backgroundImage: `url(${category.image})`, backgroundPosition: "50% 50%", backgroundSize: "cover", backgroundBlendMode: "multiply", backgroundColor: "rgba(0,0,0,0.35)", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <p style={{ color: "white", fontSize: "1.4em" }}>{category.name}</p>
     </div>;
   }
@@ -166,16 +167,16 @@ export class CategoriesPage extends React.Component {
     let rows = [];
     categories.forEach((category, key) => {
       if (rowItems.length == 4) {
-        rows.push(<Row style={{ marginBottom: 15 }}>{rowItems}</Row>);
+        rows.push(<Row key={rows.length} style={{ marginBottom: 15 }}>{rowItems}</Row>);
         rowItems = [];
       }
-      rowItems.push(<Col lg={3}>
+      rowItems.push(<Col key={rowItems.length} lg={3}>
         {this.renderCategoryItem(key, category)}
       </Col>);
     });
-    rows.push(<Row>{rowItems}</Row>);
+    rows.push(<Row key={rows.length}>{rowItems}</Row>);
     return <Grid>
-      {this.renderModal()}
+      {this.renderPhotosModal()}
       {this.renderCategoryModal()}
       <div style={{ margin: "50px 0px" }}>
         <p style={{ color: "black", fontSize: "1.5em", marginBottom: "1.5em" }}>Add Category</p>
