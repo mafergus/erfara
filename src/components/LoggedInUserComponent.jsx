@@ -62,7 +62,7 @@ export default class LoggedInUserComponent extends React.Component {
 
   render() {
     const { name, image } = this.props;
-    return <div className="actionBarUser" style={{ height: "100%", marginTop: "-8px", marginLeft: "1.4em", borderRadius: "3%", display: "inline-block" }}>
+    return <div className="actionBarUser" style={{ height: "100%", marginLeft: "1.4em", borderRadius: "3%", display: "inline-block" }}>
       <div onTouchTap={this.onClick} style={{ height: "100%", display: "flex", alignItems: "center", marginRight: "1em" }}>
         <img src={image} alt="You" style={{ height: "1.7em", width: "1.7em", borderRadius: "50%", margin: "0 auto" }} />
         <a style={{ color: lightBlack, display: "inline-block", fontSize: "1em", marginLeft: "0.5em" }}>{name}</a>

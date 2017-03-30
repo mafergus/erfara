@@ -156,6 +156,13 @@ export class CreateEventModal extends React.Component {
       }
     }
 
+    const startTime = new Date();
+    startTime.setMinutes(0);
+    startTime.setHours((startTime.getHours() + 1) % 24);
+    const endTime = new Date();
+    endTime.setHours((endTime.getHours() + 2) % 24);
+    endTime.setMinutes(0);
+
     return (
       <div className="popup-dialog">
         <Dialog
@@ -214,6 +221,7 @@ export class CreateEventModal extends React.Component {
                   <TimePicker 
                     name="startTime"
                     hintText="4:00 PM"
+                    defaultTime={startTime}
                     hintStyle={style.hintStyle}
                     textFieldStyle={style.textFieldStyle}
                     underlineShow={false}  
@@ -227,6 +235,7 @@ export class CreateEventModal extends React.Component {
                 <div className="box box-small">
                   <TimePicker 
                     name="endTime"
+                    defaultTime={endTime}
                     hintText="5:00 PM"
                     hintStyle={style.hintStyle}
                     textFieldStyle={style.textFieldStyle}
