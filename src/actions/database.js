@@ -12,12 +12,16 @@ firebase.initializeApp(config);
 
 firebase.database().ref('/events').on('value', function(snapshot) {
   const events = snapshot.val();
-  store.dispatch({ type: "GET_EVENTS_SUCCESS", events });
+  if (events) {
+    store.dispatch({ type: "GET_EVENTS_SUCCESS", events });
+  }
 });
 
 firebase.database().ref('/users').on('value', function(snapshot) {
   const users = snapshot.val();
-  store.dispatch({ type: "GET_USERS_SUCCESS", users });
+  if (users) {
+    store.dispatch({ type: "GET_USERS_SUCCESS", users });
+  }
 });
 
 firebase.onAuthSuccess = (userId) => {
