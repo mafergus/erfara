@@ -3,7 +3,7 @@ import firebase from 'actions/database';
 import Dialog from 'material-ui/Dialog';
 import { lightBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
-import { addUser, getFacebookInfo } from "utils/Api";
+import { addUser } from "utils/Api";
 import { addMessage } from "actions/messageActions";
 import { getPhoto, uploadFile, checkUserExists } from "utils/Api";
 import store from "store/store";
@@ -33,19 +33,11 @@ export default class AuthModal extends React.Component {
       photo: user.photoURL,
     };
     checkUserExists(user.uid)
-    .then(() => getFacebookInfo(result.credential.accessToken))
-    .then(json => {
-      userData["birthday"] = json.birthday;
-      userData["location"] = json.location.name;
-      userData["hometown"] = json.hometown.name;
-    })
     .then(() => getPhoto(), () => {
       store.dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user: userData });
       firebase.onAuthSuccess(userData.uid);
     })
-    .then(blob => {
-      return uploadFile(blob)
-    })
+    .then(blob => uploadFile(blob))
     .then(url => {
       userData.coverPhoto = url;
       store.dispatch(addUser(userData));
