@@ -25,6 +25,7 @@ firebase.database().ref('/users').on('value', function(snapshot) {
 });
 
 firebase.onAuthSuccess = (userId) => {
+  if (!userId) { return; }
   firebase.database().ref("/users/" + userId).on('value', function(snapshot) {
     const user = snapshot.val();
     if (user) {

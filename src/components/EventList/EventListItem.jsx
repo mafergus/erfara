@@ -71,7 +71,7 @@ export class EventListItem extends React.Component {
   render() {
     const { event, eventUid, isFeatured, itemStyle, popUp } = this.props;
     return <Link to={`/event/${eventUid}`} style={{ textDecoration: "none" }}>
-      <div style={{position: popUp ? 'absolute' : 'relative', zIndex: 999999, width: isFeatured ? 720 : 333, height: popUp ? 70 : 250, ...itemStyle }} className="shadow border hoverable">
+      <div style={{position: popUp ? 'absolute' : 'relative', zIndex: popUp ? 999999 : 0, width: isFeatured ? 720 : 333, height: popUp ? 70 : 250, ...itemStyle }} className="shadow border hoverable">
         <img src={event.photo} alt="Event" style={{ width: "100%", height: popUp ? 120 : 181, objectFit: "cover" }} />
         {this.renderEventDetails()}
       </div>

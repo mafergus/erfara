@@ -109,9 +109,9 @@ export function addUser(user) {
     updates["users/" + user.uid + "/uid"] = user.uid;
     updates["users/" + user.uid + "/email"] = user.email;
     updates["users/" + user.uid + "/photo"] = user.photo;
-    updates["users/" + user.uid + "/birthday"] = user.birthday;
-    updates["users/" + user.uid + "/hometown"] = user.hometown;
-    updates["users/" + user.uid + "/location"] = user.location;
+    updates["users/" + user.uid + "/birthday"] = user.birthday || "";
+    updates["users/" + user.uid + "/hometown"] = user.hometown || "";
+    updates["users/" + user.uid + "/location"] = user.location || "";
     updates["users/" + user.uid + "/coverPhoto"] = user.coverPhoto || PLACEHOLDER_PHOTO;
     updates["users/"]
 
