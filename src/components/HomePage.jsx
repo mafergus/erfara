@@ -4,7 +4,8 @@ import GoogleMap from 'google-map-react';
 import EventsList from "components/EventList/EventList";
 import { erfaraBlack } from "utils/colors";
 import { DEFAULT_LOCATION } from "utils/constants";
-import MapMarker from './Markers';
+import Markers from './Markers';
+//import EventListItem from './EventList/EventListItem';
 
 export default class HomePage extends React.Component {
 
@@ -12,6 +13,8 @@ export default class HomePage extends React.Component {
     events: PropTypes.object,
     center: PropTypes.array.isRequired,
     zoom: PropTypes.number.isRequired,
+    isOpen: PropTypes.bool,
+    markerId: PropTypes.string
   };
 
   static defaultProps = {
@@ -22,18 +25,37 @@ export default class HomePage extends React.Component {
   constructor() {
     super();
     autoBind(this);
+
+    this.markerId = ""
+    this.state = {
+      card: <div></div>,
+      isOpen: false
+    };
+  }
+
+  clickMarker(item, itemId) {
+    this.setState({ card: item });
+    this.setState({ isOpen: true });
+
+    if(this.markerId === itemId) {
+      this.setState({ isOpen: !this.state.isOpen});
+      this.markerId = "";
+    }
+    this.markerId = itemId;
   }
 
   renderMap() {
     const events = this.props.events;
     const Marker = events.filter(item => item.geoCoordinates)
                          .map((item, index) => 
-                            <MapMarker
+                            <Markers
+                              clickMarker={this.clickMarker}
                               key={index}
                               event={item}
                               lat={item.geoCoordinates.lat} 
-                              lng={item.geoCoordinates.lng}  
+                              lng={item.geoCoordinates.lng}
                             />);
+    const popupCard = this.state.isOpen ? this.state.card : <div></div>;
     return (
       <div style={{ width: "100%", height: 240 }}>
         <GoogleMap
@@ -42,6 +64,7 @@ export default class HomePage extends React.Component {
           center={this.props.center}
         >
           {Marker}
+          {popupCard}       
         </GoogleMap>
       </div>
     );
