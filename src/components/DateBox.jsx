@@ -3,7 +3,7 @@ import { getShortMonth } from "utils/dateTimeHelpers";
 import { erfaraBlack } from "utils/colors";
 
 const STYLE = {
-  height: 70,
+  height: 40,
   width: 70,
   backgroundColor: "white",
   display: "inline-block",
