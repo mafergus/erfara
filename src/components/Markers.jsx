@@ -11,7 +11,10 @@ class Markers extends React.Component {
     isHovered: PropTypes.bool,
     event: PropTypes.object,
     muiTheme: PropTypes.object,
-    $dimensionKey: PropTypes.string
+    $dimensionKey: PropTypes.string,
+    clickMarker: PropTypes.func,
+    lat: PropTypes.number,
+    lng: PropTypes.number
   };
 
   constructor() {
@@ -22,7 +25,6 @@ class Markers extends React.Component {
 
     this.state = {
       isHovered: false,
-      isPopupOpen: false,
     };
   }
 
@@ -35,16 +37,17 @@ class Markers extends React.Component {
   }
 
   onMarkerClick () {
-      this.card = 
-      <div style={{zIndex: 9999999999999}}>
-        <EventListItem           
-          eventUid={this.props.$dimensionKey}
-          event={this.props.event}
-          muiTheme={this.props.muiTheme}
-          popUp={true}
-        />
-      </div>;
-      this.setState({isPopupOpen: !this.state.isPopupOpen});
+    const cardItem = <EventListItem           
+                      eventUid={this.props.$dimensionKey}
+                      event={this.props.event}
+                      lat={this.props.lat}
+                      lng={this.props.lng}
+                      muiTheme={this.props.muiTheme}
+                      popUp={true}
+                    />;
+    const itemId = this.props.$dimensionKey;
+
+    this.props.clickMarker(cardItem, itemId);
   }
 
   render() {
@@ -75,7 +78,6 @@ class Markers extends React.Component {
             onMouseOut={this.mouseLeave} 
             onClick={this.onMarkerClick}
           />
-          {this.state.isPopupOpen ? this.card : <div></div> }
         </div>
       );
     } else {
@@ -88,7 +90,6 @@ class Markers extends React.Component {
             onMouseOut={this.mouseLeave} 
             onClick={this.onMarkerClick}
           />
-          {this.state.isPopupOpen ? this.card : <div></div> }
         </div>
       );
     }
