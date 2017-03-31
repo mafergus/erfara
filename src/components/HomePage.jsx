@@ -4,8 +4,7 @@ import GoogleMap from 'google-map-react';
 import EventsList from "components/EventList/EventList";
 import { erfaraBlack } from "utils/colors";
 import { DEFAULT_LOCATION } from "utils/constants";
-import MapsPlace from "material-ui/svg-icons/maps/place"; 
-import { red500 } from 'material-ui/styles/colors';
+import MapMarker from './Markers';
 
 export default class HomePage extends React.Component {
 
@@ -13,7 +12,6 @@ export default class HomePage extends React.Component {
     events: PropTypes.object,
     center: PropTypes.array.isRequired,
     zoom: PropTypes.number.isRequired,
-
   };
 
   static defaultProps = {
@@ -29,7 +27,13 @@ export default class HomePage extends React.Component {
   renderMap() {
     const events = this.props.events;
     const Marker = events.filter(item => item.geoCoordinates)
-                         .map((item, index) => <MapsPlace color={red500} lat={item.geoCoordinates.lat} lng={item.geoCoordinates.lng} key={index} />);
+                         .map((item, index) => 
+                            <MapMarker
+                              key={index}
+                              event={item}
+                              lat={item.geoCoordinates.lat} 
+                              lng={item.geoCoordinates.lng}  
+                            />);
     return (
       <div style={{ width: "100%", height: 240 }}>
         <GoogleMap
@@ -37,7 +41,7 @@ export default class HomePage extends React.Component {
           zoom={this.props.zoom}
           center={this.props.center}
         >
-        {Marker}
+          {Marker}
         </GoogleMap>
       </div>
     );
