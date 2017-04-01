@@ -5,12 +5,12 @@ import EventsList from "components/EventList/EventList";
 import { erfaraBlack } from "utils/colors";
 import { DEFAULT_LOCATION } from "utils/constants";
 import Markers from './Markers';
-//import EventListItem from './EventList/EventListItem';
 
 export default class HomePage extends React.Component {
 
   static propTypes = {
     events: PropTypes.object,
+    eventEntry: PropTypes.array,
     center: PropTypes.array.isRequired,
     zoom: PropTypes.number.isRequired,
     isOpen: PropTypes.bool,
@@ -28,17 +28,16 @@ export default class HomePage extends React.Component {
 
     this.markerId = ""
     this.state = {
-      card: <div></div>,
-      isOpen: false
+      cardPopup: [<div></div>],
+      isPopupOpen: false,
     };
   }
 
   clickMarker(item, itemId) {
-    this.setState({ card: item });
-    this.setState({ isOpen: true });
+    this.setState({ cardPopup: item, isPopupOpen: true });
 
     if(this.markerId === itemId) {
-      this.setState({ isOpen: !this.state.isOpen});
+      this.setState({ isPopupOpen: !this.state.isPopupOpen});
       this.markerId = "";
     }
     this.markerId = itemId;
@@ -52,19 +51,24 @@ export default class HomePage extends React.Component {
                               clickMarker={this.clickMarker}
                               key={index}
                               event={item}
+                              events={events}
+                              eventEntry={this.props.eventEntry}
                               lat={item.geoCoordinates.lat} 
                               lng={item.geoCoordinates.lng}
                             />);
-    const popupCard = this.state.isOpen ? this.state.card : <div></div>;
+
+    const cardPopup = this.state.cardPopup.map((item) => this.state.isPopupOpen ? item : null);
+
     return (
       <div style={{ width: "100%", height: 240 }}>
         <GoogleMap
           bootstrapURLKeys={{ key: "AIzaSyAlndrl6ZoeFfv0UURwByPWrxPbpYBAXEk" }}
           zoom={this.props.zoom}
           center={this.props.center}
+          options={{disableDoubleClickZoom: this.state.isHovered ? true : false}}
         >
           {Marker}
-          {popupCard}       
+          {cardPopup}
         </GoogleMap>
       </div>
     );
