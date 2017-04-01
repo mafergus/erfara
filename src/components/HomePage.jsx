@@ -9,8 +9,8 @@ import Markers from './Markers';
 export default class HomePage extends React.Component {
 
   static propTypes = {
-    events: PropTypes.object,
     eventEntry: PropTypes.array,
+    events: PropTypes.object,
     center: PropTypes.array.isRequired,
     zoom: PropTypes.number.isRequired,
     isOpen: PropTypes.bool,
@@ -30,11 +30,13 @@ export default class HomePage extends React.Component {
     this.state = {
       cardPopup: [<div></div>],
       isPopupOpen: false,
-      isHovered: false
+      isHovered: false,
+      center: DEFAULT_LOCATION,
     };
   }
 
-  clickMarker(item, itemId) {
+  clickMarker(item, itemId, geoArray) {
+    this.setState({ center: geoArray });
     this.setState({ cardPopup: item, isPopupOpen: true });
 
     if(this.markerId === itemId) {
@@ -54,14 +56,12 @@ export default class HomePage extends React.Component {
                          .map((item, index) => 
                             <Markers
                               clickMarker={this.clickMarker}
-                              getHoverState={this.getHoverState}
-                              key={index}
+                              sendHoverState={this.getHoverState}
                               event={item}
-                              events={events}
                               eventEntry={this.props.eventEntry}
                               lat={item.geoCoordinates.lat} 
                               lng={item.geoCoordinates.lng}
-                              sendHoverState={this.getHoverState}
+                              key={index}
                             />);
 
     const cardPopup = this.state.cardPopup.map((item) => this.state.isPopupOpen ? item : null);
@@ -71,7 +71,7 @@ export default class HomePage extends React.Component {
         <GoogleMap
           bootstrapURLKeys={{ key: "AIzaSyAlndrl6ZoeFfv0UURwByPWrxPbpYBAXEk" }}
           zoom={this.props.zoom}
-          center={this.props.center}
+          center={this.state.center}
           options={{disableDoubleClickZoom: this.state.isHovered ? true : false}}
         >
           {Marker}

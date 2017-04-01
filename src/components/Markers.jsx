@@ -60,7 +60,7 @@ class Markers extends React.Component {
     );
 
     const itemId = this.props.$dimensionKey;
-    this.props.clickMarker(cardItem, itemId);
+    this.props.clickMarker(cardItem, itemId, [this.props.lat, this.props.lng]);
   }
 
   render() {
