@@ -30,6 +30,7 @@ export default class HomePage extends React.Component {
     this.state = {
       cardPopup: [<div></div>],
       isPopupOpen: false,
+      isHovered: false
     };
   }
 
@@ -43,18 +44,26 @@ export default class HomePage extends React.Component {
     this.markerId = itemId;
   }
 
+  getHoverState(value) {
+    console.log('onv')
+
+    this.setState({isHovered: value});
+  }
+
   renderMap() {
     const events = this.props.events;
     const Marker = events.filter(item => item.geoCoordinates)
                          .map((item, index) => 
                             <Markers
                               clickMarker={this.clickMarker}
+                              getHoverState={this.getHoverState}
                               key={index}
                               event={item}
                               events={events}
                               eventEntry={this.props.eventEntry}
                               lat={item.geoCoordinates.lat} 
                               lng={item.geoCoordinates.lng}
+                              sendHoverState={this.getHoverState}
                             />);
 
     const cardPopup = this.state.cardPopup.map((item) => this.state.isPopupOpen ? item : null);

@@ -16,6 +16,7 @@ class Markers extends React.Component {
     $dimensionKey: PropTypes.string,
     markerId: PropTypes.string,
     clickMarker: PropTypes.func,
+    sendHoverState: PropTypes.func,
     lat: PropTypes.number,
     lng: PropTypes.number,
   };
@@ -31,11 +32,16 @@ class Markers extends React.Component {
   }
 
   mouseEnter() {
+    console.log('onv')
+
     this.setState({ isHovered: true });
+    this.props.sendHoverState(true);
   }
 
   mouseLeave() {
+    console.log('onv')
     this.setState({ isHovered: false });
+    this.props.sendHoverState(false);
   }
 
   onMarkerClick () {  // For overlapping (not-clickable) markers
@@ -61,6 +67,7 @@ class Markers extends React.Component {
   }
 
   render() {
+
     const markerStyle = {
       smallMarker: { 
         width:55, 
