@@ -4,7 +4,7 @@ import autoBind from "react-autobind";
 import { darkBlack, lightBlack, minBlack } from "material-ui/styles/colors";
 import Badge from 'material-ui/Badge';
 import { getUser } from "actions/userActions";
-import { getErfaraDate } from "utils/dateTimeHelpers";
+import Moment from "moment";
 import { getUnreadMessageCountForConversation } from "utils/helpers";
 
 function mapStateToProps(state, props) {
@@ -20,13 +20,12 @@ function mapDispatchToProps(dispatch) {
 }
 
 const IMG_STYLE = {
-  height: "46px",
-  width: "46px",
-  minWidth: "50px",
+  height: 49,
+  width: 49,
   borderRadius: "50%",
   border: `1px solid rgba(0, 0, 0, 0.06)`,
-  marginRight: "20px",
-  marginLeft: "12px",
+  marginRight: 18,
+  marginLeft: 13,
   display: "inline-block",
   flexShrink: "1",
 };
@@ -61,17 +60,18 @@ export class ConversationListItem extends React.Component {
     const { conversation, conversationId, user } = this.props;
     const message = Object.entries(this.props.conversation.messages)[0][1];
     const photo = user && user.photo;
+    const moment = new Moment(message.date);
     if (!conversation || !user) { return <div/>; }
-    return <li style={{ display: "flex", alignItems: "center", height: "72px", position: "relative" }} onClick={ this.props.onConversationClick.bind(null, conversationId) }>
+    return <li style={{ display: "flex", alignItems: "center", height: 90, position: "relative" }} onClick={ this.props.onConversationClick.bind(null, conversationId) }>
       <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <img src={photo} alt="Sender" style={IMG_STYLE}/>
       </div>
-      <div style={{ width: "50%", display: "inline-block", flexGrow: "1", paddingRight: "20px" }}>
-        <div style={{ display: "flex" }}>
-          <span className="title ellipsis" style={{ color: darkBlack, fontWeight: "500", flexGrow: "1" }}>{user.name}</span>
-          <span style={{ color: minBlack, fontSize: "0.8em" }}>{getErfaraDate(message.date)}</span>
+      <div style={{ width: "50%", display: "inline-block", flexGrow: "1", paddingRight: 15 }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <span className="title ellipsis" style={{ color: darkBlack, fontSize: "1.2em", fontWeight: "500", flexGrow: "1" }}>{user.name}</span>
+          <span style={{ color: minBlack, fontSize: "0.8em" }}>{moment.fromNow()}</span>
         </div>
-        <p className="subtitle ellipsis" style={{ color: lightBlack, fontSize: "0.9em", marginTop: "0.3em" }}>{message.message}</p>
+        <p className="subtitle ellipsis" style={{ color: lightBlack, fontSize: "0.95em", marginTop: "0.3em" }}>{message.message}</p>
       </div>
       {getUnreadMessageCountForConversation(this.props.conversation) > 0 && <Badge
         style={{ padding: 0 }}
