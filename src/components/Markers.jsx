@@ -32,14 +32,11 @@ class Markers extends React.Component {
   }
 
   mouseEnter() {
-    console.log('onv')
-
     this.setState({ isHovered: true });
     this.props.sendHoverState(true);
   }
 
   mouseLeave() {
-    console.log('onv')
     this.setState({ isHovered: false });
     this.props.sendHoverState(false);
   }
