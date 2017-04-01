@@ -207,14 +207,14 @@ p, h1 {
 .messaging-pane {
 
   .background-image {
+    background-image: url("../images/message_window_background.jpg");
     position: absolute;
     height: 100%;
     width: 100%;
-    opacity: 0.3;
+    opacity: 0.2;
     z-index: -1;
     top: 0;
     left: 0;
-    background-image: url("../images/message_window_background.jpg");
   }
 }
 

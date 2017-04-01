@@ -2,7 +2,6 @@ import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
 import MessageList from "components/Messaging/MessageList";
 import MessageBar from "components/Messaging/MessageBar";
-import { orange700 } from "material-ui/styles/colors";
 
 export default class MessagesWindow extends React.Component {
 
@@ -39,7 +38,7 @@ export default class MessagesWindow extends React.Component {
     return <div style={ STYLE } className="messaging-pane">
       <img alt="background" className="background-image" />
       <MessageList messages={messages} style={{ width: "100%", position: "absolute", bottom: "150px", left: "0", top: "0" }} />
-      <MessageBar style={{ height: "150px", width: "100%", backgroundColor: orange700, position: "absolute", bottom: "0", right: "0" }} onSend={onSendMessage}/>
+      <MessageBar style={{ width: "100%", position: "absolute", bottom: 0, right: 0, left: 0 }} onSend={onSendMessage}/>
     </div>
   }  
 }
