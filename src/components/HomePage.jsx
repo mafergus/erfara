@@ -45,8 +45,6 @@ export default class HomePage extends React.Component {
   }
 
   getHoverState(value) {
-    console.log('onv')
-
     this.setState({isHovered: value});
   }
 
