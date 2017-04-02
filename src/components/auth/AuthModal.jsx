@@ -3,7 +3,7 @@ import firebase from 'actions/database';
 import Dialog from 'material-ui/Dialog';
 import { lightBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
-import { addUser, getFacebookInfo } from "utils/Api";
+import { addUser } from "utils/Api";
 import { addMessage } from "actions/messageActions";
 import { getPhoto, uploadFile, checkUserExists } from "utils/Api";
 import store from "store/store";
@@ -33,12 +33,6 @@ export default class AuthModal extends React.Component {
       photo: user.photoURL,
     };
     checkUserExists(user.uid)
-    .then(() => getFacebookInfo(result.credential.accessToken))
-    .then(json => {
-      userData["birthday"] = json.birthday;
-      userData["location"] = json.location.name;
-      userData["hometown"] = json.hometown.name;
-    })
     .then(() => getPhoto(), () => {
       store.dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user: userData });
       firebase.onAuthSuccess(userData.uid);
@@ -47,7 +41,7 @@ export default class AuthModal extends React.Component {
     .then(url => {
       userData.coverPhoto = url;
       store.dispatch(addUser(userData));
-      store.dispatch(addMessage(userData.uid, "7hJGDkRieEfhPiMnu1HGDF8w59V2", "Welcome to Erfara!", new Date()));
+      store.dispatch(addMessage(userData.uid, "swB4xIn0FQNtdWUpMInJuFup6AD3", "Welcome to Erfara!", new Date()));
     });
   }
 
@@ -59,7 +53,12 @@ export default class AuthModal extends React.Component {
     provider.addScope("user_location");
     provider.addScope("user_about_me");
     firebase.auth().signInWithPopup(provider)
-      .then(this.onSuccess);
+    .then(this.onSuccess)
+    .catch(error => {
+      if (error.code == "auth/account-exists-with-different-credential") {
+        alert(error.message);
+      }
+    });
   }
 
   handleSignUpGoogle() {
@@ -67,7 +66,12 @@ export default class AuthModal extends React.Component {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/plus.login');
     firebase.auth().signInWithPopup(provider)
-      .then(this.onSuccess);
+    .then(this.onSuccess)
+    .catch(error => {
+      if (error.code == "auth/account-exists-with-different-credential") {
+        alert(error.message);
+      }
+    });
   }
 
   render() {

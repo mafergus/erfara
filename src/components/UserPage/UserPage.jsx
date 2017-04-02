@@ -51,10 +51,10 @@ export class UserPage extends React.Component {
   }
 
   render() {
-    const { user, followers, isFollowing, attending } = this.props;
+    const { authedUser, user, followers, isFollowing, attending } = this.props;
     if (!user) { return null; }
     return <div style={{ width: "100%", position: "relative" }}>
-      <UserHero user={user} isFollowing={isFollowing} onFollowClick={() => this.onFollowClick()} onSendMessage={() => alert("send message")} />
+      <UserHero authedUser={authedUser} user={user} isFollowing={isFollowing} onFollowClick={() => this.onFollowClick()} onSendMessage={() => alert("send message")} />
       <div style={{ width: "75%", margin: "35px auto 0px auto" }}>
         <UserDetails style={{ marginBottom: 20 }} user={user}/>
         <div>

@@ -60,7 +60,7 @@ export class MessagingPage extends React.Component {
     return <div style={{ width: "100%", height: "100%", position: "fixed", maxWidth: "1440px", top: "64px", left: "0", display: "flex" }}>
       <Resizable
         customClass="item"
-        width="35%"
+        width="30%"
         minWidth={250}
         maxWidth={600}
         isResizable={{top:false, right:true, bottom:false, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false}}

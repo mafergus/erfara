@@ -54,7 +54,7 @@ export class EventPage extends React.Component {
     getEvent: PropTypes.func.isRequired,
     params: PropTypes.object,
     isRSVPD: PropTypes.bool,
-    owner: PropTypes.object.isRequired,
+    owner: PropTypes.object,
     attendees: PropTypes.array.isRequired,
   };
   
@@ -79,11 +79,11 @@ export class EventPage extends React.Component {
 
   render() {
     // if (!this.event) { return <div></div> };
-    const { event, owner, attendees, isRSVPD } = this.props;
+    const { event, owner, authedUser, attendees, isRSVPD } = this.props;
     if (!event || !owner) { return null; }
     return <div style={{ width: "100%", position: "relative" }}>
       <UserList style={ATTENDEES_LIST} title="Attendees" users={attendees}/>
-      <EventHero event={event} owner={owner} onRSVPClick={this.onRSVP} isRSVPD={isRSVPD} />
+      <EventHero authedUser={authedUser} event={event} owner={owner} onRSVPClick={this.onRSVP} isRSVPD={isRSVPD} />
       <div style={{ width: "75%", margin: "35px auto 0px auto" }}>
         <EventDetails style={{ marginBottom: 20 }} event={event}/>
         <div>

@@ -1,9 +1,9 @@
 import React, { PropTypes } from "react";
-import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { erfaraBlack } from "utils/colors";
 import { minBlack } from "material-ui/styles/colors";
 import Moment from "moment";
+import { USER_PLACEHOLDER } from "utils/constants";
 
 const IMG_STYLE = {
   height: 50,
@@ -14,13 +14,7 @@ const IMG_STYLE = {
   verticalAlign: "top",
 };
 
-function mapStateToProps(state, props) {
-  return {
-    user: state.users.get(props.userId),
-  }
-}
-
-export class Item extends React.Component {
+export default class Item extends React.Component {
   
   static propTypes = {
     timestamp: PropTypes.string.isRequired,
@@ -28,7 +22,6 @@ export class Item extends React.Component {
     message: PropTypes.string.isRequired,
     style: PropTypes.object,
     user: PropTypes.object.isRequired,
-    userId: PropTypes.string.isRequired,
   };
 
   constructor() {
@@ -42,17 +35,15 @@ export class Item extends React.Component {
     if (!user) { return null; }
     return <div style={{ display: "flex", ...style }}>
       <div style={{ height: "100%" }}>
-        <img alt="User" style={{ ...IMG_STYLE, ...imageStyle }} src={user.photo}/>
+        <img alt="User" style={{ ...IMG_STYLE, ...imageStyle }} src={user ? user.photo : USER_PLACEHOLDER }/>
       </div>
       <div style={{ height: "100%", flexGrow: "1" }}>
         <div style={{ marginBottom: "0.6em" }}>
-          <span style={{ color: erfaraBlack, fontSize: "0.9em", fontFamily: "Roboto-Medium" }}>{user.name}</span>
+          <span style={{ color: erfaraBlack, fontSize: "0.9em", fontFamily: "Roboto-Medium" }}>{user ? user.name : "Deleted User"}</span>
           <span style={{ float: "right", color: minBlack, fontWeight: "500", fontSize: "0.75em" }}>{moment.fromNow()}</span>
         </div>
-        <span style={{ color: erfaraBlack }}>{message}</span>
+        <span style={{ color: erfaraBlack }}>{message || "Deleted User"}</span>
       </div>
     </div>;
   }
 }
-
-export default connect(mapStateToProps)(Item);

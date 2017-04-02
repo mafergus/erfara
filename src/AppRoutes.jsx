@@ -10,6 +10,8 @@ import HomePage from "components/HomePage";
 import EventPage from "components/EventPage/EventPage";
 import MessagingPage from "components/Messaging/MessagingPage";
 import UserPage from "components/UserPage/UserPage";
+import AdminPage from "components/Admin/AdminPage";
+import CategoriesPage from "components/Admin/CategoriesPage";
 
 /**
  * Routes: https://github.com/reactjs/react-router/blob/master/docs/API.md#route
@@ -27,5 +29,9 @@ export default function routes() {
     <Route path="event/:id" component={EventPage} />
     <Route path="users/:id" component={UserPage} />
     <Route path="home" component={HomePage} />
+    <Route path="admin">
+      <IndexRoute component={AdminPage} />
+      <Route path="categories" component={CategoriesPage} />
+    </Route>
   </Route>;
 }
