@@ -2,6 +2,7 @@ import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
 import DateBox from "components/DateBox";
 import RaisedButton from 'material-ui/RaisedButton';
+import AuthModal from "components/auth/AuthModal";
 
 const HERO_STYLE = {
   position: "relative",
@@ -15,6 +16,7 @@ const HERO_STYLE = {
 export default class EventHero extends React.Component {
 
   static propTypes = {
+    authedUser: PropTypes.object.isRequired,
     style: PropTypes.object,
     event: PropTypes.object,
     owner: PropTypes.object,
@@ -25,13 +27,22 @@ export default class EventHero extends React.Component {
   constructor() {
     super();
     autoBind(this);
+
+    this.state = {
+      signUpModalOpen: false,
+    };
   }
   
   render() {
-    const { event, isRSVPD, onRSVPClick } = this.props;
+    const { event, isRSVPD, onRSVPClick, authedUser } = this.props;
     const timestamp = new Date(event.date);
     const joinLabel = isRSVPD ? "Leave" : "Join";
     return <div style={{ ...HERO_STYLE, backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7)), url('${event.photo}')`, borderBottom: "1px solid rgba(0, 0, 0, 0.08)" }} >
+      <AuthModal 
+        title="Sign Up"
+        isOpen={this.state.signUpModalOpen}
+        handleClose={() => this.setState({ signUpModalOpen: false })} 
+      />
       <div style={{ width: "75%", height: "100%", position: "relative", margin: "0 auto" }}>
         <div style={{ height: 70, position: "absolute", bottom: 0, left: 0, right: 0 }}>
           <DateBox timestamp={timestamp} style={{ overflow: "hidden" }}/>
@@ -41,7 +52,7 @@ export default class EventHero extends React.Component {
             </div>
           </div>
           <div style={{ float: "right", height: "100%", display: "flex", alignItems: "flex-end", paddingBottom: 5 }}>
-            <RaisedButton label={joinLabel} onClick={onRSVPClick} primary />
+            <RaisedButton label={joinLabel} onClick={Object.keys(authedUser).length > 0 ? onRSVPClick : () => this.setState({ signUpModalOpen: true })} primary />
           </div>
         </div>
       </div>

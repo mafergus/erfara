@@ -110,7 +110,7 @@ export class AppBar extends React.Component {
       visibility: this.props.unreadCount === 0 ? 'hidden' : 'visible',
     };
     if (!user) { return null; }
-    return <div>
+    return <div style={{ display: "flex", alignItems: "center" }}>
       <Badge
         style={{ padding: 0 }}
         badgeContent={this.props.unreadCount}

@@ -39,7 +39,7 @@ export default class UserDetails extends React.Component {
 
   render() {
     const { style, user } = this.props;
-    const age = user.birthday ? Moment().diff(user.birthday, "years") : 30;
+    const age = user.birthday ? Moment().diff(user.birthday, "years") + " years old" : "Age is just a number";
     const location = user.location ? user.location : "Earth";
     const hometown = user.hometown ? user.hometown : "Earth";
     return (

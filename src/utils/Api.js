@@ -19,6 +19,37 @@ export function getFacebookInfo(accessToken) {
   });
 }
 
+export function autoAddCategory(name) {
+  return new Promise(() => {
+    getPhoto(name)
+    .then(blob => uploadFile(blob, "categoryImages/"))
+    .then(url => {
+      const categoryKey = firebase.database().ref().child("categories").push().key;
+      return updateCategory(categoryKey, name, url);
+    });
+  });
+}
+
+export function deleteCategory(key) {
+  var updates = {};
+  updates["categories/" + key] = null;
+
+  return firebase.database().ref().update(updates);
+}
+
+export function updateCategory(key, name, image) {
+  return new Promise((resolve, reject) => {
+    let update = {};
+    update["categories/" + key + "/image"] = image;
+    update["categories/" + key + "/name"] = name;
+    firebase.database().ref().update(update).then(() => {
+      resolve({ id: key, name, image });
+    }).catch(error => {
+      reject(error);
+    });
+  });
+}
+
 export function getPlaces(searchTerm) {
   return new Promise(() => {
     fetch(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${DEFAULT_LOCATION}&radius=50000&name=${searchTerm}&key=${PLACES_API_KEY}`,
@@ -78,9 +109,9 @@ export function addUser(user) {
     updates["users/" + user.uid + "/uid"] = user.uid;
     updates["users/" + user.uid + "/email"] = user.email;
     updates["users/" + user.uid + "/photo"] = user.photo;
-    updates["users/" + user.uid + "/birthday"] = user.birthday;
-    updates["users/" + user.uid + "/hometown"] = user.hometown;
-    updates["users/" + user.uid + "/location"] = user.location;
+    updates["users/" + user.uid + "/birthday"] = user.birthday || "";
+    updates["users/" + user.uid + "/hometown"] = user.hometown || "";
+    updates["users/" + user.uid + "/location"] = user.location || "";
     updates["users/" + user.uid + "/coverPhoto"] = user.coverPhoto || PLACEHOLDER_PHOTO;
     updates["users/"]
 
@@ -135,6 +166,25 @@ export function addUserFeedReply(senderId, userId, message, timestamp, parentId)
   return firebase.database().ref().update(updates);
 }
 
+export function getPhotos(searchTerm) {
+  const photoParam = searchTerm ? `&q=${searchTerm}` : ""; 
+  return new Promise((resolve, reject) => {
+    fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}${photoParam}&image_type=photo`).then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        reject(new Error(response.statusText));
+      }
+    }).then(json => {
+      if (json && json.hits && json.hits.length > 0) {
+        resolve(json);
+      }
+    }).catch(error => {
+      resolve(error);
+    });
+  });
+}
+
 export function getPhoto(searchTerm) {
   const photoParam = searchTerm ? `&q=${searchTerm}` : ""; 
   return new Promise((resolve, reject) => {
@@ -182,7 +232,7 @@ export function addEventMessage(eventId, userId, message, timestamp) {
   }
 }
 
-export function uploadFile(file) {
+export function uploadFile(file, directory="images/") {
   return new Promise((resolve, reject) => {
     var storageRef = firebase.storage().ref();
     // Create the file metadata
@@ -191,28 +241,12 @@ export function uploadFile(file) {
     };
 
     // Upload file and metadata to the object 'images/mountains.jpg'
-    var uploadTask = storageRef.child('images/' + new Date().getTime()).put(file, metadata);
+    var uploadTask = storageRef.child(directory + new Date().getTime()).put(file, metadata);
     // Listen for state changes, errors, and completion of the upload.
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
-      snapshot => {
-        switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED:
-            break;
-          case firebase.storage.TaskState.RUNNING:
-            break;
-          default: break;
-        }
-      }, error => {
-      switch (error.code) {
-        case 'storage/unauthorized':
-        case 'storage/canceled':
-        case 'storage/unknown': 
-        default: break;
-      }
-      reject(error);
-    }, function() {
-      resolve(uploadTask.snapshot.downloadURL);
-    });
+      () => {},
+      error => reject(error), 
+      () => resolve(uploadTask.snapshot.downloadURL) );
   });
 }
 

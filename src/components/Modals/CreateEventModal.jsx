@@ -156,6 +156,13 @@ export class CreateEventModal extends React.Component {
       }
     }
 
+    const startTime = new Date();
+    startTime.setMinutes(0);
+    startTime.setHours((startTime.getHours() + 1) % 24);
+    const endTime = new Date();
+    endTime.setHours((endTime.getHours() + 2) % 24);
+    endTime.setMinutes(0);
+
     return (
       <div className="popup-dialog">
         <Dialog
@@ -165,11 +172,11 @@ export class CreateEventModal extends React.Component {
           open={this.props.isOpen}>
           <div>
             <a href="#" onClick={() => { this.props.onRequestClose(); this.setState({ isLoading: false }); }} className="close-btn">&times;</a>
-            <h3>Create an Event</h3>
+            <h3 style={{ marginBottom: "1.5em" }}>Create an Event</h3>
             <div className="row-1">
               <div className="event-title">
-                <div className="label">
-                  <label>Event Title</label>
+                <div className="title-label">
+                  <p>Event Title</p>
                 </div>
                 <div className="box">
                   <TextField
@@ -183,8 +190,8 @@ export class CreateEventModal extends React.Component {
                 </div>
               </div>
               <div className="event-location">
-                <div className="label">
-                  <label>Location</label>
+                <div className="title-label">
+                  <p>Location</p>
                 </div>
                 <div className="box">
                   <SearchBox onSelectLocation={this.locationChange}/>
@@ -193,8 +200,8 @@ export class CreateEventModal extends React.Component {
             </div>
             <div className="row-2">
               <div className="event-date">
-                <div className="label">
-                  <label>Date</label>
+                <div className="title-label">
+                  <p>Date</p>
                 </div>
                 <div className="box box-small">
                   <DatePicker 
@@ -207,13 +214,14 @@ export class CreateEventModal extends React.Component {
                 </div>
               </div>
               <div className="start-time">
-                <div className="label">
-                  <label>Start Time</label>
+                <div className="title-label">
+                  <p>Start Time</p>
                 </div>
                 <div className="box box-small">
                   <TimePicker 
                     name="startTime"
                     hintText="4:00 PM"
+                    defaultTime={startTime}
                     hintStyle={style.hintStyle}
                     textFieldStyle={style.textFieldStyle}
                     underlineShow={false}  
@@ -221,12 +229,13 @@ export class CreateEventModal extends React.Component {
                 </div>
               </div>
               <div className="end-time">
-                <div className="label">
-                  <label>End Time</label>
+                <div className="title-label">
+                  <p>End Time</p>
                 </div>
                 <div className="box box-small">
                   <TimePicker 
                     name="endTime"
+                    defaultTime={endTime}
                     hintText="5:00 PM"
                     hintStyle={style.hintStyle}
                     textFieldStyle={style.textFieldStyle}
@@ -235,8 +244,8 @@ export class CreateEventModal extends React.Component {
                 </div>
               </div>
               <div className="event-info">
-                <div className="label">
-                  <label>What should invitees bring?</label>
+                <div className="title-label">
+                  <p>What should invitees bring?</p>
                 </div>
                 <div className="box">
                   <TextField
@@ -252,8 +261,8 @@ export class CreateEventModal extends React.Component {
             </div>
             <div className="row-3">
               <div className="event-description" >
-                <div className="label">
-                  <label>Event Description</label>
+                <div className="title-label">
+                  <p>Event Description</p>
                 </div>
                 <div className="box box-big">
                   <TextField
