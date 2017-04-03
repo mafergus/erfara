@@ -45,7 +45,7 @@ export default class EventHero extends React.Component {
       />
       <div style={{ width: "75%", height: "100%", position: "relative", margin: "0 auto" }}>
         <div style={{ height: 70, position: "absolute", bottom: 0, left: 0, right: 0 }}>
-          <DateBox timestamp={timestamp} style={{ overflow: "hidden" }}/>
+          <DateBox timestamp={timestamp} style={{ height: 70, overflow: "hidden" }}/>
           <div style={{ display: "inline-block", height: 70, paddingLeft: 35, overflow: "hidden" }}>
             <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
               <span style={{ fontSize: "1.7em", verticalAlign: "middle" }}>{event.title}</span>
