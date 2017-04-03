@@ -33,7 +33,8 @@ export class EventListItem extends React.Component {
     itemStyle: PropTypes.object,
     mouseOver: PropTypes.func,
     mouseOut: PropTypes.func,
-    marginConstant:PropTypes.number
+    marginConstant:PropTypes.number,
+    $geoService: PropTypes.object,
 
   };
 
@@ -58,7 +59,7 @@ export class EventListItem extends React.Component {
     const timestamp = new Date(event.date);
 
     return <div style={{ width: "100%", height: popUp ? 40 : 70, marginTop: -5, position: "relative", display: "flex", alignItems: "center", backgroundColor: "white" }}>
-      <DateBox style={{height: popUp ? 50 : 70 }} muiTheme={muiTheme.palette.accent1Color} timestamp={timestamp} />
+      <DateBox style={{height: popUp ? 40 : 70 }} muiTheme={muiTheme.palette.accent1Color} timestamp={timestamp} />
       <div style={{ height: "100%", flexGrow: "1", display: "flex", alignItems: "center", paddingLeft: 13 }}>
         <p style={{ color: "#424242", textAlign: "left" }}>
           <span style={{ fontSize: "1em" }}>{event.title}</span>
