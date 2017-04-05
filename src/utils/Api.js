@@ -19,6 +19,34 @@ export function getFacebookInfo(accessToken) {
   });
 }
 
+export function addMessage(recipientId, senderId, message, date) {
+  return dispatch => {
+    var messageData = {
+      message,
+      date,
+      from: senderId,
+    };
+
+    var newMessageKey = firebase.database().ref().child("/conversations/users/" + recipientId + senderId + "/messages").push().key;
+
+    var updates = {};
+    updates["/conversations/users/" + recipientId + "/" + senderId + "/messages/" + newMessageKey] = messageData;
+    updates["/conversations/users/" + senderId + "/" + recipientId + "/messages/" + newMessageKey] = messageData;
+
+    return firebase.database().ref().update(updates).then(() => {
+      dispatch(readMessage(senderId, recipientId, newMessageKey));
+    });
+  }
+}
+
+export function readMessage(userId, conversationId, messageId) {
+  return () => {
+    var updates = {};
+    updates["/conversations/users/" + userId + "/" + conversationId + "/lastReadMessage"] = messageId;
+    return firebase.database().ref().update(updates);
+  }
+}
+
 export function searchCategories(searchTerm) {
   return new Promise((resolve, reject) => {
     firebase.database().ref("/categories")
