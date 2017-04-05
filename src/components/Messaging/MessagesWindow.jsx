@@ -18,7 +18,6 @@ export default class MessagesWindow extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    debugger;
     const { conversation } = nextProps;
     if (conversation.hasOwnProperty("messages") && Object.keys(conversation.messages).length > 0) {
       const messages = Object.keys(conversation.messages);
