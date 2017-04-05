@@ -5,14 +5,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Share from 'material-ui/svg-icons/notification/wc';
 import Learn from 'material-ui/svg-icons/social/sentiment-very-satisfied';
 import Experience from 'material-ui/svg-icons/image/brightness-7';
-import withWidth, {LARGE} from 'material-ui/utils/withWidth';
-import typography from 'material-ui/styles/typography';
-import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import { cyan500, darkWhite, orange50, orange500, lightBlack, darkBlack } from 'material-ui/styles/colors';
+import withWidth from 'material-ui/utils/withWidth';
+import { orange50, orange500, lightBlack, darkBlack } from 'material-ui/styles/colors';
 import { darkGray } from "utils/colors";
 import AuthModal from 'components/auth/AuthModal';
-import HomeFeature from 'components/HomeFeature';
-import FullWidthSection from 'components/FullWidthSection';
+import OnboardingModal from 'components/Onboarding/OnboardingModal';
 import EventsList from "components/EventList/EventList";
 
 function mapStateToProps(state) {
@@ -42,125 +39,6 @@ export class SplashPage extends React.Component {
     }
   }
 
-  renderHero() {
-    const styles = {
-      root: {
-        backgroundColor: cyan500,
-        overflow: 'hidden',
-        minHeight: '500px',
-      },
-      svgLogo: {
-        marginLeft: window.innerWidth * 0.5 - 130,
-        width: 420,
-        height: 157,
-      },
-      tagline: {
-        margin: '16px auto 0 auto',
-        textAlign: 'center',
-        maxWidth: 575,
-      },
-      label: {
-        color: lightBaseTheme.palette.primary1Color,
-      },
-      githubStyle: {
-        margin: '16px 32px 0px 8px',
-      },
-      h1: {
-        fontSize: '1.5em',
-        color: darkWhite,
-        fontWeight: typography.fontWeightLight,
-      },
-      h2: {
-        fontSize: '1em',
-        lineHeight: '28px',
-        marginTop: '1.5em',
-        marginBottom: '5em',
-        letterSpacing: 0,
-      },
-      nowrap: {
-        whiteSpace: 'nowrap',
-      },
-      taglineWhenLarge: {
-        marginTop: 32,
-      },
-      h1WhenLarge: {
-        fontSize: '2em',
-      },
-      h2WhenLarge: {
-        fontSize: '1.5em',
-        lineHeight: '32px',
-        paddingTop: 16,
-        marginBottom: 12,
-      },
-    };
-
-    styles.h2 = Object.assign({}, styles.h1, styles.h2);
-
-    if (this.props.width === LARGE) {
-      styles.tagline = Object.assign({}, styles.tagline, styles.taglineWhenLarge);
-      styles.h1 = Object.assign({}, styles.h1, styles.h1WhenLarge);
-      styles.h2 = Object.assign({}, styles.h2, styles.h2WhenLarge);
-    }
-
-    return (
-      <FullWidthSection style={styles.root} className="heroImage">
-        <div style={styles.tagline}>
-          <h1 style={styles.h1}>Learn. Teach. Experience.</h1>
-          <h2 style={styles.h2}>
-            Life is about the people you meet, and the experiences you share
-          </h2>
-          <RaisedButton
-            className="demo-button"
-            style={{marginTop: '100px'}}
-            primary={true}
-            label="Join"
-            onTouchTap={() => this.setState({ isJoinOpen: true })}
-            buttonStyle={{width: '10em'}}
-          />
-          <AuthModal
-            title="Sign Up"
-            isOpen={this.state.isJoinOpen}
-            handleClose={() => this.setState({ isJoinOpen: false })}
-          />
-        </div>
-      </FullWidthSection>
-    );
-  }
-
-  renderFeatures() {
-    const styles = {maxWidth: 906};
-
-    return (
-      <FullWidthSection useContent={true} contentStyle={styles}>
-        <HomeFeature
-          heading="Get Started"
-          route="/event"
-          imageClass="getStartedImage"
-          firstChild={true}
-        />
-        <HomeFeature
-          heading="Customization"
-          route="/event"
-          imageClass="customizationImage"
-        />
-        <HomeFeature
-          heading="Components"
-          route="/event"
-          imageClass="componentsImage"
-          lastChild={true}
-        />
-      </FullWidthSection>
-    );
-  }
-
-  renderJoinModal() {
-    return         <AuthModal 
-          title="Sign Up"
-          isOpen={this.state.signUpModalOpen}
-          handleClose={() => this.setState({ signUpModalOpen: false })} 
-        />
-  }
-
   renderDescriptionItem(image, text) {
     return <div style={{ display: "inline-block", margin: "0px 20px", verticalAlign: "text-top" }}>
       <div style={{ textAlign: "center" }}>{image}</div>
@@ -181,28 +59,36 @@ export class SplashPage extends React.Component {
     </div>
   }
 
+  renderHero() {
+    return <div style={{ width: "43%", height: "100%", display: "inline-block", overflow: "hidden" }}>
+      <div style={{ height: "100%", width: "100%", padding: 80 }} className="heroImage">
+        <div>
+          <span style={{ fontSize: "2.6em", fontFamily: "Roboto-Light", color: "white" }}>Share knowledge,<br/>build friendships.</span>
+        </div>
+        <RaisedButton 
+          style={{ marginTop: 50 }}
+          label="JOIN THE COMMUNITY"
+          labelColor="#FFFFFF"
+          onTouchTap={() => this.setState({ isJoinOpen: true })}
+          backgroundColor="#07ADB0"
+        />
+        <div style={{ marginTop: 40, fontSize: "0.9em", fontColor: "white", textDecoration: "underline" }}>Learn how it works</div>
+      </div>
+    </div>;
+  }
+
   render() {
     return <div style={{ position: "absolute", top: 0, bottom: 0, left: 0, width: "100%" }}>
+      <OnboardingModal
+        isOpen={false}
+        handleClose={() => null}
+      />
       <AuthModal 
         title="Sign Up"
         isOpen={this.state.isJoinOpen}
         handleClose={() => this.setState({ isJoinOpen: false })} 
       />
-      <div style={{ width: "43%", height: "100%", display: "inline-block", overflow: "hidden" }}>
-        <div style={{ height: "100%", width: "100%", padding: 80 }} className="heroImage">
-          <div>
-            <span style={{ fontSize: "2.6em", fontFamily: "Roboto-Light", color: "white" }}>Share knowledge,<br/>build friendships.</span>
-          </div>
-          <RaisedButton 
-            style={{ marginTop: 50 }}
-            label="JOIN THE COMMUNITY"
-            labelColor="#FFFFFF"
-            onTouchTap={() => this.setState({ isJoinOpen: true })}
-            backgroundColor="#07ADB0"
-          />
-          <div style={{ marginTop: 40, fontSize: "0.9em", fontColor: "white", textDecoration: "underline" }}>Learn how it works</div>
-        </div>
-      </div>
+      {this.renderHero()}
       <div style={{ width: "57%", height: "100%", display: "inline-block", overflowX: "hidden" }}>
         <div style={{ width: 720, margin: "25px auto 15px auto" }}>
           <h1 style={{ color: orange500, fontSize: "1.6em", fontFamily: "Roboto-Light" }}>Upcoming Events</h1>
