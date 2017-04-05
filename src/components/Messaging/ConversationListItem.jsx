@@ -9,6 +9,7 @@ import { getUnreadMessageCountForConversation } from "utils/helpers";
 
 function mapStateToProps(state, props) {
   return {
+    authedUser: state.authedUser,
     user: state.users.get(props.conversationId),
   }
 }
@@ -33,6 +34,7 @@ const IMG_STYLE = {
 export class ConversationListItem extends React.Component {
 
   static propTypes = {
+    authedUser: PropTypes.object.isRequired,
     getUser: PropTypes.func.isRequired,
     user: PropTypes.object,
     conversation: PropTypes.object.isRequired,
@@ -52,12 +54,8 @@ export class ConversationListItem extends React.Component {
     }
   }
 
-  getUnreadMessages() {
-
-  }
-
   render() {
-    const { conversation, conversationId, user } = this.props;
+    const { authedUser, conversation, conversationId, user } = this.props;
     const message = Object.entries(this.props.conversation.messages)[0][1];
     const photo = user && user.photo;
     const moment = new Moment(message.date);
@@ -73,11 +71,11 @@ export class ConversationListItem extends React.Component {
         </div>
         <p className="subtitle ellipsis" style={{ color: lightBlack, fontSize: "0.95em", marginTop: "0.3em" }}>{message.message}</p>
       </div>
-      {getUnreadMessageCountForConversation(this.props.conversation) > 0 && <Badge
+      {getUnreadMessageCountForConversation(authedUser, conversation) > 0 && <Badge
         style={{ padding: 0 }}
         primary={true}
-        badgeContent={getUnreadMessageCountForConversation(this.props.conversation)}
-        badgeStyle={{ top: 2, right: 10 }}
+        badgeContent={getUnreadMessageCountForConversation(authedUser, conversation)}
+        badgeStyle={{ top: 2, right: 15 }}
       />}
     </li>
   }
