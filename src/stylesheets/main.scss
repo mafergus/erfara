@@ -1,3 +1,5 @@
+$erfara-black: #424242;
+
 @font-face {
     font-family: 'LobsterTwo-Regular'; /*a name to be used later*/
     src: url('../fonts/LobsterTwo-Regular.ttf');
@@ -78,6 +80,34 @@ p, h1 {
   margin: 0px;
 }
 
+.text {
+  color: $erfara-black;
+}
+
+h1 {
+  @extend .text;
+  font-size: 2.6em;
+}
+
+h2 {
+  @extend .text;
+  font-size: 1.6em;
+}
+
+h3 {
+  @extend .text;
+}
+
+h4 {
+  @extend .text;
+  font-size: 1em;
+}
+
+h5 {
+  @extend .text;
+  font-size: 0.8em;
+}
+
 .app {
   width: 100%;
   height: 100%;
@@ -150,6 +180,14 @@ p, h1 {
         -ms-transform: scale(1.01);
             transform: scale(1.01);
            box-shadow: 5px 5px 8px #C7C7C7;
+  }
+}
+
+.hover-opacity {
+  -webkit-transition: all .1s ease-in-out;
+          transition: all .1s ease-in-out;
+  &:hover {
+             opacity: 0.9;
   }
 }
 
