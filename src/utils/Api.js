@@ -19,6 +19,35 @@ export function getFacebookInfo(accessToken) {
   });
 }
 
+export function searchCategories(searchTerm) {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref("/categories")
+      .orderByChild("name")
+      .startAt(searchTerm)
+      .endAt(searchTerm+"\uf8ff").once("value", snap => {
+        let categories = [];
+        snap.forEach(child => {
+          const value = child.val()
+          categories.push({ ...value, id: child.key });
+        });
+        resolve(categories);
+    }).catch(error => reject(error));
+  });
+}
+
+export function getCategories() {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref("/categories").orderByChild("name").once("value", snap => {
+      let categories = [];
+      snap.forEach(child => {
+        const value = child.val()
+        categories.push({ ...value, id: child.key });
+      });
+      resolve(categories);
+    }).catch(error => reject(error));
+  });
+}
+
 export function autoAddCategory(name) {
   return new Promise(() => {
     getPhoto(name)
@@ -26,7 +55,8 @@ export function autoAddCategory(name) {
     .then(url => {
       const categoryKey = firebase.database().ref().child("categories").push().key;
       return updateCategory(categoryKey, name, url);
-    });
+    })
+    .catch(error => alert(error));
   });
 }
 
@@ -166,6 +196,31 @@ export function addUserFeedReply(senderId, userId, message, timestamp, parentId)
   return firebase.database().ref().update(updates);
 }
 
+export function getPhotoUrl(searchTerm, isThumbnail=false) {
+  const photoParam = searchTerm ? `&q=${searchTerm}` : "";
+  debugger
+  return new Promise((resolve, reject) => {
+    debugger;
+    fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}${photoParam}&image_type=photo`).then(response => {
+      debugger;
+      if (response.ok) {
+        return response.json();
+      } else {
+        reject(new Error(response.statusText));
+      }
+    }).then(json => {
+      debugger;
+      if (json && json.hits && json.hits.length > 0) {
+        const urlType = isThumbnail ? "previewURL" : "webformatURL";
+        const url = searchTerm ? 
+          json.hits[0][urlType] : 
+          json.hits[getRandomInt(0, json.hits.length)][urlType];
+        resolve(url);
+      }
+    }).catch(error => resolve(error));
+  });
+}
+
 export function getPhotos(searchTerm) {
   const photoParam = searchTerm ? `&q=${searchTerm}` : ""; 
   return new Promise((resolve, reject) => {
@@ -186,22 +241,10 @@ export function getPhotos(searchTerm) {
 }
 
 export function getPhoto(searchTerm) {
-  const photoParam = searchTerm ? `&q=${searchTerm}` : ""; 
   return new Promise((resolve, reject) => {
-    fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}${photoParam}&image_type=photo`).then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        reject(new Error(response.statusText));
-      }
-    }).then(json => {
-      if (json && json.hits && json.hits.length > 0) {
-        const url = searchTerm ? 
-          json.hits[0].webformatURL : 
-          json.hits[getRandomInt(0, json.hits.length)].webformatURL;
-        return fetch(url);
-      }
-    }).then(response => {
+    getPhotoUrl(searchTerm)
+    .then(url => fetch(url))
+    .then(response => {
       if (response && response.ok) {
         return response.blob();
       } else {
