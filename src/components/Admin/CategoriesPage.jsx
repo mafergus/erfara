@@ -22,7 +22,7 @@ export class CategoriesPage extends React.Component {
 
   static propTypes = {
     categories: PropTypes.object,
-    images: PropTypes.object,
+    images: PropTypes.array,
   };
   
   constructor() {
@@ -52,7 +52,7 @@ export class CategoriesPage extends React.Component {
     if (event.charCode === 13 && this.state.category.length > 2) { // enter key pressed
       autoAddCategory(this.state.category).then(() => {
         this.setState({ category: "" });
-      });
+      }).catch(error => alert(error));
       this.setState({ category: "" });
     } 
   }
@@ -110,23 +110,27 @@ export class CategoriesPage extends React.Component {
   renderPhotosModal() {
     const { images } = this.props;
     let rowItems = [];
+    let rows = [];
+    images.forEach(image => {
+      if (rowItems.length === 4) {
+        rows.push(<Row key={rows.length}>{rowItems}</Row>);
+        rowItems = [];
+      }
+      rowItems.push(<Col key={image.previewURL} lg={3}>
+        <div onClick={this.updateCategoryImage.bind(null, image)} style={{ backgroundImage: `url(${image.previewURL})`, backgroundPosition: "50% 50%", backgroundSize: "cover", height: 200, width: 200, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        </div>
+      </Col>);
+    });
+    if (rowItems.length) {
+      rows.push(<Row key={rows.length}>{rowItems}</Row>);
+    }
     return <Dialog
       style={{ zIndex: 9000 }}
       modal={false}
       onRequestClose={() => this.setState({ photoDialogOpen: false, photoLoading: false })}
       open={this.state.photoDialogOpen}>
-      <div style={{ overflowY: "scroll", width: "100%", height: 500 }}>
-        {images.map(image => {
-        if (rowItems.length == 8) {
-          const leRow = <Row>{rowItems}</Row>;
-          rowItems = [];
-          return leRow;
-        }
-        rowItems.push(<Col lg={3}>
-          <div onClick={this.updateCategoryImage.bind(null, image)} style={{ backgroundImage: `url(${image.previewURL})`, backgroundPosition: "50% 50%", backgroundSize: "cover", height: 200, width: 200, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          </div>
-        </Col>);
-        })}
+      <div style={{ overflowY: "scroll", width: "100%", height: 500, backgroundColor: "green" }}>
+        {rows}
       </div>
     </Dialog>;
   }
