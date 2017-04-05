@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
 import MapsPlace from "material-ui/svg-icons/maps/place"; 
-import { red500 } from "material-ui/styles/colors";
+import { red500, orange600 } from "material-ui/styles/colors";
 import EventListItem from './EventList/EventListItem';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
@@ -10,44 +10,61 @@ class Markers extends React.Component {
   static propTypes = {
     isHovered: PropTypes.bool,
     event: PropTypes.object,
+    events: PropTypes.object,
+    eventEntry: PropTypes.array,
     muiTheme: PropTypes.object,
-    $dimensionKey: PropTypes.string
+    $dimensionKey: PropTypes.string,
+    markerId: PropTypes.string,
+    clickMarker: PropTypes.func,
+    sendHoverState: PropTypes.func,
+    lat: PropTypes.number,
+    lng: PropTypes.number,
   };
 
   constructor() {
     super();
     autoBind(this);
 
-    this.card = '';
-
     this.state = {
       isHovered: false,
-      isPopupOpen: false,
+      isOpen: false
     };
   }
 
   mouseEnter() {
     this.setState({ isHovered: true });
+    this.props.sendHoverState(true);
   }
 
   mouseLeave() {
     this.setState({ isHovered: false });
+    this.props.sendHoverState(false);
   }
 
-  onMarkerClick () {
-      this.card = 
-      <div style={{zIndex: 9999999999999}}>
-        <EventListItem           
-          eventUid={this.props.$dimensionKey}
-          event={this.props.event}
-          muiTheme={this.props.muiTheme}
-          popUp={true}
-        />
-      </div>;
-      this.setState({isPopupOpen: !this.state.isPopupOpen});
+  onMarkerClick () {  // For overlapping (not-clickable) markers
+    const clickedMarker =  this.props.eventEntry.filter(item => item[1].geoCoordinates.lat === this.props.lat && item[1].geoCoordinates.lng === this.props.lng );
+    
+    const cardItem = clickedMarker.map((item, index) =>  
+      <EventListItem
+        eventUid={item[0]}
+        event={item[1]}
+        muiTheme={this.props.muiTheme}
+        popUp={true}
+        lat={this.props.lat} 
+        lng={this.props.lng} 
+        mouseOver={this.mouseEnter}
+        mouseOut={this.mouseLeave}
+        key={index}
+        marginConstant={index}
+      />
+    );
+
+    const itemId = this.props.$dimensionKey;
+    this.props.clickMarker(cardItem, itemId, [this.props.lat, this.props.lng]);
   }
 
   render() {
+
     const markerStyle = {
       smallMarker: { 
         width:55, 
@@ -70,12 +87,12 @@ class Markers extends React.Component {
         <div>
           <MapsPlace
             style={markerStyle.bigMarker} 
-            color={red500} 
+            color={orange600} 
             onMouseOver={this.mouseEnter} 
             onMouseOut={this.mouseLeave} 
             onClick={this.onMarkerClick}
+            hoverColor={orange600}
           />
-          {this.state.isPopupOpen ? this.card : <div></div> }
         </div>
       );
     } else {
@@ -87,8 +104,8 @@ class Markers extends React.Component {
             onMouseOver={this.mouseEnter} 
             onMouseOut={this.mouseLeave} 
             onClick={this.onMarkerClick}
+            hoverColor={orange600}
           />
-          {this.state.isPopupOpen ? this.card : <div></div> }
         </div>
       );
     }
