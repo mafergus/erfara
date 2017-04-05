@@ -133,7 +133,7 @@ export class OnboardingModal extends React.Component {
   render() {
     const { handleClose } = this.props;
     return <Dialog
-      open={true}
+      open={false}
       modal={false}
       onRequestClose={handleClose}
     >
