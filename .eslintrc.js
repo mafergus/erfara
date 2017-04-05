@@ -17,7 +17,7 @@ module.exports = {
   },
   "rules": {
     "no-debugger": 1,
-    "no-console": 1
+    "no-console": 1,
   },
   "extends": ["eslint:recommended", "plugin:react/recommended"],
 };

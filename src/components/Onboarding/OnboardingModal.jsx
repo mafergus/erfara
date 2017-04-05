@@ -69,12 +69,9 @@ export class OnboardingModal extends React.Component {
     }
     searchCategories(value).then(categories => addCategorySearchResults(categories))
     .then(() => {
-      debugger;
       if (searchResults.length === 0 && value.length > 1) {
-        debugger;
         this.setState({ newCategory: { name: value } });
         getPhotoUrl(value, true).then(url => {
-          debugger;
           const updatedCategory = this.state.newCategory;
           this.setState({ newCategory: {...updatedCategory, image: url} });
         });
@@ -101,7 +98,6 @@ export class OnboardingModal extends React.Component {
     let { searchResults, categories } = this.props;
     if (this.state.searchTerm.length === 0) { searchResults = categories; }
     if (this.state.newCategory && searchResults.length === 0) {
-      debugger;
       searchResults = [];
       searchResults.push(this.state.newCategory);
     }
