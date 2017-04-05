@@ -198,18 +198,14 @@ export function addUserFeedReply(senderId, userId, message, timestamp, parentId)
 
 export function getPhotoUrl(searchTerm, isThumbnail=false) {
   const photoParam = searchTerm ? `&q=${searchTerm}` : "";
-  debugger
   return new Promise((resolve, reject) => {
-    debugger;
     fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}${photoParam}&image_type=photo`).then(response => {
-      debugger;
       if (response.ok) {
         return response.json();
       } else {
         reject(new Error(response.statusText));
       }
     }).then(json => {
-      debugger;
       if (json && json.hits && json.hits.length > 0) {
         const urlType = isThumbnail ? "previewURL" : "webformatURL";
         const url = searchTerm ? 
