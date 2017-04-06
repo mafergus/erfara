@@ -26,8 +26,13 @@ export default class ConversationList extends React.Component {
       backgroundColor: "white",
     }
     return <ul style={STYLE} className="conversationList">
-      {conversations && Object.entries(conversations).map(item => {
-        return <ConversationListItem key={item[0]} conversationId={item[0]} conversation={item[1]} onConversationClick={this.props.onConversationSelected} />
+      {conversations.map((item, key) => {
+        return <ConversationListItem 
+          key={key}
+          conversationId={key}
+          conversation={item}
+          onConversationClick={this.props.onConversationSelected}
+        />;
       })}
     </ul>;
   }  

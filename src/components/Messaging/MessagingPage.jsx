@@ -5,13 +5,14 @@ import ConversationList from "components/Messaging/ConversationList";
 import MessagesWindow from "components/Messaging/MessagesWindow";
 import store from "store/store";
 import { bindActionCreators } from "redux";
-import { addMessage, readMessage } from "actions/messageActions";
+import { addMessage, readMessage } from "utils/Api";
 import Resizable from "react-resizable-box";
 
 function mapStateToProps(state) {
   return {
     authedUser: state.authedUser,
-    conversations: state.authedUser.hasOwnProperty("conversations") && state.authedUser.conversations,
+    // Immutable Map
+    conversations: state.conversations.get("map") || {},
   };
 }
 
@@ -23,7 +24,7 @@ export class MessagingPage extends React.Component {
 
   static propTypes = {
     authedUser: PropTypes.object.isRequired,
-    conversations: PropTypes.array.isRequired,
+    conversations: PropTypes.object.isRequired,
     readMessage: PropTypes.func.isRequired,
   };
   
@@ -33,16 +34,6 @@ export class MessagingPage extends React.Component {
 
     this.state = {
       conversationId: null,
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    //This is to load the first conversation when this component loads
-    if (!this.state.conversationId && 
-      nextProps.authedUser.hasOwnProperty("conversations") && 
-      Object.keys(nextProps.authedUser["conversations"]).length > 0) {
-      const conversationEntry = Object.entries(nextProps.authedUser["conversations"])[0];
-      this.setState({ conversationId: conversationEntry[0] });
     }
   }
 
@@ -56,7 +47,7 @@ export class MessagingPage extends React.Component {
   }
 
   render() {
-    if (!this.props.authedUser || !this.props.authedUser.conversations) { return null; }
+    const { conversations } = this.props;
     return <div style={{ width: "100%", height: "100%", position: "fixed", maxWidth: "1440px", top: "64px", left: "0", display: "flex" }}>
       <Resizable
         customClass="item"
@@ -67,13 +58,13 @@ export class MessagingPage extends React.Component {
         height="100%"
       >
         <ConversationList 
-          conversations={this.props.conversations}
+          conversations={conversations}
           onConversationSelected={conversationId => this.setState({ conversationId })}
           style={{ display: "inline-block", height: "100%", width: "100%", marginTop: "0px" }}
         />
       </Resizable>
       <MessagesWindow 
-        conversation={this.props.conversations[this.state.conversationId]}
+        conversation={conversations.get(this.state.conversationId) || {}}
         onSendMessage={this.sendMessage}
         onReadMessage={this.readMessage}
         style={{ width: "100%", height: "100%", display: "inline-block" }}
