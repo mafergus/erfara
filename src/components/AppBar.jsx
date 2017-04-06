@@ -14,7 +14,6 @@ import AuthModal from 'components/auth/AuthModal';
 import LoggedInUserComponent from "components/LoggedInUserComponent";
 import store from "store/store";
 import { addUser } from "utils/Api";
-import { getUnreadMessageCount } from "utils/helpers";
 
 const STYLE = {
   position: 'fixed',
@@ -31,7 +30,7 @@ function mapStateToProps(state) {
   }
   return {
     user,
-    unreadCount: getUnreadMessageCount(state),
+    unreadCount: state.conversations.get("unreadMessages"),
   };
 }
 

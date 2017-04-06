@@ -13,6 +13,7 @@ function mapStateToProps(state, props) {
     event,
     attendees: event && Object.keys(event.attendees).map(userId => state.users.get(userId)),
     user: event && state.users.get(event.userId),
+    users: Object.keys(state.users),
   };
 }
 
@@ -35,7 +36,7 @@ export class EventListItem extends React.Component {
     mouseOut: PropTypes.func,
     marginConstant:PropTypes.number,
     $geoService: PropTypes.object,
-
+    users: PropTypes.array,
   };
 
   static defaultProps = {
@@ -48,8 +49,8 @@ export class EventListItem extends React.Component {
   }
 
   componentWillMount() {
-    const { event, getUser } = this.props;
-    if (event) {
+    const { event, getUser, users } = this.props;
+    if (event && !users.includes(event.userId)) {
       getUser(event.userId);
     }
   }

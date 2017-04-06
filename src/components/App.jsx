@@ -12,12 +12,11 @@ import withWidth, { MEDIUM, LARGE } from 'material-ui/utils/withWidth';
 import FullWidthSection from "components/FullWidthSection";
 import AppBar from "components/AppBar";
 import CreateEventModal from "components/Modals/CreateEventModal";
-import { getUnreadMessageCount } from "utils/helpers";
 
 function mapStateToProps(state) {
   return {
     authedUser: state.authedUser,
-    unreadMessages: getUnreadMessageCount(state),
+    unreadMessages: state.conversations.get("unreadMessages"),
   };
 }
 

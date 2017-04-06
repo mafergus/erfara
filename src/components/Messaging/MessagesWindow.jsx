@@ -19,9 +19,11 @@ export default class MessagesWindow extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { conversation } = nextProps;
-    const messages = conversation && Object.keys(conversation.messages);
-    const lastMessage = messages.slice(-1)[0];
-    this.props.onReadMessage(lastMessage);
+    if (conversation.hasOwnProperty("messages") && Object.keys(conversation.messages).length > 0) {
+      const messages = Object.keys(conversation.messages);
+      const lastMessage = messages.slice(-1)[0];
+      this.props.onReadMessage(lastMessage);
+    }
   }
 
   render() {
@@ -33,7 +35,7 @@ export default class MessagesWindow extends React.Component {
       paddingBottom: "10px",
       position: "relative",
     }
-    if (!conversation) { return <div/>; }
+    if (!Object.keys(conversation).length) { return <div/>; }
     const messages = Object.values(conversation.messages);
     return <div style={ STYLE } className="messaging-pane">
       <img className="background-image" />
