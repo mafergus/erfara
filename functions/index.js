@@ -98,6 +98,7 @@ function sendGoodbyEmail(email, displayName) {
 exports.sendEmailOnMessage = functions.database.ref('/conversations/users/{userId}/{conversationId}/messages').onWrite(event => {
   const snapshot = event.data;
   console.log("Got new message!!! Event data: ", event);
+  console.log("SNAPSHOT VAL: ", event.data.val());
   // Only send a notification when a message has been created.
   if (snapshot.previous.val()) {
     return;
