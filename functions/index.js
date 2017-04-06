@@ -95,12 +95,11 @@ function sendGoodbyEmail(email, displayName) {
   });
 }
 
-exports.sendEmailOnMessage = functions.database.ref('/conversations/users/{userId}/{conversationId}/messages').onWrite(event => {
+exports.sendEmailOnMessage = functions.database.ref('/conversations/users/{userId}/{conversationId}/messages/{messageId}').onWrite(event => {
   const snapshot = event.data;
   console.log("Got new message!!! Event data: ", event);
   console.log("SNAPSHOT VAL: ", event.data.val());
-  console.log("EXPORT VAL: ", event.data.exportVal());
-  console.log("DELTA:", event.data.delta());
+  console.log("MESSAGE?!?!?: ", event.data.val().message);
   // Only send a notification when a message has been created.
   if (snapshot.previous.val()) {
     return;
