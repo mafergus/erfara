@@ -95,8 +95,9 @@ function sendGoodbyEmail(email, displayName) {
   });
 }
 
-exports.sendEmailOnMessage = functions.database.ref('/conversations/users/{messageId}').onWrite(event => {
+exports.sendEmailOnMessage = functions.database.ref('/conversations/users/{userId}/{conversationId}/messages').onWrite(event => {
   const snapshot = event.data;
+  console.log("Got new message!!! Event data: ", event);
   // Only send a notification when a message has been created.
   if (snapshot.previous.val()) {
     return;
