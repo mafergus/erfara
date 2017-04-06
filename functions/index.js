@@ -99,6 +99,8 @@ exports.sendEmailOnMessage = functions.database.ref('/conversations/users/{userI
   const snapshot = event.data;
   console.log("Got new message!!! Event data: ", event);
   console.log("SNAPSHOT VAL: ", event.data.val());
+  console.log("EXPORT VAL: ", event.data.exportVal());
+  console.log("DELTA:", event.data.delta());
   // Only send a notification when a message has been created.
   if (snapshot.previous.val()) {
     return;
