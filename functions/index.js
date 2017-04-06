@@ -23,7 +23,7 @@ require('@google-cloud/debug-agent').start({ allowExpressions: true });
 // TODO: Configure the `gmail.email` and `gmail.password` Google Cloud environment variables.
 const gmailEmail = encodeURIComponent(functions.config().gmail.email);
 const gmailPassword = encodeURIComponent(functions.config().gmail.password);
-const pass = encodeURIComponent("***REMOVED***");
+const pass = encodeURIComponent("tempgmailpassword");
 const mailTransport = nodemailer.createTransport(
     `smtps://${gmailEmail}:${pass}@smtp.gmail.com`);
 
