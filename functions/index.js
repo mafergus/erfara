@@ -97,13 +97,22 @@ function sendGoodbyEmail(email, displayName) {
 
 exports.sendEmailOnMessage = functions.database.ref('/conversations/users/{userId}/{conversationId}/messages/{messageId}').onWrite(event => {
   const snapshot = event.data;
-  console.log("Got new message!!! Event data: ", event);
-  console.log("SNAPSHOT VAL: ", event.data.val());
-  console.log("MESSAGE?!?!?: ", event.data.val().message);
+  console.log("Got new message: ", event.data.val().message, " from ", event.data.val().from);
   // Only send a notification when a message has been created.
   if (snapshot.previous.val()) {
     return;
   }
+
+  return functions.database.ref("/users/" + snapshot.val().from).once("value", snap => {
+    console.log("Got snap for user: ", snap.val(), " username: ", snap.val().name);
+    const mailOptions = {
+      from: '"Matt" <matt@erfara.com>',
+      to: '"Matt" <matt@erfara.com>',
+    };
+    return mailTransport.sendMail(mailOptions).then(() => {
+      console.log("Email for new message sent to: ", email);
+    });
+  });
 
   // Notification details.
   const text = snapshot.val().text;
