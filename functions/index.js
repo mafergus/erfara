@@ -16,6 +16,9 @@
 'use strict';
 
 const functions = require('firebase-functions');
+// Import and initialize the Firebase Admin SDK.
+const admin = require('firebase-admin');
+admin.initializeApp(functions.config().firebase);
 const nodemailer = require('nodemailer');
 require('@google-cloud/debug-agent').start({ allowExpressions: true });
 // Configure the email transport using the default SMTP transport and a GMail account.
@@ -31,31 +34,47 @@ const mailTransport = nodemailer.createTransport(
 // TODO: Change this to your app or company name to customize the email sent.
 const APP_NAME = 'Erfara';
 
-// [START sendWelcomeEmail]
 /**
  * Sends a welcome email to new user.
  */
-// [START onCreateTrigger]
 exports.sendWelcomeEmail = functions.auth.user().onCreate(event => {
-// [END onCreateTrigger]
-  // [START eventAttributes]
-  const user = event.data; // The Firebase user.
-
-  const email = user.email; // The email of the user.
-  const displayName = user.displayName; // The display name of the user.
-  // [END eventAttributes]
+  const user = event.data;
+  const email = user.email;
+  const displayName = user.displayName;
 
   return sendWelcomeEmail(email, displayName);
 });
-// [END sendWelcomeEmail]
 
-// [START sendByeEmail]
+exports.sendWelcomeMessage = functions.auth.user().onCreate(event => {
+  const user = event.data;
+  const email = user.email;
+  const displayName = user.displayName;
+
+  console.log("Sending welcome message to ", user);
+
+  return admin.database().ref("users").orderByChild("email").equalTo("matt@erfara.com").once("value")
+  .then(snap => {
+    const mattUser = snap.val();
+    console.log("Got matt@erfara.com ", snap.val());
+    const messageData = {
+      message: "Welcome to Erfara! Enjoy!",
+      date: new Date(),
+      from: mattUser.uid,
+    };
+    const url = `/conversations/users/${user.uid}/${mattUser.uid}/messages/`;
+    const newMessageKey = admin.database().ref().child(url).push().key;
+    var updates = {};
+    updates[`/conversations/users/${user.uid}/${mattUser.uid}/messages/` + newMessageKey] = messageData;
+    updates[`/conversations/users/${mattUser.uid}/${user.uid}/messages/` + newMessageKey] = messageData;
+
+    return admin.database().ref().update(updates);
+  });
+});
+
 /**
  * Send an account deleted email confirmation to users who delete their accounts.
  */
-// [START onDeleteTrigger]
 exports.sendByeEmail = functions.auth.user().onDelete(event => {
-// [END onDeleteTrigger]
   const user = event.data;
 
   const email = user.email;
@@ -74,7 +93,7 @@ function sendWelcomeEmail(email, displayName) {
 
   // The user unsubscribed to the newsletter.
   mailOptions.subject = `Welcome to Erfara!`;
-  mailOptions.text = `Hey ${displayName}! Welcome to ${APP_NAME}, have fun! If you have any questions, problems or feedback don't hesitate to email me!`;
+  mailOptions.text = `Hey ${displayName}! Welcome to ${APP_NAME}, have fun! If you have any questions, problems or feedback don't hesitate to email me!\n\n-Matt, Founder of Erfara`;
   return mailTransport.sendMail(mailOptions).then(() => {
     console.log('New welcome email sent to:', email);
   });
@@ -97,57 +116,27 @@ function sendGoodbyEmail(email, displayName) {
 
 exports.sendEmailOnMessage = functions.database.ref('/conversations/users/{userId}/{conversationId}/messages/{messageId}').onWrite(event => {
   const snapshot = event.data;
-  console.log("Got new message: ", event.data.val().message, " from ", event.data.val().from);
-  // Only send a notification when a message has been created.
+  const message = event.data.val();
+  console.log("Got new message: ", message.message, " from ", message.from);
   if (snapshot.previous.val()) {
     return;
   }
 
-  return functions.database.ref("/users/" + snapshot.val().from).once("value", snap => {
-    console.log("Got snap for user: ", snap.val(), " username: ", snap.val().name);
+  const userId = event.params.userId;
+  if (userId === message.from) { return; }
+  const fromUserPromise = admin.database().ref("/users/" + message.from).once("value");
+  const toUserPromise = admin.database().ref("/users/" + userId).once("value");
+  Promise.all([fromUserPromise, toUserPromise]).then(values => {
+    const fromUser = values[0].val();
+    const toUser = values[1].val();
     const mailOptions = {
       from: '"Matt" <matt@erfara.com>',
-      to: '"Matt" <matt@erfara.com>',
+      to: `"${toUser.name}" <${toUser.email}>`,
     };
+    mailOptions.subject = `New Message from ${fromUser.name} on Erfara`;
+    mailOptions.text = `${fromUser.name} says: "${message.message}"\n\n\nReply here: www.erfara.com/messages/${message.from}`;
     return mailTransport.sendMail(mailOptions).then(() => {
-      console.log("Email for new message sent to: ", email);
+      console.log("Email for new message " + " sent to: ", toUser.email + " from: ", fromUser.name);
     });
   });
-
-  // Notification details.
-  const text = snapshot.val().text;
-  const payload = {
-    notification: {
-      title: `${snapshot.val().name} posted ${text ? 'a message' : 'an image'}`,
-      body: text ? (text.length <= 100 ? text : text.substring(0, 97) + '...') : '',
-      icon: snapshot.val().photoUrl || '/images/profile_placeholder.png',
-      click_action: `https://${functions.config().firebase.authDomain}`
-    }
-  };
-
-  // Get the list of device tokens.
-  // return admin.database().ref('fcmTokens').once('value').then(allTokens => {
-  //   if (allTokens.val()) {
-  //     // Listing all tokens.
-  //     const tokens = Object.keys(allTokens.val());
-
-  //     // Send notifications to all tokens.
-  //     return admin.messaging().sendToDevice(tokens, payload).then(response => {
-  //       // For each message check if there was an error.
-  //       const tokensToRemove = [];
-  //       response.results.forEach((result, index) => {
-  //         const error = result.error;
-  //         if (error) {
-  //           console.error('Failure sending notification to', tokens[index], error);
-  //           // Cleanup the tokens who are not registered anymore.
-  //           if (error.code === 'messaging/invalid-registration-token' ||
-  //               error.code === 'messaging/registration-token-not-registered') {
-  //             tokensToRemove.push(allTokens.ref.child(tokens[index]).remove());
-  //           }
-  //         }
-  //       });
-  //       return Promise.all(tokensToRemove);
-  //     });
-  //   }
-  // });
 });
