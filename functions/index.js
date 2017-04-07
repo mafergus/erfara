@@ -93,6 +93,8 @@ function sendWelcomeEmail(email, displayName) {
     to: email
   };
 
+  console.log("Should send welcome email to ", email);
+
   // The user unsubscribed to the newsletter.
   mailOptions.subject = `Welcome to Erfara!`;
   mailOptions.text = `Hey ${displayName}! Welcome to ${APP_NAME}, have fun! If you have any questions, problems or feedback don't hesitate to email me!\n\n-Matt, Founder of Erfara`;

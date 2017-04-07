@@ -51,7 +51,7 @@ export class MessagingPage extends React.Component {
   render() {
     const { conversations, params } = this.props;
     const conversation = conversations.get(params.id) || conversations.valueSeq().first();
-    debugger;
+    if (!conversation) { return null; }
     return <div style={{ width: "100%", height: "100%", position: "fixed", maxWidth: "1440px", top: "64px", left: "0", display: "flex" }}>
       <Resizable
         customClass="item"
