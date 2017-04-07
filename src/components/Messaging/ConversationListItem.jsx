@@ -1,6 +1,7 @@
 import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
+import { Link } from "react-router";
 import { darkBlack, lightBlack, minBlack } from "material-ui/styles/colors";
 import Badge from 'material-ui/Badge';
 import { getUser } from "actions/userActions";
@@ -60,24 +61,26 @@ export class ConversationListItem extends React.Component {
     const photo = user && user.photo;
     const moment = new Moment(message.date);
     if (!conversation || !user) { return <div/>; }
-    return <li style={{ display: "flex", alignItems: "center", height: 90, position: "relative" }} onClick={ this.props.onConversationClick.bind(null, conversationId) }>
-      <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <img src={photo} alt="Sender" style={IMG_STYLE}/>
-      </div>
-      <div style={{ width: "50%", display: "inline-block", flexGrow: "1", paddingRight: 15 }}>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <span className="title ellipsis" style={{ color: darkBlack, fontSize: "1.2em", fontWeight: "500", flexGrow: "1" }}>{user.name}</span>
-          <span style={{ color: minBlack, fontSize: "0.8em" }}>{moment.fromNow()}</span>
+    return <Link to={`/messages/${conversationId}`} style={{ textDecoration: "none" }}>
+      <li style={{ display: "flex", alignItems: "center", height: 90, position: "relative" }} onClick={ this.props.onConversationClick.bind(null, conversationId) }>
+        <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <img src={photo} alt="Sender" style={IMG_STYLE}/>
         </div>
-        <p className="subtitle ellipsis" style={{ color: lightBlack, fontSize: "0.95em", marginTop: "0.3em" }}>{message.message}</p>
-      </div>
-      {getUnreadMessageCountForConversation(authedUser, conversation) > 0 && <Badge
-        style={{ padding: 0 }}
-        primary={true}
-        badgeContent={getUnreadMessageCountForConversation(authedUser, conversation)}
-        badgeStyle={{ top: 2, right: 15 }}
-      />}
-    </li>
+        <div style={{ width: "50%", display: "inline-block", flexGrow: "1", paddingRight: 15 }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <span className="title ellipsis" style={{ color: darkBlack, fontSize: "1.2em", fontWeight: "500", flexGrow: "1" }}>{user.name}</span>
+            <span style={{ color: minBlack, fontSize: "0.8em" }}>{moment.fromNow()}</span>
+          </div>
+          <p className="subtitle ellipsis" style={{ color: lightBlack, fontSize: "0.95em", marginTop: "0.3em" }}>{message.message}</p>
+        </div>
+        {getUnreadMessageCountForConversation(authedUser, conversation) > 0 && <Badge
+          style={{ padding: 0 }}
+          primary={true}
+          badgeContent={getUnreadMessageCountForConversation(authedUser, conversation)}
+          badgeStyle={{ top: 2, right: 15 }}
+        />}
+      </li>
+    </Link>;
   }
 }
 

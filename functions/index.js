@@ -50,22 +50,24 @@ exports.sendWelcomeMessage = functions.auth.user().onCreate(event => {
   const email = user.email;
   const displayName = user.displayName;
 
-  console.log("Sending welcome message to ", user);
+  sendWelcomeEmail(email, displayName);
+
+  console.log("Sending welcome message to ", user.email);
 
   return admin.database().ref("users").orderByChild("email").equalTo("matt@erfara.com").once("value")
   .then(snap => {
     const mattUser = snap.val();
-    console.log("Got matt@erfara.com ", snap.val());
+    console.log("Got matt@erfara.com ", "JoEQsdvoWGaWUfIcnSPuS0iwY0g1");
     const messageData = {
       message: "Welcome to Erfara! Enjoy!",
       date: new Date(),
-      from: mattUser.uid,
+      from: "JoEQsdvoWGaWUfIcnSPuS0iwY0g1",
     };
-    const url = `/conversations/users/${user.uid}/${mattUser.uid}/messages/`;
+    const url = `/conversations/users/${user.uid}/JoEQsdvoWGaWUfIcnSPuS0iwY0g1/messages/`;
     const newMessageKey = admin.database().ref().child(url).push().key;
     var updates = {};
-    updates[`/conversations/users/${user.uid}/${mattUser.uid}/messages/` + newMessageKey] = messageData;
-    updates[`/conversations/users/${mattUser.uid}/${user.uid}/messages/` + newMessageKey] = messageData;
+    updates[`/conversations/users/${user.uid}/JoEQsdvoWGaWUfIcnSPuS0iwY0g1/messages/` + newMessageKey] = messageData;
+    updates[`/conversations/users/JoEQsdvoWGaWUfIcnSPuS0iwY0g1/${user.uid}/messages/` + newMessageKey] = messageData;
 
     return admin.database().ref().update(updates);
   });
@@ -108,7 +110,7 @@ function sendGoodbyEmail(email, displayName) {
 
   // The user unsubscribed to the newsletter.
   mailOptions.subject = `Bye!`;
-  mailOptions.text = `Hey ${displayName}!, We confirm that we have deleted your ${APP_NAME} account.`;
+  mailOptions.text = `Hey ${displayName}! We confirm that we have deleted your ${APP_NAME} account.`;
   return mailTransport.sendMail(mailOptions).then(() => {
     console.log('Account deletion confirmation email sent to:', email);
   });

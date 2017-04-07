@@ -1,4 +1,5 @@
 import React, { PropTypes } from "react";
+import ImmutablePropTypes from "react-immutable-proptypes";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import ConversationList from "components/Messaging/ConversationList";
@@ -24,7 +25,8 @@ export class MessagingPage extends React.Component {
 
   static propTypes = {
     authedUser: PropTypes.object.isRequired,
-    conversations: PropTypes.object.isRequired,
+    conversations: ImmutablePropTypes.map.isRequired,
+    params: PropTypes.object,
     readMessage: PropTypes.func.isRequired,
   };
   
@@ -47,7 +49,9 @@ export class MessagingPage extends React.Component {
   }
 
   render() {
-    const { conversations } = this.props;
+    const { conversations, params } = this.props;
+    const conversation = conversations.get(params.id) || conversations.valueSeq().first();
+    debugger;
     return <div style={{ width: "100%", height: "100%", position: "fixed", maxWidth: "1440px", top: "64px", left: "0", display: "flex" }}>
       <Resizable
         customClass="item"
@@ -63,8 +67,8 @@ export class MessagingPage extends React.Component {
           style={{ display: "inline-block", height: "100%", width: "100%", marginTop: "0px" }}
         />
       </Resizable>
-      <MessagesWindow 
-        conversation={conversations.get(this.state.conversationId) || {}}
+      <MessagesWindow
+        conversation={conversation}
         onSendMessage={this.sendMessage}
         onReadMessage={this.readMessage}
         style={{ width: "100%", height: "100%", display: "inline-block" }}

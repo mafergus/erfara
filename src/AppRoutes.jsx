@@ -25,7 +25,10 @@ import CategoriesPage from "components/Admin/CategoriesPage";
 export default function routes() {
   return <Route path="/" component={App}>
     <IndexRoute component={MainPage} />
-    <Route path="messages" component={MessagingPage} />
+    <Route path="messages">
+      <IndexRoute component={MessagingPage}/>
+      <Route path="(:id)" component={MessagingPage} />
+    </Route>
     <Route path="event/:id" component={EventPage} />
     <Route path="users/:id" component={UserPage} />
     <Route path="home" component={HomePage} />

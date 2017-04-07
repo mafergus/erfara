@@ -3,7 +3,7 @@ import firebase from 'actions/database';
 import Dialog from 'material-ui/Dialog';
 import { lightBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
-import { addUser, addMessage } from "utils/Api";
+import { addUser } from "utils/Api";
 import { getPhoto, uploadFile, checkUserExists } from "utils/Api";
 import store from "store/store";
 
@@ -40,7 +40,6 @@ export default class AuthModal extends React.Component {
     .then(url => {
       userData.coverPhoto = url;
       store.dispatch(addUser(userData));
-      store.dispatch(addMessage(userData.uid, "swB4xIn0FQNtdWUpMInJuFup6AD3", "Welcome to Erfara!", new Date()));
     });
   }
 
