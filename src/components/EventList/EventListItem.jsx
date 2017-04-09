@@ -6,6 +6,7 @@ import { Link } from "react-router";
 import { getUser } from "actions/userActions";
 import Attendees from "components/EventList/Attendees";
 import DateBox from "components/DateBox";
+import { Col } from "react-bootstrap";
 
 function mapStateToProps(state, props) {
   const event = state.events.get(props.eventUid);
@@ -76,12 +77,30 @@ export class EventListItem extends React.Component {
 
   render() {
     const { event, eventUid, isFeatured, itemStyle, popUp, mouseOver, mouseOut, marginConstant } = this.props;
-    return <Link to={`/event/${eventUid}`} style={{ textDecoration: "none" }}>
-      <div onMouseOver={popUp ? mouseOver : null} onMouseOut={popUp ? mouseOut : null} style={{marginTop: popUp ? -50 : 0, marginLeft: popUp ? 50+(-380*marginConstant) : 0, position: popUp ? 'absolute' : 'relative', zIndex: popUp ? 999999 : 0, width: isFeatured ? 720 : 333, height: popUp ? 70 : 250, ...itemStyle }} className="shadow border hoverable">
-        <img src={event.photo} alt="Event" style={{ width: "100%", height: popUp ? 120 : 181, objectFit: "cover" }} />       
-        {this.renderEventDetails()}
-      </div>
-    </Link>;
+    const STYLE = {
+      marginTop: popUp ? -50 : 0,
+      marginLeft: popUp ? 50+(-380*marginConstant) : 0,
+      marginBottom: 25,
+      paddingRight: 20,
+      position: popUp ? 'absolute' : 'relative',
+      zIndex: popUp ? 999999 : 0,
+      height: popUp ? 70 : 250,
+      ...itemStyle,
+    };
+    return <Col
+        md={12}
+        lg={isFeatured ? 12 : 6}
+        onMouseOver={popUp ? mouseOver : null}
+        onMouseOut={popUp ? mouseOut : null}
+        style={STYLE}
+      >
+      <Link to={`/event/${eventUid}`} style={{ textDecoration: "none" }} className="no-padding">
+        <div className="hoverable shadow">
+          <img src={event.photo} alt="Event" style={{ width: "100%", height: popUp ? 120 : 181, objectFit: "cover" }} />       
+          {this.renderEventDetails()}
+        </div>
+      </Link>
+      </Col>;
   }
 }
 

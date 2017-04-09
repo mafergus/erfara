@@ -5,7 +5,7 @@ import muiThemeable from 'material-ui/styles/muiThemeable';
 import { getEvents } from "actions/eventActions";
 import { getUsers } from "actions/userActions";
 import EventListItem from "components/EventList/EventListItem";
-import Row from "components/GridList/Row";
+import { Row } from "react-bootstrap";
 
 function orderByDate(arr) {
   return arr.slice().sort(function (a, b) {
@@ -60,11 +60,28 @@ export class EventsList extends React.Component {
     this.props.getUsers();
   }
 
+  renderFeaturedItem(rows, item) {
+    const { muiTheme, itemStyle } = this.props;
+    let items = [];
+    items.push(<EventListItem
+      itemStyle={itemStyle}
+      muiTheme={muiTheme}
+      key={item[0]}
+      eventUid={item[0]}
+      event={item[1]}
+      isFeatured
+    />);
+    return this.renderRow(rows, items);
+  }
+
+  renderRow(rows, items) {
+    return <Row key={rows.length}>{items}</Row>;
+  }
+
   render() {
-    const { cols, events, style, hasFeatured, colPadding, rowPadding, muiTheme, itemStyle, header } = this.props;
+    const { cols, events, style, hasFeatured, muiTheme, itemStyle, header } = this.props;
     const STYLE = {
-      width: 720,
-      paddingTop: 0,
+      padding: "0px 15px",
       position: "relative",
       marginLeft: "auto",
       marginRight: "auto",
@@ -72,31 +89,28 @@ export class EventsList extends React.Component {
     }
     const rows = [];
     let items = [];
-    let processedFeatured = false;
     events.forEach(item => {
-      if (hasFeatured && !processedFeatured) {
-        rows.push(<Row key={rows.length} rowPadding={rowPadding}>
-            [<EventListItem
-              itemStyle={itemStyle}
-              muiTheme={muiTheme}
-              key={item[0]}
-              eventUid={item[0]}
-              event={item[1]}
-              isFeatured
-            />]
-          </Row>);
-        processedFeatured = true;
+      if (hasFeatured && rows.length === 0) {
+        rows.push(this.renderFeaturedItem(rows, item));
         return;
       }
       if (items.length === cols) {
-        rows.push(<Row key={rows.length}>{items}</Row>);
+        rows.push(this.renderRow(rows, items));
         items = [];
       }
-      items.push(<EventListItem itemStyle={itemStyle} muiTheme={muiTheme} key={item[0]} eventUid={item[0]} event={item[1]} />);
+      items.push(
+        <EventListItem
+          itemStyle={itemStyle}
+          muiTheme={muiTheme}
+          key={item[0]}
+          eventUid={item[0]}
+          event={item[1]} 
+        />
+      );
     });
-    if (items.length !== 0) { rows.push(<Row key={rows.length} colPadding={colPadding} rowPadding={rowPadding}>{items}</Row>) }
+    if (items.length !== 0) { rows.push(this.renderRow(rows, items)) }
     return <div style={STYLE}>
-      <div style={{ width: 1150, margin: "0px auto 20px auto" }}>{header}</div>
+      <div style={{ width: "100%", margin: "0px auto 20px auto" }}>{header}</div>
       {rows}
     </div>;
   }

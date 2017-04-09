@@ -180,6 +180,14 @@ export function addUser(user) {
   }
 }
 
+export function deleteUser(userId) {
+  let updates = {};
+  updates["users/" + userId] = null;
+  updates["conversations/" + userId] = null;
+
+  return firebase.database().ref().update(updates);
+}
+
 export function followUser(followerId, userId) {
   var updates = {};
   updates["/users/" + userId + "/followers/" + followerId] = true;
