@@ -62,7 +62,6 @@ export class LocationSearch extends React.Component {
       },
       hintStyle: {
         color: "#BDBDBD", 
-        fontFamily: ".AppleSystemUIFont",
         fontSize: "12px"
       }
     }

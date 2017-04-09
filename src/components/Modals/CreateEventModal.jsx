@@ -11,7 +11,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { addEvent } from "utils/Api";
 import { getPhoto, uploadFile } from "utils/Api";
 import SearchBox from 'components/Modals/LocationSearch';
-import "components/Modals/CreateEventModal.css";
+import "components/Modals/CreateEventModal.scss";
+import { Row, Col } from "react-bootstrap";
 
 const PLACEHOLDER_PHOTO = "http://files.parsetfss.com/a5e80e30-a275-49f2-989e-e218e12017db/tfss-02ed6157-7aa6-4ffa-b530-16f711fb8f59-muir-woods.jpg";
 
@@ -78,6 +79,7 @@ export class CreateEventModal extends React.Component {
       });
     }
   }
+
   locationChange(location, geoLocation) {
     this.setState({locationFromSearchBox: location, geoLocationFromSearchBox: geoLocation});
   }
@@ -101,7 +103,6 @@ export class CreateEventModal extends React.Component {
   disabledProgressCircle() {
     this.setState( {isLoading: false} );
   }
-
 
   renderProgressCircle() {
     if(this.props.userId){
@@ -133,16 +134,116 @@ export class CreateEventModal extends React.Component {
     }
   }
 
+  renderTitle(style) {
+    return <div>
+      <p className="title-label">Event Title</p>
+      <div className="box">
+        <TextField
+          name="title"
+          hintText="Give your event a short name"
+          hintStyle={style.hintStyle}
+          underlineShow={false}
+          style={style.textFieldStyle}
+          onChange={(event, value) => { this.name = value;}}
+        />
+      </div>
+    </div>;
+  }
+
+  renderLocation() {
+    return <div>
+      <p className="title-label">Location</p>
+      <div className="box">
+        <SearchBox onSelectLocation={this.locationChange}/>
+      </div>
+    </div>;
+  }
+
+  renderDate(style) {
+    return <div className="event-date">
+      <div className="title-label">
+        <p>Date</p>
+      </div>
+      <div className="box box-small">
+        <DatePicker 
+          name="date"
+          hintText="7/23/17"
+          hintStyle={style.hintStyle}
+          textFieldStyle={style.textFieldStyle}
+          underlineShow={false} 
+          onChange={this.dateChange} />
+      </div>
+    </div>;
+  }
+
+  renderStartTime(style) {
+    const startTime = new Date();
+    startTime.setMinutes(0);
+    startTime.setHours((startTime.getHours() + 1) % 24);
+
+    return <div className="start-time">
+      <div className="title-label">
+        <p>Start Time</p>
+      </div>
+      <div className="box box-small">
+        <TimePicker 
+          name="startTime"
+          hintText="4:00 PM"
+          defaultTime={startTime}
+          hintStyle={style.hintStyle}
+          textFieldStyle={style.textFieldStyle}
+          underlineShow={false}  
+          onChange={this.startTimeChange} />
+      </div>
+    </div>;
+  }
+
+  renderEndTime(style) {
+    const endTime = new Date();
+    endTime.setHours((endTime.getHours() + 2) % 24);
+    endTime.setMinutes(0);
+
+    return <div className="end-time">
+      <div className="title-label">
+        <p>End Time</p>
+      </div>
+      <div className="box box-small">
+        <TimePicker 
+          name="endTime"
+          defaultTime={endTime}
+          hintText="5:00 PM"
+          hintStyle={style.hintStyle}
+          textFieldStyle={style.textFieldStyle}
+          underlineShow={false}  
+          onChange={this.endTimeChange} />
+      </div>
+    </div>;
+  }
+
+  renderToBring(style) {
+    return <div>
+      <p className="title-label">What should invitees bring?</p>
+      <div className="box">
+        <TextField
+          name="info"
+          hintText="i.e. water bottle, comfortable shoes"
+          hintStyle={style.hintStyle}
+          style={style.textFieldStyle}
+          underlineShow={false}
+          onChange={(event, value) => { this.advices = value; }}
+        />
+      </div>
+    </div>;
+  }
+
   render() {
     const style = {
       hintStyle: {
         color: "#BDBDBD", 
-        fontFamily: ".AppleSystemUIFont",
         fontSize: "12px"
       },
       descriptionHintStyle: {
         color: "#BDBDBD", 
-        fontFamily: ".AppleSystemUIFont",
         fontSize: "12px",
         top: "12px"
       },
@@ -156,109 +257,27 @@ export class CreateEventModal extends React.Component {
       }
     }
 
-    const startTime = new Date();
-    startTime.setMinutes(0);
-    startTime.setHours((startTime.getHours() + 1) % 24);
-    const endTime = new Date();
-    endTime.setHours((endTime.getHours() + 2) % 24);
-    endTime.setMinutes(0);
-
     return (
       <div className="popup-dialog">
         <Dialog
-          contentStyle={{width: "55%", minWidth:"660px"}}
+          contentStyle={{ width: "100%" }}
           modal={false}
           onRequestClose={this.props.onRequestClose}
-          open={this.props.isOpen}>
+          open={this.props.isOpen}
+          autoScrollBodyContent>
           <div>
             <a href="#" onClick={() => { this.props.onRequestClose(); this.setState({ isLoading: false }); }} className="close-btn">&times;</a>
             <h3 style={{ marginBottom: "1.5em" }}>Create an Event</h3>
-            <div className="row-1">
-              <div className="event-title">
-                <div className="title-label">
-                  <p>Event Title</p>
-                </div>
-                <div className="box">
-                  <TextField
-                    name="title"
-                    hintText="Give your event a short name"
-                    hintStyle={style.hintStyle}
-                    underlineShow={false}
-                    style={style.textFieldStyle}
-                    onChange={(event, value) => { this.name = value;}}
-                  />
-                </div>
-              </div>
-              <div className="event-location">
-                <div className="title-label">
-                  <p>Location</p>
-                </div>
-                <div className="box">
-                  <SearchBox onSelectLocation={this.locationChange}/>
-                </div>
-              </div>
-            </div>
-            <div className="row-2">
-              <div className="event-date">
-                <div className="title-label">
-                  <p>Date</p>
-                </div>
-                <div className="box box-small">
-                  <DatePicker 
-                    name="date"
-                    hintText="7/23/17"
-                    hintStyle={style.hintStyle}
-                    textFieldStyle={style.textFieldStyle}
-                    underlineShow={false} 
-                    onChange={this.dateChange} />
-                </div>
-              </div>
-              <div className="start-time">
-                <div className="title-label">
-                  <p>Start Time</p>
-                </div>
-                <div className="box box-small">
-                  <TimePicker 
-                    name="startTime"
-                    hintText="4:00 PM"
-                    defaultTime={startTime}
-                    hintStyle={style.hintStyle}
-                    textFieldStyle={style.textFieldStyle}
-                    underlineShow={false}  
-                    onChange={this.startTimeChange} />
-                </div>
-              </div>
-              <div className="end-time">
-                <div className="title-label">
-                  <p>End Time</p>
-                </div>
-                <div className="box box-small">
-                  <TimePicker 
-                    name="endTime"
-                    defaultTime={endTime}
-                    hintText="5:00 PM"
-                    hintStyle={style.hintStyle}
-                    textFieldStyle={style.textFieldStyle}
-                    underlineShow={false}  
-                    onChange={this.endTimeChange} />
-                </div>
-              </div>
-              <div className="event-info">
-                <div className="title-label">
-                  <p>What should invitees bring?</p>
-                </div>
-                <div className="box">
-                  <TextField
-                    name="info"
-                    hintText="i.e. water bottle, comfortable shoes"
-                    hintStyle={style.hintStyle}
-                    style={style.textFieldStyle}
-                    underlineShow={false}
-                    onChange={(event, value) => { this.advices = value; }}
-                  />
-                </div>
-              </div>
-            </div>
+            <Row>
+              <Col xs={12} sm={6} className="margin-bottom">{this.renderTitle(style)}</Col>
+              <Col xs={12} sm={6} className="margin-bottom">{this.renderLocation()}</Col>
+            </Row>
+            <Row>
+              <Col xs={4} sm={2} className="margin-bottom">{this.renderDate(style)}</Col>
+              <Col xs={4} sm={2} className="margin-bottom">{this.renderStartTime(style)}</Col>
+              <Col xs={4} sm={2} className="margin-bottom">{this.renderEndTime(style)}</Col>
+              <Col xs={12} sm={6} className="margin-bottom">{this.renderToBring(style)}</Col>
+            </Row>
             <div className="row-3">
               <div className="event-description" >
                 <div className="title-label">
