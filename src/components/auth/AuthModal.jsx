@@ -6,6 +6,7 @@ import autoBind from 'react-autobind';
 import { addUser } from "utils/Api";
 import { getPhoto, uploadFile, checkUserExists } from "utils/Api";
 import store from "store/store";
+import { Col, Row } from "react-bootstrap";
 
 /**
  * A modal dialog can only be closed by selecting one of the actions.
@@ -77,20 +78,28 @@ export default class AuthModal extends React.Component {
 
     return (
       <Dialog
-        contentStyle={{textAlign: "center", width: "40%", marginBottom: "300px"}}
+        contentStyle={{ textAlign: "center", width: "60%" }}
         title={title}
         titleStyle={{ fontSize: "1.1em", textAlign: "left", padding: "12px 0px 12px 25px", color: lightBlack }}
         modal={false}
         onRequestClose={handleClose}
         open={isOpen}>
-        <button
-          style={{margin: "3em 8em 3em 0em", verticalAlign: "middle"}}
-          className="googleSignUpButton"
-          onClick={this.handleSignUpGoogle}></button>
-        <button
-          style={{verticalAlign: "middle"}}
-          className="facebookSignUpButton"
-          onClick={this.handleSignUpFacebook}></button>
+        <Row style={{ height: 225 }}>
+          <Col sm={6} xs={12} style={{ height: "100%" }}>
+            <div style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <button
+                className="googleSignUpButton"
+                onClick={this.handleSignUpGoogle}></button>
+            </div>
+          </Col>
+          <Col sm={6} xs={12} style={{ height: "100%" }}>
+            <div style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <button
+                className="facebookSignUpButton"
+                onClick={this.handleSignUpFacebook}></button>
+            </div>
+          </Col>
+        </Row>
       </Dialog>
     );
   }

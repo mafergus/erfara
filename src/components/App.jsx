@@ -76,6 +76,7 @@ class App extends React.Component {
     const hideFab = this.context.router.isActive('/messages');
     return !hideFab && 
       <FloatingActionButton
+        className="fab"
         onTouchTap={() => this.setState({ eventModalOpen: true })}
         style={{ position: "fixed", right: "1.3em", bottom: "1.3em" }}
       >
@@ -97,7 +98,7 @@ class App extends React.Component {
     return (
       <div>
         <Title render={unreadMessages} />
-        <AppBar />
+        <AppBar onEventCreate={() => this.setState({ eventModalOpen: true })}/>
         <div style={{ position: "absolute", top: 63, bottom: 0, left: 0, width: "100%" }}>
           {this.renderContent()}
         </div>

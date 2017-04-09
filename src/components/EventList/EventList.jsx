@@ -85,6 +85,7 @@ export class EventsList extends React.Component {
       position: "relative",
       marginLeft: "auto",
       marginRight: "auto",
+      maxWidth: 1100,
       ...style,
     }
     const rows = [];

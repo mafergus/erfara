@@ -42,6 +42,7 @@ export class AppBar extends React.Component {
 
   static propTypes = {
     addUser: PropTypes.func.isRequired,
+    onEventCreate: PropTypes.func.isRequired,
     unreadCount: PropTypes.number.isRequired,
     user: PropTypes.object.isRequired,
   }
@@ -103,6 +104,7 @@ export class AppBar extends React.Component {
   }
 
   renderLoggedInUser(user) {
+    const { onEventCreate } = this.props;
     const badgeStyle = {
       top: 2,
       right: 2,
@@ -110,6 +112,13 @@ export class AppBar extends React.Component {
     };
     if (!user) { return null; }
     return <div style={{ display: "flex", alignItems: "center" }}>
+      <div className="create-event">
+        <FlatButton
+          label="Create Event"
+          primary={true}
+          onTouchTap={onEventCreate}
+        />
+      </div>
       <Badge
         style={{ padding: 0 }}
         badgeContent={this.props.unreadCount}

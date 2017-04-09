@@ -100,7 +100,6 @@ export default class HomePage extends React.Component {
   renderList() {
     return <EventsList 
       header={this.renderHeaders()}
-      itemStyle={{ width: 550 }}
       style={{ width: "100%", marginTop: 30 }}
       hasFeatured={false}
     />;
