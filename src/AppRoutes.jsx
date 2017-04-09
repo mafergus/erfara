@@ -12,6 +12,7 @@ import MessagingPage from "components/Messaging/MessagingPage";
 import UserPage from "components/UserPage/UserPage";
 import AdminPage from "components/Admin/AdminPage";
 import CategoriesPage from "components/Admin/CategoriesPage";
+import UserManagementPage from "components/Admin/UserManagementPage";
 
 /**
  * Routes: https://github.com/reactjs/react-router/blob/master/docs/API.md#route
@@ -35,6 +36,7 @@ export default function routes() {
     <Route path="admin">
       <IndexRoute component={AdminPage} />
       <Route path="categories" component={CategoriesPage} />
+      <Route path="users" component={UserManagementPage} />
     </Route>
   </Route>;
 }
