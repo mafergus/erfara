@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import Title from 'react-title-component';
+import 'babel-polyfill';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { orange500, orange700 } from 'material-ui/styles/colors';
@@ -78,7 +79,7 @@ class App extends React.Component {
       <FloatingActionButton
         className="fab"
         onTouchTap={() => this.setState({ eventModalOpen: true })}
-        style={{ position: "fixed", right: "1.3em", bottom: "1.3em" }}
+        style={{ position: "fixed", right: 8, bottom: 8 }}
       >
         <ContentAdd />
       </FloatingActionButton>;
