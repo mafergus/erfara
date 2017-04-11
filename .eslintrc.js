@@ -18,6 +18,6 @@ module.exports = {
   "rules": {
     "no-debugger": 1,
     "no-console": 1,
-    "semi": 1,
+    "semi": 0,
   },
 };
