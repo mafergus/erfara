@@ -70,7 +70,7 @@ export class FeedItem extends React.Component {
         value={this.state.reply}
         style={{ flexGrow: "1", margin: "0px 15px" }}
         onKeyPress={this.onKeyPress}
-        onChange={(event, value) => { this.setState({ reply: value }) }}
+        onChange={(event, value) => { this.setState({ reply: value }); }}
         autoFocus
       />
     </div>;

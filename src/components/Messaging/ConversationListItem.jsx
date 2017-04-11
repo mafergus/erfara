@@ -12,7 +12,7 @@ function mapStateToProps(state, props) {
   return {
     authedUser: state.authedUser,
     user: state.users.get(props.conversationId),
-  }
+  };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -40,7 +40,6 @@ export class ConversationListItem extends React.Component {
     user: PropTypes.object,
     conversation: PropTypes.object.isRequired,
     conversationId: PropTypes.string.isRequired,
-    onConversationClick: PropTypes.func.isRequired,
   };
   
   constructor() {
@@ -57,12 +56,12 @@ export class ConversationListItem extends React.Component {
 
   render() {
     const { authedUser, conversation, conversationId, user } = this.props;
-    const message = Object.entries(this.props.conversation.messages)[0][1];
+    const message = Object.entries(this.props.conversation.messages).slice(-1)[0][1];
     const photo = user && user.photo;
     const moment = new Moment(message.date);
     if (!conversation || !user) { return <div/>; }
     return <Link to={`/messages/${conversationId}`} style={{ textDecoration: "none" }}>
-      <li style={{ display: "flex", alignItems: "center", height: 90, position: "relative" }} onClick={ this.props.onConversationClick.bind(null, conversationId) }>
+      <li style={{ display: "flex", alignItems: "center", height: 90, position: "relative" }}>
         <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <img src={photo} alt="Sender" style={IMG_STYLE}/>
         </div>

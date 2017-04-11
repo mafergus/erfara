@@ -7,7 +7,7 @@ export default class MessagesWindow extends React.Component {
 
   static propTypes = {
     style: PropTypes.object,
-    conversation: PropTypes.object,
+    messages: PropTypes.array.isRequired,
     onReadMessage: PropTypes.func.isRequired,
     onSendMessage: PropTypes.func.isRequired,
   }
@@ -17,30 +17,33 @@ export default class MessagesWindow extends React.Component {
     autoBind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { conversation } = nextProps;
-    if (conversation.hasOwnProperty("messages") && Object.keys(conversation.messages).length > 0) {
-      const messages = Object.keys(conversation.messages);
+  componentDidMount() {
+    const { messages, onReadMessage } = this.props;
+    if (messages) {
       const lastMessage = messages.slice(-1)[0];
-      this.props.onReadMessage(lastMessage);
+      onReadMessage(lastMessage.id);
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { messages, onReadMessage } = nextProps;
+    const lastMessage = messages.slice(-1)[0];
+    onReadMessage(lastMessage.id);
+  }
+
   render() {
-    const { style, conversation, onSendMessage } = this.props;
+    const { style, messages, onSendMessage } = this.props;
     const STYLE = {
       ...style,
       paddingLeft: "80px",
       paddingRight: "80px",
       paddingBottom: "10px",
       position: "relative",
-    }
-    if (!Object.keys(conversation).length) { return <div/>; }
-    const messages = Object.values(conversation.messages);
-    return <div style={ STYLE } className="messaging-pane">
+    };
+    return <div style={STYLE} className="messaging-pane">
       <img className="background-image" />
       <MessageList messages={messages} style={{ width: "100%", position: "absolute", bottom: "150px", left: "0", top: "0" }} />
       <MessageBar style={{ width: "100%", position: "absolute", bottom: 0, right: 0, left: 0 }} onSend={onSendMessage}/>
-    </div>
+    </div>;
   }  
 }

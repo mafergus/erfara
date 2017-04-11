@@ -40,11 +40,10 @@ export function addMessage(recipientId, senderId, message, date) {
 }
 
 export function readMessage(userId, conversationId, messageId) {
-  return () => {
-    var updates = {};
-    updates["/conversations/users/" + userId + "/" + conversationId + "/lastReadMessage"] = messageId;
-    return firebase.database().ref().update(updates);
-  }
+  if (!userId || !conversationId || !messageId || userId === conversationId) { return; }
+  var updates = {};
+  updates["/conversations/users/" + userId + "/" + conversationId + "/lastReadMessage"] = messageId;
+  firebase.database().ref().update(updates);
 }
 
 export function searchCategories(searchTerm) {

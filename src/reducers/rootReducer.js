@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { responsiveStateReducer } from 'redux-responsive'
 import { eventsReducer } from 'reducers/eventsReducer';
 import { authedUserReducer } from "reducers/authedUserReducer";
 import { usersReducer } from "reducers/usersReducer";
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   events: eventsReducer,
   images: imagesReducer,
   locationSearch: locationSearchReducer,
+  browser: responsiveStateReducer,
   users: usersReducer,
 });
 

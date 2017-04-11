@@ -13,7 +13,7 @@ export class MessageList extends React.Component {
 
   static propTypes = {
     authedUser: PropTypes.object,
-    messages: PropTypes.array,
+    messages: PropTypes.array.isRequired,
     style: PropTypes.object,
   };
 
@@ -36,8 +36,8 @@ export class MessageList extends React.Component {
       overflow: "auto",
     }
     return <ul style={STYLE} ref="list">
-      {messages && messages.map((item, key) => {
-        return <MessageListItem key={key} message={item} isMine={authedUser.uid === item.from} />;
+      {messages.map((item, index) => {
+        return (<MessageListItem key={index} message={item} isMine={authedUser.uid === item.from} />);
       })}
     </ul>;
   }

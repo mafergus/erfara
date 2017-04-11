@@ -8,7 +8,6 @@ export default class ConversationList extends React.Component {
   static propTypes = {
     conversations: PropTypes.object,
     style: PropTypes.object,
-    onConversationSelected: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -31,7 +30,6 @@ export default class ConversationList extends React.Component {
           key={key}
           conversationId={key}
           conversation={item}
-          onConversationClick={this.props.onConversationSelected}
         />;
       })}
     </ul>;
