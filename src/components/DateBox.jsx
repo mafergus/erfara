@@ -7,7 +7,7 @@ const STYLE = {
   backgroundColor: "white",
   display: "inline-block",
   borderRight: "1px solid rgba(0, 0, 0, 0.06)",
-}
+};
 
 export default function DateBox({ style, timestamp, textColor }) {
     return <div style={{ ...style, ...STYLE }}>
@@ -22,7 +22,7 @@ export default function DateBox({ style, timestamp, textColor }) {
 
 DateBox.defaultProps = {
   textColor: erfaraBlack,
-}
+};
 
 DateBox.propTypes = {
   style: PropTypes.object,

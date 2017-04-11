@@ -45,7 +45,7 @@ export class AppBar extends React.Component {
     onEventCreate: PropTypes.func.isRequired,
     unreadCount: PropTypes.number.isRequired,
     user: PropTypes.object.isRequired,
-  }
+  };
 
   static contextTypes = {
     router: PropTypes.object.isRequired
@@ -124,11 +124,12 @@ export class AppBar extends React.Component {
         badgeContent={this.props.unreadCount}
         secondary={true}
         badgeStyle={badgeStyle}
+        onTouchTap={() => this.context.router.push("/messages")}
       >
         <IconButton
           style={{ height: "50px", width: "50px", padding: "10px" }}
           iconStyle={{ height: "30px", width: "30px", margin: "auto", color: lightBlack }}
-          onClick={() => this.context.router.push("/messages")}
+          onTouchTap={() => this.context.router.push("/messages")}
         >
           <MailIcon color={orange500} hoverColor={orange200} />
         </IconButton>
@@ -141,13 +142,24 @@ export class AppBar extends React.Component {
   }
 
   render() {
+    const ICON_STYLE = {
+      marginLeft: "1em",
+      marginRight: "0.1em",
+      height: "1.85em",
+      width: "1.85em",
+      marginTop: "12px",
+    };
     return <MaterialUIAppBar
       className="appBar"
       title="Erfara"
       titleStyle={{ fontFamily: "LobsterTwo-Regular", color: orange500 }}
       onTitleTouchTap={this.onTitleTouchTap}
       iconElementLeft={
-        <ErfaraIcon color={orange500} style={{marginLeft: "1em", marginRight: "0.1em", height: "1.85em", width: "1.85em", marginTop: "10px"}}/>
+        <ErfaraIcon
+          color={orange500}
+          style={ICON_STYLE}
+          onTouchTap={this.onTitleTouchTap}
+        />
       }
       iconElementRight={ this.renderIconRight() }
       style={STYLE}

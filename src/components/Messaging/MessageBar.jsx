@@ -16,7 +16,7 @@ export default class MessageBar extends React.Component {
 
     this.state = {
       message: "",
-    }
+    };
   }
 
   onSendClicked() {
@@ -45,7 +45,7 @@ export default class MessageBar extends React.Component {
         value={this.state.message}
         style={{ width: "80%", marginLeft: 28, marginTop: 10 }}
         onKeyPress={this.onKeyPress}
-        onChange={ (event, value) => { this.setState({ message: value }) }} />
+        onChange={ (event, value) => { this.setState({ message: value }); }} />
     </div>;
   }
 }

@@ -6,7 +6,7 @@ import Dialog from 'material-ui/Dialog';
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
 import CategoriesList from "components/Onboarding/CategoriesList";
-import { Search } from "components/Glyphs"
+import { Search } from "components/Glyphs";
 import { getCategories } from "utils/Api";
 import { addCategories, addCategorySearchResults } from "actions/categoriesActions";
 import { searchCategories, getPhotoUrl } from "utils/Api";

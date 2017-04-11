@@ -39,6 +39,6 @@ export default class Attendees extends React.Component {
 
     return <div style={{ display: "flex", alignItems: "center", marginRight: 2 }}>
       {children}
-    </div>
+    </div>;
   }
 }

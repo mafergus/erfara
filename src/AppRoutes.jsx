@@ -13,6 +13,9 @@ import UserPage from "components/UserPage/UserPage";
 import AdminPage from "components/Admin/AdminPage";
 import CategoriesPage from "components/Admin/CategoriesPage";
 import UserManagementPage from "components/Admin/UserManagementPage";
+import MobileConversationList from "components/Messaging/MobileConversationList";
+import MobileMessagingPage from "components/Messaging/MobileMessagingPage";
+import store from "store/store";
 
 /**
  * Routes: https://github.com/reactjs/react-router/blob/master/docs/API.md#route
@@ -24,11 +27,14 @@ import UserManagementPage from "components/Admin/UserManagementPage";
  * handler and its parent handler like so: Paper > Components > App
  */
 export default function routes() {
+  const state = store.getState();
+  const isMobile = state.browser.is.extraSmall;
+
   return <Route path="/" component={App}>
     <IndexRoute component={MainPage} />
     <Route path="messages">
-      <IndexRoute component={MessagingPage}/>
-      <Route path="(:id)" component={MessagingPage} />
+      <IndexRoute component={isMobile ? MobileConversationList : MessagingPage}/>
+      <Route path="(:id)" component={isMobile ? MobileMessagingPage : MessagingPage} />
     </Route>
     <Route path="event/:id" component={EventPage} />
     <Route path="users/:id" component={UserPage} />
