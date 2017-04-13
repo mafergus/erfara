@@ -73,6 +73,43 @@ exports.sendWelcomeMessage = functions.auth.user().onCreate(event => {
   });
 });
 
+exports.sendEventJoinMessage = functions.database.ref('/events/{eventId}/attendees/{userId}').onWrite(event => {
+  const user = event.data.val();
+  var eventObj = {};
+
+  if (event.data.previous.val()) { 
+    return;
+  }
+
+  console.log("Sending event join message for joiner ", user, " with params ", event.params);
+
+  return admin.database().ref("events/" + event.params.eventId).once("value")
+  .then(snap => {
+    eventObj = snap.val();
+    const eventOwner = eventObj.userId;
+    console.log("Fetched event ", eventObj, " and owner ", eventOwner);
+
+    const ownerPromise = admin.database().ref("users/" + eventOwner).once("value");
+    const joinerPromise = admin.database().ref("users/" + event.params.userId).once("value");
+    return Promise.all([ownerPromise, joinerPromise]);
+  })
+  .then(values => {
+    const owner = values[0].val();
+    const joiner = values[1].val();
+    console.log("Got event owner ", owner,  " and joiner ", joiner);
+
+    const mailOptions = {
+      from: '"Matt" <matt@erfara.com>',
+      to: owner.email
+    };
+    mailOptions.subject = `New Memeber Joined your Event ${eventObj.title}!`;
+    mailOptions.text = `Hey ${owner.name}! ${joiner.name} just RVSPd for ${eventObj.title}! Reach out to them and say hi.`;
+    return mailTransport.sendMail(mailOptions).then(() => {
+      console.log('Email for event joiner sent to:', owner.email);
+    });
+  });
+});
+
 /**
  * Send an account deleted email confirmation to users who delete their accounts.
  */
@@ -138,7 +175,7 @@ exports.sendEmailOnMessage = functions.database.ref('/conversations/users/{userI
       to: `"${toUser.name}" <${toUser.email}>`,
     };
     mailOptions.subject = `New Message from ${fromUser.name} on Erfara`;
-    mailOptions.text = `${fromUser.name} says: "${message.message}"\n\n\nReply here: www.erfara.com/messages/${message.from}`;
+    mailOptions.text = `${fromUser.name} says: "${message.message}"\n\n\nReply here: https://erfara-web.herokuapp.com/messages/${message.from}`;
     return mailTransport.sendMail(mailOptions).then(() => {
       console.log("Email for new message " + " sent to: ", toUser.email + " from: ", fromUser.name);
     });
