@@ -36,7 +36,7 @@ export function addMessage(recipientId, senderId, message, date) {
     return firebase.database().ref().update(updates).then(() => {
       dispatch(readMessage(senderId, recipientId, newMessageKey));
     });
-  }
+  };
 }
 
 export function readMessage(userId, conversationId, messageId) {
@@ -54,7 +54,7 @@ export function searchCategories(searchTerm) {
       .endAt(searchTerm+"\uf8ff").once("value", snap => {
         let categories = [];
         snap.forEach(child => {
-          const value = child.val()
+          const value = child.val();
           categories.push({ ...value, id: child.key });
         });
         resolve(categories);
@@ -67,7 +67,7 @@ export function getCategories() {
     firebase.database().ref("/categories").orderByChild("name").once("value", snap => {
       let categories = [];
       snap.forEach(child => {
-        const value = child.val()
+        const value = child.val();
         categories.push({ ...value, id: child.key });
       });
       resolve(categories);
@@ -170,13 +170,13 @@ export function addUser(user) {
     updates["users/" + user.uid + "/hometown"] = user.hometown || "";
     updates["users/" + user.uid + "/location"] = user.location || "";
     updates["users/" + user.uid + "/coverPhoto"] = user.coverPhoto || PLACEHOLDER_PHOTO;
-    updates["users/"]
+    updates["users/"];
 
     firebase.database().ref().update(updates).then(() => {
       dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user });
       firebase.onAuthSuccess(user.uid);
     });
-  }
+  };
 }
 
 export function deleteUser(userId) {
@@ -303,7 +303,7 @@ export function addEventMessage(eventId, userId, message, timestamp) {
     updates[url + newEventMessageKey] = messageData;
 
     return firebase.database().ref().update(updates);
-  }
+  };
 }
 
 export function uploadFile(file, directory="images/") {
@@ -379,7 +379,7 @@ export function addEvent(title, description, photo, date, startTime, endTime, ad
     updates["/users/" + userId + "/events/" +  newEventKey] = eventData;
 
     return firebase.database().ref().update(updates);
-  }
+  };
 }
 
 function getRandomInt(min, max) {

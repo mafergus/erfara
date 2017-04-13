@@ -36,7 +36,7 @@ export class LocationSearch extends React.Component {
     getCoordinates(id).then(json => {
       const coordinateObj = json.result.geometry.location;
       this.props.onSelectLocation(location, coordinateObj);
-    })
+    });
   }
 
   gotText(value, dataSource, params) {
@@ -64,7 +64,7 @@ export class LocationSearch extends React.Component {
         color: "#BDBDBD", 
         fontSize: "12px"
       }
-    }
+    };
     return (
       <div>
         <AutoComplete
@@ -76,7 +76,7 @@ export class LocationSearch extends React.Component {
           dataSourceConfig={dataSourceConfig}
           listStyle={{width:'301px' ,marginLeft:"-8px"}}
           underlineShow={false}
-          onUpdateInput={(value, dataSource, params) => {this.gotText(value, dataSource, params)}}
+          onUpdateInput={(value, dataSource, params) => {this.gotText(value, dataSource, params);}}
           onNewRequest={(chosenItem) => { this.sendLocationToModal(chosenItem.description, chosenItem.place_id);}}
         />
       </div>

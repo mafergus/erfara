@@ -130,7 +130,7 @@ export class CreateEventModal extends React.Component {
           className="create-btn"
           onClick={ () => { this.props.onRequestClose(); }}
         />
-      )
+      );
     }
   }
 
@@ -255,7 +255,7 @@ export class CreateEventModal extends React.Component {
       errorText: {
         marginTop: "10px"
       }
-    }
+    };
 
     return (
       <div className="popup-dialog">

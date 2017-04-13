@@ -42,4 +42,4 @@ CategoryListItem.propTypes = {
   isSelected: PropTypes.bool.isRequired,
   onClick: PropTypes.func,
   style: PropTypes.object,
-}
+};

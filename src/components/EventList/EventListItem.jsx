@@ -1,5 +1,5 @@
 import React, { PropTypes } from "react";
-import autoBind from "react-autobind"
+import autoBind from "react-autobind";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router";
@@ -79,7 +79,7 @@ export class EventListItem extends React.Component {
     const { event, eventUid, isFeatured, itemStyle, popUp, mouseOver, mouseOut, marginConstant } = this.props;
     const STYLE = {
       marginTop: popUp ? -50 : 0,
-      marginLeft: popUp ? 50+(-380*marginConstant) : 0,
+      marginLeft: popUp ? 50 + -380 * marginConstant : 0,
       marginBottom: 25,
       paddingRight: 20,
       position: popUp ? 'absolute' : 'relative',

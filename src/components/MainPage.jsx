@@ -8,7 +8,7 @@ function mapStateToProps(state) {
     isAuthed: state.authedUser && Object.keys(state.authedUser).length > 1,
     events: state.events,
     eventEntry: Object.entries(state.events.toJS())
-  }
+  };
 }
 
 export class MainPage extends React.Component {

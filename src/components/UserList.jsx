@@ -36,7 +36,7 @@ export default class UserList extends React.Component {
         image={item && item.photo}
         />);
     });
-    return <PeopleList people={items} peopleType={title} isTitlePlural={isTitlePlural} style={style} className={className}/>
+    return <PeopleList people={items} peopleType={title} isTitlePlural={isTitlePlural} style={style} className={className}/>;
   }
   
 }

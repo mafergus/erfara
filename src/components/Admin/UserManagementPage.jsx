@@ -54,7 +54,7 @@ export class UserManagementPage extends React.Component {
       backgroundBlendMode: "multiply",
       backgroundColor: "rgba(0,0,0,0.35)",
       margin: 15,
-    }
+    };
     return <div style={STYLE} className="hoverable" onClick={() => this.setState({ dialogOpen: true, selectedUser: user.uid })}>
       <div style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <span>{user.name}</span>

@@ -8,7 +8,7 @@ export function getUser(uuid) {
         dispatch({type: "GET_USER_SUCCESS", user});
       }
     });
-  }
+  };
 }
 
 export function getUsers() {
@@ -17,5 +17,5 @@ export function getUsers() {
       const users = snap.val();
       dispatch({type: "GET_USERS_SUCCESS", users});
     });
-  }
+  };
 }

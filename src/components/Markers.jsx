@@ -54,7 +54,7 @@ class Markers extends React.Component {
         lng={this.props.lng} 
         mouseOver={this.mouseEnter}
         mouseOut={this.mouseLeave}
-        key={index}
+        key={item[0]}
         marginConstant={index}
       />
     );

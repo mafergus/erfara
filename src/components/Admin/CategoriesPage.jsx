@@ -39,7 +39,7 @@ export class CategoriesPage extends React.Component {
     firebase.database().ref('/categories').orderByChild("name").on('value', snapshot => {
       let categories = [];
       snapshot.forEach(child => {
-        const value = child.val()
+        const value = child.val();
         categories.push({ ...value, id: child.key });
       });
       if (categories) {
@@ -149,7 +149,7 @@ export class CategoriesPage extends React.Component {
         <TextField 
           hintText="Name"
           defaultValue={category ? category.name : ""}
-          onChange={(event, value) => { this.setState({ newName: value }) }}
+          onChange={(event, value) => { this.setState({ newName: value }); }}
           onKeyPress={this.updateCategoryName}
         />
         <br/>
@@ -189,7 +189,7 @@ export class CategoriesPage extends React.Component {
           value={this.state.category}
           style={{ width: "90%", marginLeft: "10px", marginRight: "10px", marginBottom: "1.5em" }}
           onKeyPress={this.onKeyPress}
-          onChange={ (event, value) => { this.setState({ category: value }) }}
+          onChange={ (event, value) => { this.setState({ category: value }); }}
         />
       </div>
       {rows}

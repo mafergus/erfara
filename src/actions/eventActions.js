@@ -8,7 +8,7 @@ export function getEvents() {
         dispatch({ type: "GET_EVENTS_SUCCESS", events });
       }
     });
-  }
+  };
 }
 
 export function getEvent(id) {
@@ -19,5 +19,5 @@ export function getEvent(id) {
         dispatch({ type: "GET_EVENT_SUCCESS", event });
       }
     });
-  }
+  };
 }

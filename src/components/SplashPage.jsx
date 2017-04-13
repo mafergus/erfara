@@ -37,7 +37,7 @@ export class SplashPage extends React.Component {
     this.state = {
       showEvents: true,
       isJoinOpen: false,
-    }
+    };
   }
 
   // renderDescriptionItem(image, text) {

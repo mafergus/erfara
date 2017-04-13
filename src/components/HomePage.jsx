@@ -26,7 +26,7 @@ export default class HomePage extends React.Component {
     super();
     autoBind(this);
 
-    this.markerId = ""
+    this.markerId = "";
     this.state = {
       cardPopup: [<div></div>],
       isPopupOpen: false,

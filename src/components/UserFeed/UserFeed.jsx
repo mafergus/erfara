@@ -59,7 +59,7 @@ export class UserFeed extends React.Component {
           value={this.state.message}
           style={{ width: "90%", marginLeft: "10px", marginRight: "10px" }}
           onKeyPress={this.onKeyPress}
-          onChange={ (event, value) => { this.setState({ message: value }) }}
+          onChange={ (event, value) => { this.setState({ message: value }); }}
         />
       </div>
     </div>;

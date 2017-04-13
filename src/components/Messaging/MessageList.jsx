@@ -34,10 +34,10 @@ export class MessageList extends React.Component {
       paddingLeft: "30px",
       paddingRight: "30px",
       overflow: "auto",
-    }
+    };
     return <ul style={STYLE} ref="list">
       {messages.map((item, index) => {
-        return (<MessageListItem key={index} message={item} isMine={authedUser.uid === item.from} />);
+        return <MessageListItem key={item.date} message={item} isMine={authedUser.uid === item.from} />;
       })}
     </ul>;
   }

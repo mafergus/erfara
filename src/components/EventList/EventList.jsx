@@ -87,7 +87,7 @@ export class EventsList extends React.Component {
       marginRight: "auto",
       maxWidth: 1100,
       ...style,
-    }
+    };
     const rows = [];
     let items = [];
     events.forEach(item => {
@@ -109,7 +109,7 @@ export class EventsList extends React.Component {
         />
       );
     });
-    if (items.length !== 0) { rows.push(this.renderRow(rows, items)) }
+    if (items.length !== 0) { rows.push(this.renderRow(rows, items)); }
     return <div style={STYLE}>
       <div style={{ width: "100%", margin: "0px auto 20px auto" }}>{header}</div>
       {rows}

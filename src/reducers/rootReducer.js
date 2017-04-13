@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { responsiveStateReducer } from 'redux-responsive'
+import { responsiveStateReducer } from 'redux-responsive';
 import { eventsReducer } from 'reducers/eventsReducer';
 import { authedUserReducer } from "reducers/authedUserReducer";
 import { usersReducer } from "reducers/usersReducer";
@@ -21,10 +21,10 @@ const appReducer = combineReducers({
 
  const rootReducer = (state, action) => {
   if (action.type === "SIGN_OUT_USER") {
-    state = undefined
+    state = undefined;
   }
 
-  return appReducer(state, action)
-}
+  return appReducer(state, action);
+};
 
 export default rootReducer;

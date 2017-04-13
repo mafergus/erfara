@@ -21,7 +21,7 @@ const STYLE = {
   zIndex: 4,
   backgroundColor: white,
   top: 0,
-}
+};
 
 function mapStateToProps(state) {
   const user = state.authedUser;
@@ -58,7 +58,7 @@ export class AppBar extends React.Component {
     this.state = {
       signUpModalOpen: false,
       logInModalOpen: false,
-    }
+    };
   }
 
   componentWillMount() {

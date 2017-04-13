@@ -78,7 +78,7 @@ export class MessagingPage extends React.Component {
         height="100%"
       >
         <ConversationList 
-          conversations={conversations}
+          conversations={conversations.map((item, key) => { return { id: key, ...item }; })}
           style={{ display: "inline-block", height: "100%", width: "100%", marginTop: "0px" }}
         />
       </Resizable>
@@ -89,7 +89,7 @@ export class MessagingPage extends React.Component {
         onReadMessage={this.readMessage}
         style={{ width: "100%", height: "100%", display: "inline-block" }}
       />
-    </div>
+    </div>;
   }
 
 }
