@@ -29,7 +29,7 @@ export class MobileConversationList extends React.Component {
     if (!conversation) { return null; }
     return <div style={{ width: "100%", height: "100%", position: "fixed", maxWidth: "1440px", top: "64px", left: "0", display: "flex" }}>
       <ConversationList 
-        conversations={conversations}
+        conversations={conversations.map((item, key) => { return { id: key, ...item }; })}
         style={{ display: "inline-block", height: "100%", width: "100%", marginTop: "0px" }}
       />
     </div>;
