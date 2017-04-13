@@ -42,6 +42,10 @@ module.exports = {
     "complexity": ["warn", 5],
     "consistent-return": 1,
     "curly": 1,
+    "default-case": 1,
+    "dot-location": ["warn", "property"],
+    "eqeqeq": 1,
+    "no-case-declarations": 1,
 
     // Require that the first prop in a JSX element be on a new line when the element is multiline
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-first-prop-new-line.md
