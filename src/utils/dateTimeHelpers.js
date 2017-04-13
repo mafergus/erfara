@@ -10,19 +10,6 @@ import {
   differenceInDays,
 } from "date-fns";
 
-export function getDayString(day) {
-  switch (day) {
-    case 0: return "Sunday";
-    case 1: return "Monday";
-    case 2: return "Tuesday";
-    case 3: return "Wednesday";
-    case 4: return "Thursday";
-    case 5: return "Friday";
-    case 6: return "Saturday";
-    default: return "Uh oh";
-  }
-}
-
 export function getShortMonth(date) {
   const month = date.getMonth();
   switch (month) {
@@ -50,11 +37,6 @@ export function getErfaraDate(date) {
     return "Yesterday";
   }
   return format(date, "MM/DD/YYYY");
-}
-
-export function getDateString(date) {
-  const dayStr = getDayString(date.getDay());
-  return format(date, "h:mm A") + " on " + dayStr + ", " + date.toLocaleDateString();
 }
 
 /**
@@ -119,33 +101,4 @@ export function unixFormatTime(ts) {
  */
 export function unixFormatDate(ts) {
   return formatDate(unixToDate(ts));
-}
-
-/**
- * Generates a string describing the specified time range
- * @param  {Date} start Range start
- * @param  {Date} end   Range end
- * @return {String}     Range description text
- */
-export function formatTimeRange(start, end) {
-  const rangeIsSameDay = isSameDay(start, end);
-  const rangeIsStartOfDay = isEqual(start, startOfDay(start));
-  const rangeIsEndOfDay = isEqual(end, endOfDay(end));
-  const rangeIsFullDays = rangeIsStartOfDay && rangeIsEndOfDay;
-  let endStr = formatDate(end);
-
-  if (rangeIsSameDay) {
-    return rangeIsFullDays ? endStr : `${endStr} ${formatTime(start)} - ${formatTime(end)}`;
-  }
-
-  const diffDays = differenceInDays(end, start);
-
-  if (rangeIsFullDays && isToday(end) && diffDays < 29) {
-    return `Last ${pluralize("day", diffDays, true)}`;
-  }
-
-  const startStr = rangeIsStartOfDay ? formatDate(start) : formatDateTime(start);
-  endStr = rangeIsEndOfDay ? endStr : formatDateTime(end);
-
-  return `${startStr} - ${endStr}`;
 }

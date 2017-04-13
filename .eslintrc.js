@@ -46,6 +46,28 @@ module.exports = {
     "dot-location": ["warn", "property"],
     "eqeqeq": 1,
     "no-case-declarations": 1,
+    "no-else-return": 1,
+    "no-empty-function": 1,
+    "no-empty-pattern": 1,
+    "no-eq-null": 1,
+    "no-extra-bind": 1,
+    "yoda": 1,
+    "no-fallthrough": 1,
+    "no-global-assign": 1,
+    "no-lone-blocks": 1,
+    "no-loop-func": 1,
+    "no-magic-numbers": 1,
+    "no-multi-spaces": 1,
+    "no-multi-str": 1,
+    "no-param-reassign": 1,
+    "no-redeclare": 1,
+    "no-return-await": 1,
+    "no-unused-expressions": 1,
+    "no-useless-concat": 1,
+    "no-useless-escape": 1,
+    "no-useless-return": 1,
+    "prefer-promise-reject-errors": 1,
+    
 
     // Require that the first prop in a JSX element be on a new line when the element is multiline
     // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-first-prop-new-line.md
