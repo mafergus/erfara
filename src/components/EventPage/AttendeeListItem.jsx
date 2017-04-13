@@ -9,7 +9,7 @@ export default function AttendeesListItem({ userId, name, image, location }) {
       <img src={image || USER_PLACEHOLDER} alt="User" style={{ height: "2.5em", width: "2.5em", borderRadius: "50%", marginRight: "0.9em", verticalAlign: "middle" }}/>
       <div style={{ flexGrow: "1", verticalAlign: "middle", overflow: "hidden" }}>
         <p className="ellipsis" style={{ color: darkBlack, fontSize: "1em" }}>{name || "Deleted User" }</p>
-        <p style={{ color: lightBlack, fontSize: "0.7em" }}>{location || "Unknown Location"}</p>
+        <p style={{ color: lightBlack, fontSize: "0.8em" }}>{location || "Unknown Location"}</p>
       </div>
     </div>
   </Link>;
