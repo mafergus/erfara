@@ -98,6 +98,8 @@ exports.sendEventJoinMessage = functions.database.ref('/events/{eventId}/attende
     const joiner = values[1].val();
     console.log("Got event owner ", owner,  " and joiner ", joiner);
 
+    if (joiner.uid === owner.uid) { return; }
+
     const mailOptions = {
       from: '"Matt" <matt@erfara.com>',
       to: owner.email

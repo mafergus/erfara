@@ -57,7 +57,7 @@ export class CreateEventModal extends React.Component {
       return;
     }
 
-    if(!name || !description || !advices || !locationString) {
+    if(!name || !description || !advices) {
       setTimeout( () => { this.disabledProgressCircle(); }, 2000 );
       alert("Please fill all fields");
       return;
