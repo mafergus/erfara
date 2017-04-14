@@ -7,7 +7,10 @@ import { getEvent } from "actions/eventActions";
 import { joinEvent, leaveEvent } from "utils/Api";
 import EventHero from "components/EventPage/EventHero";
 import Feed from "components/Feed/Feed";
+import Attendees from "components/EventList/Attendees";
 import { erfaraBlack } from "utils/colors";
+import HorizontalEventAttendees from "components/EventPage/HorizontalEventAttendees";
+import { Col, Row } from "react-bootstrap";
 
 const ATTENDEES_LIST = {
   position: "absolute",
@@ -15,6 +18,23 @@ const ATTENDEES_LIST = {
   width: "200px",
   marginLeft: "-210px",
   backgroundColor: "white",
+};
+
+const USER_LIST_STYLE = {
+  height: "100%",
+  width: "100%",
+  display: "inline-block",
+  verticalAlign: "top",
+  marginBottom: 14,
+};
+
+const USER_FEED_STYLE = {
+  height: "100%",
+  width: "100%",
+  display: "inline-block",
+  marginBottom: 50,
+  backgroundColor: "white",
+  padding: "0.9em 1.5em",
 };
 
 function mapStateToProps(state, props) {
@@ -28,6 +48,7 @@ function mapStateToProps(state, props) {
   }
   return {
     authedUser: state.authedUser,
+    browser: state.browser,
     event,
     owner,
     attendees: leUsers,
@@ -49,6 +70,7 @@ export class EventPage extends React.Component {
 
   static propTypes = {
     authedUser: PropTypes.object.isRequired,
+    browser: PropTypes.object.isRequired,
     uuid: PropTypes.string,
     event: PropTypes.object,
     getEvent: PropTypes.func.isRequired,
@@ -79,21 +101,42 @@ export class EventPage extends React.Component {
 
   render() {
     // if (!this.event) { return <div></div> };
-    const { event, owner, authedUser, attendees, isRSVPD } = this.props;
+    const { event, owner, authedUser, attendees, isRSVPD, browser } = this.props;
     if (!event || !owner) { return null; }
     return <div style={{ width: "100%", position: "relative" }}>
-      <UserList style={ATTENDEES_LIST} title="Attendees" users={attendees}/>
-      <EventHero authedUser={authedUser} event={event} owner={owner} onRSVPClick={this.onRSVP} isRSVPD={isRSVPD} />
-      <div style={{ width: "75%", margin: "35px auto 0px auto" }}>
-        <EventDetails style={{ marginBottom: 20 }} event={event}/>
-        <div>
-          <UserList title="going" users={attendees} isTitlePlural={false} className="light-shadow border" style={{ height: "100%", width: "24%", marginRight: "2%", display: "inline-block", verticalAlign: "top" }}/> 
-          <div className="light-shadow border" style={{ height: "100%", width: "50%", display: "inline-block", marginBottom: 50, backgroundColor: "white", padding: "0.9em 1.5em" }}>
-            <span style={{ color: erfaraBlack, fontSize: "1em" }}>Discussion</span>
-            <hr style={{ margin: "0.8em 0em" }} />
-            <Feed eventId={this.props.params.id}/>
-          </div>
-        </div>
+      <EventHero
+        authedUser={authedUser}
+        event={event}
+        owner={owner}
+        onRSVPClick={this.onRSVP}
+        isRSVPD={isRSVPD}
+        isExtraSmall={browser.is.extraSmall}
+      />
+      <div style={{ width: browser.is.extraSmall ? "95%" : "75%", margin: `${browser.is.extraSmall ? "5px" : "15px"} auto 0px auto` }}>
+        <EventDetails style={{ marginBottom: 14 }} event={event} browser={browser}/>
+        <Row>
+          <Col lg={3} sm={12} style={{ paddingRight: browser.greaterThan.large ? 0 : 15 }}>
+            {browser.is.extraSmall ? 
+              <HorizontalEventAttendees
+                attendees={attendees}
+              /> :
+              <UserList
+                title="going"
+                users={attendees}
+                isTitlePlural={false}
+                className="light-shadow border"
+                style={USER_LIST_STYLE}
+              />
+            }
+          </Col>
+          <Col lg={6} sm={12}>
+            <div className="light-shadow border" style={USER_FEED_STYLE}>
+              <span style={{ color: erfaraBlack, fontSize: "1em" }}>Discussion</span>
+              <hr style={{ margin: "0.8em 0em" }} />
+              <Feed eventId={this.props.params.id}/>
+            </div>
+          </Col>
+        </Row>
       </div>
     </div>;
   }

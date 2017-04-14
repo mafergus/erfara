@@ -67,7 +67,7 @@ export class Feed extends React.Component {
     const { style, className, items, authedUser } = this.props;
     return <div className={className} style={{ ...style, backgroundColor: "white" }}>
       { authedUser.uid ? this.renderMessageBar() : null }
-      <hr style={{ margin: "0.8em 0em" }}/>
+      <hr style={{ margin: "30px 0px" }}/>
       {items && Object.entries(items).map(item => <FeedItem key={item[0]} userId={item[1].userId} feedItem={item[1]} feedItemId={item[0]} onReply={this.onReplySubmitted} />)}
     </div>;
   }

@@ -8,7 +8,7 @@ const ITEM_STYLE = {
   display: "flex",
   border: `1px solid faintBlack`,
   borderRadius: 15,
-  marginTop: 13,
+  marginTop: 8,
 };
 
 const MY_ITEM_STYLE = {

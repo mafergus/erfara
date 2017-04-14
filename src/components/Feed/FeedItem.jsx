@@ -60,7 +60,7 @@ export class FeedItem extends React.Component {
 
   renderReplyBox() {
     const { authedUser } = this.props;
-    return <div className="border" style={{ width: "100%", display: "flex", alignItems: "center", height: 60, marginBottom: 15 }}>
+    return <div className="border" style={{ width: "100%", display: "flex", alignItems: "center", height: 50, marginBottom: 15 }}>
       <img alt="You" style={{ height: 30, width: 30, margin: "0px 7px 0px 12px", borderRadius: "50%" }} src={authedUser.photo}/>
       <TextField 
         hintText="Reply"
@@ -86,19 +86,19 @@ export class FeedItem extends React.Component {
         userId={item[1].userId}
       />;
     });
-    return <div style={{ padding: "1.4em 0em 1.4em 70px", fontSize: "0.9em" }}>
+    return <div style={{ fontSize: "0.9em" }}>
       {replyItems}
     </div>;
   }
 
   render() {
     const { feedItem, user } = this.props;
-    return <div style={{ padding: "15px 0px 15px 0px", width: "100%" }}>
+    return <div style={{ width: "100%" }}>
       <Item message={feedItem.message} timestamp={feedItem.timestamp} user={user}/>
       {feedItem.replies && this.renderReplies(feedItem.replies)}
-      <div style={{ padding: "1.4em 0em 1.4em 80px", fontSize: "0.9em" }}><span className="reply-box" onClick={() => this.setState({ isReplyOpen: !this.state.isReplyOpen })}>Reply</span></div>
+      <div style={{ padding: "0.6em 0em 1.4em 80px", fontSize: "0.9em" }}><span className="reply-box" onClick={() => this.setState({ isReplyOpen: !this.state.isReplyOpen })}>Reply</span></div>
       {this.state.isReplyOpen && this.renderReplyBox() }
-      <hr/>
+      <hr style={{ marginTop: 0, marginBottom: 30 }}/>
     </div>;
   }
 }
