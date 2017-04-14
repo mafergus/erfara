@@ -52,17 +52,17 @@ export default class EventDetails extends React.Component {
     return (
       <div className="border light-shadow" style={{ ...style, backgroundColor: "white", padding: "1.7em 1.7em 0.9em 1.7em", display: "flex" }}>
         <Row>
-          <Col sm={12} lg={3} style={{ display: "inline-block" }}>
+          <Col xs={12} lg={3} style={{ display: "inline-block" }}>
             {browser.greaterThan.medium && this.renderTimeTitle()}
             <Col xs={12} sm={5} lg={12} style={{ padding: 0 }}>{this.renderListItem(Alarm, dateStr, startTimeStr + "-" + endTimeStr)}</Col>
             <Col xs={12} sm={5} lg={12} style={{ padding: 0 }}>{this.renderListItem(Place, event.locationString)}</Col>
           </Col>
-          <Col sm={12} lg={6} style={{ display: "inline-block", marginBottom: 50, padding: browser.greaterThan.large ? "0px 80px" : "0px 20px" }}>
+          <Col xs={12} lg={6} style={{ display: "inline-block", marginBottom: 50, padding: browser.greaterThan.large ? "0px 80px" : "0px 20px" }}>
             <span style={{ color: erfaraBlack, fontSize: "1em" }}>Details</span>
             <hr style={{ margin: "10px 0px 20px 0px" }} />
             <p style={{ fontSize: "0.9em", color: erfaraBlack }}>{event.description}</p>
           </Col>
-          <Col sm={12} lg={3} style={{ display: "inline-block", marginBottom: 50 }}>
+          <Col xs={12} lg={3} style={{ display: "inline-block", marginBottom: 50 }}>
             <span style={{ color: erfaraBlack, fontSize: "1em" }}>What to bring</span>
             <hr style={{ margin: "10px 0px 20px 0px" }} />
             <p style={{ fontSize: "0.9em", color: erfaraBlack }}>{event.advices && event.advices.length > 1 ? event.advices : "Just yourself!"}</p>

@@ -56,7 +56,11 @@ export default class EventHero extends React.Component {
         </div>
       </div>
       <div style={{ height: "100%", display: "flex", alignItems: "flex-end", paddingBottom: 5 }}>
-        <RaisedButton label={joinLabel} onClick={Object.keys(authedUser).length > 0 ? onRSVPClick : () => this.setState({ signUpModalOpen: true })} primary />
+        <RaisedButton
+          label={joinLabel}
+          onClick={Object.keys(authedUser).length > 0 ? onRSVPClick : () => this.setState({ signUpModalOpen: true })} 
+          primary
+        />
       </div>
     </div>;
   }
@@ -76,6 +80,12 @@ export default class EventHero extends React.Component {
 
     return <div>
       <div style={this.getHeroStyle(event)} >
+        <RaisedButton
+          style={{ position: "absolute", bottom: 5, right: 5, width: 50 }}
+          label={joinLabel}
+          onClick={Object.keys(authedUser).length > 0 ? onRSVPClick : () => this.setState({ signUpModalOpen: true })}
+          primary
+        />
         <AuthModal 
           title="Sign Up"
           isOpen={this.state.signUpModalOpen}
