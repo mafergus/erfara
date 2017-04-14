@@ -90,10 +90,6 @@ export class OnboardingModal extends React.Component {
     }
   }
 
-  onSubmit() {
-
-  }
-
   renderContent() {
     let { searchResults, categories } = this.props;
     if (this.state.searchTerm.length === 0) { searchResults = categories; }

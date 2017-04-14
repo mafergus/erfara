@@ -42,7 +42,9 @@ class Markers extends React.Component {
   }
 
   onMarkerClick () {  // For overlapping (not-clickable) markers
-    const clickedMarker =  this.props.eventEntry.filter(item => item[1].geoCoordinates.lat === this.props.lat && item[1].geoCoordinates.lng === this.props.lng );
+    const clickedMarker = this.props.eventEntry.filter(item => { 
+      return item[1].geoCoordinates.lat === this.props.lat && item[1].geoCoordinates.lng === this.props.lng;
+    });
     
     const cardItem = clickedMarker.map((item, index) =>  
       <EventListItem
@@ -95,20 +97,19 @@ class Markers extends React.Component {
           />
         </div>
       );
-    } else {
-      return ( 
-        <div>
-          <MapsPlace
-            style={markerStyle.smallMarker} 
-            color={red500} 
-            onMouseOver={this.mouseEnter} 
-            onMouseOut={this.mouseLeave} 
-            onClick={this.onMarkerClick}
-            hoverColor={orange600}
-          />
-        </div>
-      );
     }
+    return (
+      <div>
+        <MapsPlace
+          style={markerStyle.smallMarker}
+          color={red500}
+          onMouseOver={this.mouseEnter}
+          onMouseOut={this.mouseLeave}
+          onClick={this.onMarkerClick}
+          hoverColor={orange600}
+        />
+      </div>
+    );
   }
 }
 export default muiThemeable()(Markers);

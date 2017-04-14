@@ -78,7 +78,7 @@ export class SplashPage extends React.Component {
     </Col>;
   }
 
-  renderEvents() {
+  static renderEvents() {
     return <Col sm={12} md={7} className="events-panel no-padding">
       <div style={{ height: "100%", overflowX: "hidden" }}>
         <EventsList
@@ -105,7 +105,7 @@ export class SplashPage extends React.Component {
           handleClose={() => this.setState({ isJoinOpen: false })} 
         />
         {this.renderHero()}
-        {this.renderEvents()}
+        {SplashPage.renderEvents()}
       </div>
     </Grid>;
   }

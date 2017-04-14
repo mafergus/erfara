@@ -27,7 +27,15 @@ const OVERLAY_STYLE = {
 };
 
 export default function CategoryListItem({ style, category, onClick, isSelected }) {
-  return <div onClick={onClick.bind(null, category)} className="hover-opacity" style={{ ...ITEM_STYLE, ...style,  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), url('${category.image}')` }}>
+  return <div
+    onClick={onClick.bind(null, category)}
+    className="hover-opacity"
+    style={{ 
+      ...ITEM_STYLE,
+      ...style,
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), url('${category.image}')`
+    }}
+  >
     <h4 style={{ color: isSelected ? lightTwo : "white", margin: 0, fontWeight: "600", position: "absolute", bottom: 10, left: 10 }}>
       {category.name}
     </h4>

@@ -20,11 +20,12 @@ const appReducer = combineReducers({
 });
 
  const rootReducer = (state, action) => {
+  const newState = state;
   if (action.type === "SIGN_OUT_USER") {
-    state = undefined;
+    newState = undefined;
   }
 
-  return appReducer(state, action);
+  return appReducer(newState, action);
 };
 
 export default rootReducer;

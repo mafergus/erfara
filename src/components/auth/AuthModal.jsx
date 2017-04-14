@@ -24,7 +24,7 @@ export default class AuthModal extends React.Component {
     autoBind(this);
   }
 
-  onSuccess(result) {
+  static onSuccess(result) {
     const user = result.user;
     let userData = {
       name: user.displayName,
@@ -52,9 +52,9 @@ export default class AuthModal extends React.Component {
     provider.addScope("user_location");
     provider.addScope("user_about_me");
     firebase.auth().signInWithPopup(provider)
-    .then(this.onSuccess)
+    .then(AuthModal.onSuccess)
     .catch(error => {
-      if (error.code == "auth/account-exists-with-different-credential") {
+      if (error.code === "auth/account-exists-with-different-credential") {
         alert(error.message);
       }
     });
@@ -65,9 +65,9 @@ export default class AuthModal extends React.Component {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/plus.login');
     firebase.auth().signInWithPopup(provider)
-    .then(this.onSuccess)
+    .then(AuthModal.onSuccess)
     .catch(error => {
-      if (error.code == "auth/account-exists-with-different-credential") {
+      if (error.code === "auth/account-exists-with-different-credential") {
         alert(error.message);
       }
     });

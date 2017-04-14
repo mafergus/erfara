@@ -13,9 +13,9 @@ function mapStateToProps(state, props) {
   const user = state.users.get(props.params.id);
   const followers = user && user.followers && Object.keys(user.followers).map(userId => state.users.get(userId));
   const attending = {};
-  user && user.attending && Object.entries(user.attending).forEach(item => {
-    attending[item[0]] = state.events.get(item[0]);
-  });
+  if (user && user.attending) {
+    Object.entries(user.attending).forEach(item => attending[item[0]] = state.events.get(item[0]) );
+  }
   return {
     attending,
     authedUser: state.authedUser,

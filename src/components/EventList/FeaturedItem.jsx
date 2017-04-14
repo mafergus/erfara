@@ -1,5 +1,5 @@
 import React, { PropTypes } from "react";
-import autoBind from "react-autobind"
+import autoBind from "react-autobind";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router";

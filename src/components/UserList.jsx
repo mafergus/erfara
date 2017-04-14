@@ -26,16 +26,18 @@ export default class UserList extends React.Component {
   render() {
     const { users, title, style, className, isTitlePlural } = this.props;
     let items = [];
-    users && users.forEach(item => {
-      items.push(<AttendeeListItem
-        key={items.length}
-        user={item}
-        userId={item && item.uid}
-        name={item && item.name}
-        location="San Jose, CA" 
-        image={item && item.photo}
+    if (users) {
+      users.forEach(item => {
+        items.push(<AttendeeListItem
+          key={items.length}
+          user={item}
+          userId={item && item.uid}
+          name={item && item.name}
+          location={user.location || "San Jose, CA"}
+          image={item && item.photo}
         />);
-    });
+      });
+    }
     return <PeopleList people={items} peopleType={title} isTitlePlural={isTitlePlural} style={style} className={className}/>;
   }
   

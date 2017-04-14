@@ -71,10 +71,10 @@ export class EventsList extends React.Component {
       event={item[1]}
       isFeatured
     />);
-    return this.renderRow(rows, items);
+    return EventList.renderRow(rows, items);
   }
 
-  renderRow(rows, items) {
+  static renderRow(rows, items) {
     return <Row key={rows.length}>{items}</Row>;
   }
 
@@ -96,7 +96,7 @@ export class EventsList extends React.Component {
         return;
       }
       if (items.length === cols) {
-        rows.push(this.renderRow(rows, items));
+        rows.push(EventList.renderRow(rows, items));
         items = [];
       }
       items.push(
@@ -109,7 +109,7 @@ export class EventsList extends React.Component {
         />
       );
     });
-    if (items.length !== 0) { rows.push(this.renderRow(rows, items)); }
+    if (items.length !== 0) { rows.push(EventList.renderRow(rows, items)); }
     return <div style={STYLE}>
       <div style={{ width: "100%", margin: "0px auto 20px auto" }}>{header}</div>
       {rows}

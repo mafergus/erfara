@@ -21,7 +21,7 @@ class FullWidthSection extends Component {
     contentType: 'div',
   };
 
-  getStyles() {
+  static getStyles() {
     return {
       root: {
         padding: desktopGutter,
@@ -52,7 +52,7 @@ class FullWidthSection extends Component {
       ...other
     } = this.props;
 
-    const styles = this.getStyles();
+    const styles = FullWidthSection.getStyles();
 
     let content;
     if (useContent) {

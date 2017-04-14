@@ -39,10 +39,6 @@ export class UserManagementPage extends React.Component {
     getUsers();
   }
 
-  renderRow() {
-
-  }
-
   renderUser(user) {
     const STYLE = {
       height: 200,

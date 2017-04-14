@@ -58,27 +58,23 @@ export class CreateEventModal extends React.Component {
     }
 
     if(!name || !description || !advices) {
-      debugger;
       setTimeout( () => { this.disabledProgressCircle(); }, 2000 );
       alert("Please fill all fields");
       return;
-    } else {
-      const searchTerm = name.split(" ")[0];
-      getPhoto(searchTerm)
-      .then(blob => {
-        return uploadFile(blob);
-      })
-      .then(url => {
-        store.dispatch(addEvent(name, description, url, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId, geoLocation));
-        this.disabledProgressCircle();
-        onRequestClose();
-      })
-      .catch(() => {
-        store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId, geoLocation));
-        this.disabledProgressCircle();
-        onRequestClose();
-      });
     }
+    const searchTerm = name.split(" ")[0];
+    getPhoto(searchTerm)
+    .then(blob => uploadFile(blob))
+    .then(url => {
+      store.dispatch(addEvent(name, description, url, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId, geoLocation));
+      this.disabledProgressCircle();
+      onRequestClose();
+    })
+    .catch(() => {
+      store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId, geoLocation));
+      this.disabledProgressCircle();
+      onRequestClose();
+    });
   }
 
   locationChange(location, geoLocation) {
@@ -106,7 +102,7 @@ export class CreateEventModal extends React.Component {
   }
 
   renderProgressCircle() {
-    if(this.props.userId){
+    if(this.props.userId) {
       if(this.state.isLoading) {
         return ( 
           <div>
@@ -123,16 +119,14 @@ export class CreateEventModal extends React.Component {
         />
       );   
     }
-    else {
-      return (
-        <RaisedButton 
-          label="LOG IN"
-          primary={true}
-          className="create-btn"
-          onClick={ () => { this.props.onRequestClose(); }}
-        />
-      );
-    }
+    return (
+      <RaisedButton 
+        label="LOG IN"
+        primary={true}
+        className="create-btn"
+        onClick={ () => { this.props.onRequestClose(); }}
+      />
+    );
   }
 
   renderTitle(style) {

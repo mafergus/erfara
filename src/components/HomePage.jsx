@@ -61,7 +61,7 @@ export default class HomePage extends React.Component {
                               eventEntry={this.props.eventEntry}
                               lat={item.geoCoordinates.lat} 
                               lng={item.geoCoordinates.lng}
-                              key={index}
+                              key={item.geoCoordinates}
                             />);
 
     const cardPopup = this.state.cardPopup.map((item) => this.state.isPopupOpen ? item : null);
@@ -81,7 +81,7 @@ export default class HomePage extends React.Component {
     );
   }
 
-  renderHeaders() {
+  static renderHeaders() {
     const SUBTITLE_STYLE = {
       color: erfaraBlack,
       fontSize: "0.9em",
@@ -97,9 +97,9 @@ export default class HomePage extends React.Component {
     </div>;
   }
 
-  renderList() {
+  static renderList() {
     return <EventsList 
-      header={this.renderHeaders()}
+      header={HomePage.renderHeaders()}
       style={{ width: "100%", marginTop: 30 }}
       hasFeatured={false}
     />;
@@ -108,7 +108,7 @@ export default class HomePage extends React.Component {
   render() {
     return <div>
       {this.renderMap()}
-      {this.renderList()}
+      {HomePage.renderList()}
     </div>;
   }
 }

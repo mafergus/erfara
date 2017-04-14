@@ -170,7 +170,7 @@ export class CategoriesPage extends React.Component {
     let rowItems = [];
     let rows = [];
     categories.forEach((category, key) => {
-      if (rowItems.length == 4) {
+      if (rowItems.length === 4) {
         rows.push(<Row key={rows.length} style={{ marginBottom: 15 }}>{rowItems}</Row>);
         rowItems = [];
       }

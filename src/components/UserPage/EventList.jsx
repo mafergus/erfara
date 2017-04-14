@@ -18,7 +18,7 @@ export default class EventList extends React.Component {
     autoBind(this);
   }
 
-  renderItem(eventId, event) {
+  static renderItem(eventId, event) {
     const photo = event.photo;
     const STYLE = {
       display: "flex",
@@ -47,7 +47,7 @@ export default class EventList extends React.Component {
       <span style={{ color: erfaraBlack, fontSize: "1em", padding: "0em 1em" }}>{pluralize("event", Object.keys(events).length, true)} {title}</span>
       <hr style={{ margin: "0.8em 1em" }} />
       <div style={{ margin: "0em 1em" }}>
-        {Object.entries(events).map(event => this.renderItem(event[0], event[1]))}
+        {Object.entries(events).map(event => EventList.renderItem(event[0], event[1]))}
       </div>
     </div>;
   }

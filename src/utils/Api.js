@@ -133,9 +133,8 @@ export function autoCompletePlaces(searchTerm) {
       {mode: 'cors'}).then(response => {
         if (response.ok) {
           return response.json();
-        } else {
-          reject(new Error(response.statusText));
         }
+        reject(new Error(response.statusText));
       }).then(json => {
         resolve(json);
       });
@@ -168,7 +167,6 @@ export function addUser(user) {
     updates["users/" + user.uid + "/hometown"] = user.hometown || "";
     updates["users/" + user.uid + "/location"] = user.location || "";
     updates["users/" + user.uid + "/coverPhoto"] = user.coverPhoto || PLACEHOLDER_PHOTO;
-    updates["users/"];
 
     firebase.database().ref().update(updates).then(() => {
       dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user });
@@ -235,9 +233,8 @@ export function getPhotoUrl(searchTerm, isThumbnail=false) {
     fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}${photoParam}&image_type=photo`).then(response => {
       if (response.ok) {
         return response.json();
-      } else {
-        reject(new Error(response.statusText));
       }
+      reject(new Error(response.statusText));
     }).then(json => {
       if (json && json.hits && json.hits.length > 0) {
         const urlType = isThumbnail ? "previewURL" : "webformatURL";
@@ -256,9 +253,8 @@ export function getPhotos(searchTerm) {
     fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}${photoParam}&image_type=photo`).then(response => {
       if (response.ok) {
         return response.json();
-      } else {
-        reject(new Error(response.statusText));
       }
+      reject(new Error(response.statusText));
     }).then(json => {
       if (json && json.hits && json.hits.length > 0) {
         resolve(json);
@@ -276,9 +272,8 @@ export function getPhoto(searchTerm) {
     .then(response => {
       if (response && response.ok) {
         return response.blob();
-      } else {
-        reject(new Error(response.statusText));
       }
+      reject(new Error(response.statusText));
     }).then(blob => {
       resolve(blob);
     }).catch(error => {
@@ -316,7 +311,7 @@ export function uploadFile(file, directory="images/") {
     var uploadTask = storageRef.child(directory + new Date().getTime()).put(file, metadata);
     // Listen for state changes, errors, and completion of the upload.
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
-      () => {},
+      null,
       error => reject(error), 
       () => resolve(uploadTask.snapshot.downloadURL) );
   });

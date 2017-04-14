@@ -26,21 +26,23 @@ export default class CategoriesList extends React.Component {
       combinedCategories = [...combinedCategories, ...selectedCategories]; 
     }
     combinedCategories = [...combinedCategories, ...filteredCategories];
-    combinedCategories && combinedCategories.forEach(category => {
-      if (items.length === 4) {
-        rows.push(<div key={rows.length}>{items}</div>);
-        items = [];
-      }
-      items.push(
-        <CategoryListItem
-          key={category.id || category.name}
-          category={category}
-          isSelected={selectedCategories ? selectedCategories.some(item => item.id === category.id) : false}
-          onClick={onCategorySelected}
-          style={ items.length === 3 ? { "marginRight": 0 } : {} }
-        />
-      );
-    });
+    if (combinedCategories) {
+     combinedCategories.forEach(category => {
+        if (items.length === 4) {
+          rows.push(<div key={rows.length}>{items}</div>);
+          items = [];
+        }
+        items.push(
+          <CategoryListItem
+            key={category.id || category.name}
+            category={category}
+            isSelected={selectedCategories ? selectedCategories.some(item => item.id === category.id) : false}
+            onClick={onCategorySelected}
+            style={ items.length === 3 ? { "marginRight": 0 } : {} }
+          />
+        );
+      });
+    }
     if (items.length) {
       rows.push(<div key={rows.length}>{items}</div>);
     }

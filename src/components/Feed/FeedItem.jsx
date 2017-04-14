@@ -76,7 +76,7 @@ export class FeedItem extends React.Component {
     </div>;
   }
 
-  renderReplies(replies) {
+  static renderReplies(replies) {
     const replyItems = Object.entries(replies).map(item => { 
       return <Item
         style={{ padding: "1em 0em" }}
@@ -95,7 +95,7 @@ export class FeedItem extends React.Component {
     const { feedItem, user } = this.props;
     return <div style={{ padding: "15px 0px 15px 0px", width: "100%" }}>
       <Item message={feedItem.message} timestamp={feedItem.timestamp} user={user}/>
-      {feedItem.replies && this.renderReplies(feedItem.replies)}
+      {feedItem.replies && FeedItem.renderReplies(feedItem.replies)}
       <div style={{ padding: "1.4em 0em 1.4em 80px", fontSize: "0.9em" }}><span className="reply-box" onClick={() => this.setState({ isReplyOpen: !this.state.isReplyOpen })}>Reply</span></div>
       {this.state.isReplyOpen && this.renderReplyBox() }
       <hr/>

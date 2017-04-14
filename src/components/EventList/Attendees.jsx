@@ -23,7 +23,7 @@ export default class Attendees extends React.Component {
   render() {
     const { extended, attendees } = this.props;
     let children = [];
-    if (!attendees) return null;
+    if (!attendees) { return null; }
     if (extended) {
       children = attendees.map(user => user && <img alt="Attendee" key={user.uid} style={{ height: 26, width: 26, borderRadius: "50%", objectFit: "cover", marginRight: PADDING }} src={user.photo}/>);
     } else {

@@ -23,7 +23,7 @@ export default class EventDetails extends React.Component {
     autoBind(this);
   }
 
-  renderListItem(Icon, title, subtitle) {
+  static renderListItem(Icon, title, subtitle) {
     return <div style={{ width: "100%", display: "flex", marginBottom: 32 }}>
       <div style={{ height: "100%", margin: "6px 18px 0px 0px" }}>
         <Icon style={{ color: darkGray }}/>
@@ -45,8 +45,8 @@ export default class EventDetails extends React.Component {
         <div style={{ height: "100%", width: "25%", display: "inline-block" }}>
           <span style={{ color: erfaraBlack, fontSize: "1em" }}>Time and Place</span>
           <hr style={{ margin: "10px 0px 20px 0px" }} />
-          {this.renderListItem(Alarm, dateStr, startTimeStr + "-" + endTimeStr)}
-          {this.renderListItem(Place, event.locationString)}
+          {EventDetails.renderListItem(Alarm, dateStr, startTimeStr + "-" + endTimeStr)}
+          {EventDetails.renderListItem(Place, event.locationString)}
         </div>
         <div style={{ height: "100%", width: "50%", display: "inline-block", padding: "0 80px" }}>
           <span style={{ color: erfaraBlack, fontSize: "1em" }}>Details</span>
