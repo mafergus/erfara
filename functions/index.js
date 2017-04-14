@@ -104,7 +104,7 @@ exports.sendEventJoinMessage = functions.database.ref('/events/{eventId}/attende
       from: '"Matt" <matt@erfara.com>',
       to: owner.email
     };
-    mailOptions.subject = `New Memeber Joined your Event ${eventObj.title}!`;
+    mailOptions.subject = `New Member Joined your Event ${eventObj.title}!`;
     mailOptions.text = `Hey ${owner.name}! ${joiner.name} just RVSPd for ${eventObj.title}! Reach out to them and say hi.`;
     return mailTransport.sendMail(mailOptions).then(() => {
       console.log('Email for event joiner sent to:', owner.email);
