@@ -10,9 +10,8 @@ export function getFacebookInfo(accessToken) {
     fetch(`https://graph.facebook.com/me?fields=id,name,about,age_range,location,hometown,birthday&access_token=${accessToken}`).then(response => {
       if (response.ok) {
         return response.json();
-      } else {
-        reject(new Error(response.statusText));
       }
+      reject(new Error(response.statusText));
     }).then(json => {
       resolve(json);
     });
@@ -120,9 +119,8 @@ export function getCoordinates(searchTerm) {
       {mode: 'cors'}).then(response => {
         if(response.ok) {
           return response.json();
-        } else {
-          reject(new Error(response.statusText));
         }
+        reject(new Error(response.statusText));
       }).then(json => {
         resolve(json);
       });
@@ -376,14 +374,14 @@ export function addEvent(title, description, photo, date, startTime, endTime, ad
     // Write the new post's data simultaneously in the posts list and the user's post list.
     var updates = {};
     updates["/events/" + newEventKey] = eventData;
-    updates["/users/" + userId + "/events/" +  newEventKey] = eventData;
+    updates["/users/" + userId + "/events/" + newEventKey] = eventData;
 
     return firebase.database().ref().update(updates);
   };
 }
 
 function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
+  const minVal = Math.ceil(min);
+  const maxVal = Math.floor(max);
+  return Math.floor(Math.random() * (maxVal - minVal)) + minVal;
 }
