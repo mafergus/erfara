@@ -22,11 +22,11 @@ export default function DateBox({ style, timestamp, textColor }) {
 
 DateBox.defaultProps = {
   textColor: erfaraBlack,
+  style: {},
 };
 
 DateBox.propTypes = {
   style: PropTypes.object,
-  timestamp: PropTypes.object,
+  timestamp: PropTypes.object.isRequired,
   textColor: PropTypes.string,
-  popUp: PropTypes.bool
 };

@@ -10,7 +10,11 @@ export default class MessagesWindow extends React.Component {
     messages: PropTypes.array.isRequired,
     onReadMessage: PropTypes.func.isRequired,
     onSendMessage: PropTypes.func.isRequired,
-  }
+  };
+
+  static defaultProps = {
+    style: {},
+  };
 
   constructor() {
     super();
@@ -43,7 +47,7 @@ export default class MessagesWindow extends React.Component {
     return <div style={STYLE} className="messaging-pane">
       <img className="background-image" />
       <MessageList messages={messages} style={{ width: "100%", position: "absolute", bottom: "150px", left: "0", top: "0" }} />
-      <MessageBar style={{ width: "100%", position: "absolute", bottom: 0, right: 0, left: 0 }} onSend={onSendMessage}/>
+      <MessageBar style={{ width: "100%", position: "absolute", bottom: 0, right: 0, left: 0 }} onSend={onSendMessage} />
     </div>;
   }  
 }

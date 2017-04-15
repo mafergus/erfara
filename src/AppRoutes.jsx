@@ -5,7 +5,6 @@ import {
 } from 'react-router';
 
 import App from "components/App";
-import MainPage from "components/MainPage";
 import HomePage from "components/HomePage";
 import EventPage from "components/EventPage/EventPage";
 import MessagingPage from "components/Messaging/MessagingPage";
@@ -29,11 +28,12 @@ import store from "store/store";
 export default function routes() {
   const state = store.getState();
   const isMobile = state.browser.is.extraSmall;
+  const isAuthed = state.authedUser.hasOwnProperty("uid");
 
   return <Route path="/" component={App}>
-    <IndexRoute component={MainPage} />
+    <IndexRoute component={isAuthed ? HomePage : SplashPage} />
     <Route path="messages">
-      <IndexRoute component={isMobile ? MobileConversationList : MessagingPage}/>
+      <IndexRoute component={isMobile ? MobileConversationList : MessagingPage} />
       <Route path="(:id)" component={isMobile ? MobileMessagingPage : MessagingPage} />
     </Route>
     <Route path="event/:id" component={EventPage} />

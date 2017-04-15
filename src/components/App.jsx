@@ -23,7 +23,10 @@ class App extends React.Component {
   static propTypes = {
     children: PropTypes.node,
     unreadMessages: PropTypes.number.isRequired,
-    width: PropTypes.number.isRequired,
+  };
+
+  static defaultProps = {
+    children: null,
   };
 
   static contextTypes = {
@@ -99,12 +102,12 @@ class App extends React.Component {
     return (
       <div>
         <Title render={unreadMessages} />
-        <AppBar onEventCreate={() => this.setState({ eventModalOpen: true })}/>
+        <AppBar onEventCreate={() => this.setState({ eventModalOpen: true })} />
         <div style={{ position: "absolute", top: 63, bottom: 0, left: 0, width: "100%" }}>
           {this.renderContent()}
         </div>
         {this.renderFAB()}
-        <CreateEventModal isOpen={this.state.eventModalOpen} onRequestClose={ () => this.setState({ eventModalOpen: false }) }/>
+        <CreateEventModal isOpen={this.state.eventModalOpen} onRequestClose={() => this.setState({ eventModalOpen: false })} />
       </div>
     );
   }

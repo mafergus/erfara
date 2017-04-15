@@ -1,27 +1,22 @@
 import React, { PropTypes } from "react";
-import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import TextField from "material-ui/TextField";
-import { addEventMessage } from "utils/Api";
-import store from "store/store";
-import FeedItem from "components/Feed/FeedItem";
-import { addFeedReply } from "utils/Api";
 
-function mapStateToProps(state, props) {
-  return {
-    items: props.eventId && state.events.get(props.eventId).feed,
-    authedUser: state.authedUser,
-  };
-}
-
-export class Feed extends React.Component {
+export default class Feed extends React.Component {
 
   static propTypes = {
     className: PropTypes.string,
-    items: PropTypes.object,
+    children: PropTypes.object,
     style: PropTypes.object,
-    eventId: PropTypes.string,
-    authedUser: PropTypes.object,
+    authedUserPhoto: PropTypes.string.isRequired,
+    onSendMessage: PropTypes.func.isRequired,
+    hideMessageBar: PropTypes.bool.isRequired,
+  };
+
+  static defaultProps = {
+    className: "",
+    style: {},
+    children: null,
   };
 
   constructor() {
@@ -31,18 +26,15 @@ export class Feed extends React.Component {
   }
 
   onKeyPress(event) {
+    const { onSendMessage } = this.props;
     if (event.charCode === 13 && this.state.message.length > 2) { // enter key pressed
-      store.dispatch(addEventMessage(this.props.eventId, this.props.authedUser.uid, this.state.message, new Date()));
+      onSendMessage(this.state.message);
       this.setState({ message: "" });
     } 
   }
 
-  onReplySubmitted(itemId, text) {
-    const { eventId, authedUser } = this.props;
-    addFeedReply(eventId, authedUser.uid, text, new Date(), itemId);
-  }
-
   renderMessageBar() {
+    const { authedUserPhoto } = this.props;
     const STYLE = {
       display: "flex",
       justifyContent: "center",
@@ -50,27 +42,30 @@ export class Feed extends React.Component {
       ...this.props.style,
     };
     return <div style={STYLE}>
-      <img src={this.props.authedUser.photo} alt="You" style={{ height: 50, width: 50, margin: "10px", borderRadius: "50%" }} />
+      <img
+        src={authedUserPhoto}
+        alt="You"
+        style={{ height: 50, width: 50, margin: 10, borderRadius: "50%" }}
+      />
       <div style={{ flexGrow: "1", height: "100%", alignSelf: "center" }}>
         <TextField 
           hintText="Message"
           value={this.state.message}
-          style={{ width: "90%", marginLeft: "10px", marginRight: "10px" }}
+          style={{ width: "90%", marginLeft: 10, marginRight: 10 }}
           onKeyPress={this.onKeyPress}
-          onChange={ (event, value) => { this.setState({ message: value }); }}
+          onChange={(event, value) => { this.setState({ message: value }); }}
         />
       </div>
     </div>;
   }
 
   render() {
-    const { style, className, items, authedUser } = this.props;
+    const { style, className, children, hideMessageBar } = this.props;
+
     return <div className={className} style={{ ...style, backgroundColor: "white" }}>
-      { authedUser.uid ? this.renderMessageBar() : null }
-      <hr style={{ margin: "0.8em 0em" }}/>
-      {items && Object.entries(items).map(item => <FeedItem key={item[0]} userId={item[1].userId} feedItem={item[1]} feedItemId={item[0]} onReply={this.onReplySubmitted} />)}
+      {hideMessageBar ? null : this.renderMessageBar()}
+      <hr style={{ margin: "0.8em 0em" }} />
+      {children}
     </div>;
   }
 }
-
-export default connect(mapStateToProps)(Feed);

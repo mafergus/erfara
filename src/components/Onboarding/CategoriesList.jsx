@@ -6,7 +6,7 @@ export default class CategoriesList extends React.Component {
 
   static propTypes = {
     categories: PropTypes.array.isRequired,
-    onCategorySelected: PropTypes.func,
+    onCategorySelected: PropTypes.func.isRequired,
     selectedCategories: PropTypes.array.isRequired,
   };
   
@@ -18,7 +18,7 @@ export default class CategoriesList extends React.Component {
   render() {
     const { categories, selectedCategories, onCategorySelected } = this.props;
     let items = [];
-    let rows = [];
+    const rows = [];
     let combinedCategories = [];
     let filteredCategories = [...categories];
     if (selectedCategories) { 
@@ -38,7 +38,7 @@ export default class CategoriesList extends React.Component {
             category={category}
             isSelected={selectedCategories ? selectedCategories.some(item => item.id === category.id) : false}
             onClick={onCategorySelected}
-            style={ items.length === 3 ? { "marginRight": 0 } : {} }
+            style={items.length === 3 ? { "marginRight": 0 } : {}}
           />
         );
       });

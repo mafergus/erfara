@@ -17,6 +17,10 @@ export class MobileConversationList extends React.Component {
     conversations: ImmutablePropTypes.map.isRequired,
     params: PropTypes.object,
   };
+
+  static defaultProps = {
+    params: {id: ""},
+  };
   
   constructor(props) {
     super(props);

@@ -8,18 +8,15 @@ import { connect } from 'react-redux';
 
 function mapStateToProps(state) {
   return {
-    authedUser: state.authedUser,
-    locationSearch: state.locationSearch
+    locationSearch: state.locationSearch,
   };
 }
 
 
 export class LocationSearch extends React.Component {
   static propTypes = {
-    text: PropTypes.string,
-    authedUser: PropTypes.object,
-    locationSearch: PropTypes.array,
-    onSelectLocation: PropTypes.func
+    locationSearch: PropTypes.array.isRequired,
+    onSelectLocation: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -28,37 +25,36 @@ export class LocationSearch extends React.Component {
 
     this.text = "";
     this.state = {
-      locationString :"",
+      locationString: "",
     };
   }
 
   sendLocationToModal(location, id) {
+    const { onSelectLocation } = this.props;
     getCoordinates(id).then(json => {
       const coordinateObj = json.result.geometry.location;
-      this.props.onSelectLocation(location, coordinateObj);
+      onSelectLocation(location, coordinateObj);
     });
   }
 
   gotText(value, dataSource, params) {
-    if (params && this.props.authedUser.uid) {
-      this.text = value;
-      if (this.text.length > 2 || this.text.length === 0) { 
-        autoCompletePlaces(this.text).then(json => {
-          const predictions = json.predictions;
-          store.dispatch(addLocationSearchResults(predictions));
-        });
-      }
+    this.text = value;
+    if (params && (this.text.length > 2 || this.text.length === 0)) { 
+      autoCompletePlaces(this.text).then(json => {
+        const { predictions } = json;
+        store.dispatch(addLocationSearchResults(predictions));
+      });
     }
   }
 
   render() {
-    const dataSource = this.props.locationSearch;
-    const dataSourceConfig = { text: 'description', value:'id'};
+    const { locationSearch } = this.props;
+    const dataSourceConfig = { text: 'description', value: 'id'};
     const style = {
       textFieldStyle: {
-        paddingLeft:"10px",
+        paddingLeft: "10px",
         width: "295px",
-        fontSize:"12px"
+        fontSize: "12px"
       },
       hintStyle: {
         color: "#BDBDBD", 
@@ -72,12 +68,12 @@ export class LocationSearch extends React.Component {
           hintStyle={style.hintStyle}
           textFieldStyle={style.textFieldStyle}
           filter={AutoComplete.noFilter}
-          dataSource={dataSource}
+          dataSource={locationSearch}
           dataSourceConfig={dataSourceConfig}
-          listStyle={{width:'301px' ,marginLeft:"-8px"}}
+          listStyle={{ width: 301, marginLeft: -8 }}
           underlineShow={false}
-          onUpdateInput={(value, dataSource, params) => {this.gotText(value, dataSource, params);}}
-          onNewRequest={(chosenItem) => { this.sendLocationToModal(chosenItem.description, chosenItem.place_id);}}
+          onUpdateInput={(value, dataSource, params) => { this.gotText(value, locationSearch, params); }}
+          onNewRequest={(chosenItem) => { this.sendLocationToModal(chosenItem.description, chosenItem.place_id); }}
         />
       </div>
     );

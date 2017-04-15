@@ -3,7 +3,7 @@ import Immutable from "immutable";
 export function eventsReducer(state = Immutable.Map(), action) {
   switch (action.type) {
     case "GET_EVENTS_SUCCESS": {
-      const newState = state;
+      let newState = state;
       Object.entries(action.events).forEach(entry => {
         newState = newState.set(entry[0], entry[1]);
       });

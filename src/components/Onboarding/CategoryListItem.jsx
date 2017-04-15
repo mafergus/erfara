@@ -40,7 +40,7 @@ export default function CategoryListItem({ style, category, onClick, isSelected 
       {category.name}
     </h4>
     {isSelected && <div style={OVERLAY_STYLE}>
-      <ErfaraIcon color="white" style={{ height: 42, width: 42 }}/>
+      <ErfaraIcon color="white" style={{ height: 42, width: 42 }} />
     </div>}
   </div>;
 }
@@ -48,6 +48,10 @@ export default function CategoryListItem({ style, category, onClick, isSelected 
 CategoryListItem.propTypes = {
   category: PropTypes.object.isRequired,
   isSelected: PropTypes.bool.isRequired,
-  onClick: PropTypes.func,
+  onClick: PropTypes.func.isRequired,
   style: PropTypes.object,
+};
+
+CategoryListItem.defaultProps = {
+  style: {},
 };

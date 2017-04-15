@@ -69,22 +69,22 @@ class Markers extends React.Component {
 
     const markerStyle = {
       smallMarker: { 
-        width:55, 
-        height:55, 
-        transform:'scale(0.6,0.6)', 
+        width: 55, 
+        height: 55, 
+        transform: 'scale(0.6,0.6)', 
         transformOrigin: '28px 55px',
         zIndex: 0
       },
       bigMarker: {
-        width:55, 
-        height:55, 
-        transform:'scale(1,1)', 
+        width: 55, 
+        height: 55, 
+        transform: 'scale(1,1)', 
         transformOrigin: '28px 55px',
         zIndex: 0
       }
     };
 
-    if(this.state.isHovered) {
+    if (this.state.isHovered) {
       return ( 
         <div>
           <MapsPlace

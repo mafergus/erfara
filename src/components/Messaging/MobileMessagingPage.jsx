@@ -3,7 +3,6 @@ import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import MessagesWindow from "components/Messaging/MessagesWindow";
 import store from "store/store";
-import { bindActionCreators } from "redux";
 import { addMessage, readMessage } from "utils/Api";
 
 function mapStateToProps(state, props) {
@@ -17,8 +16,8 @@ export class MobileMessagingPage extends React.Component {
 
   static propTypes = {
     authedUser: PropTypes.object.isRequired,
-    conversation: PropTypes.object,
-    params: PropTypes.object,
+    conversation: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired,
   };
   
   constructor(props) {

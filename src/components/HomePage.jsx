@@ -1,4 +1,5 @@
 import React, { PropTypes } from "react";
+import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import GoogleMap from 'google-map-react';
 import EventsList from "components/EventList/EventList";
@@ -6,15 +7,23 @@ import { erfaraBlack } from "utils/colors";
 import { DEFAULT_LOCATION } from "utils/constants";
 import Markers from './Markers';
 
-export default class HomePage extends React.Component {
+const SUBTITLE_STYLE = {
+  color: erfaraBlack,
+  fontSize: "0.9em",
+  fontFamily: "Roboto-Light",
+};
+
+function mapStateToProps(state) {
+  return {
+    events: state.events.valueSeq(),
+  };
+}
+
+export class HomePage extends React.Component {
 
   static propTypes = {
-    eventEntry: PropTypes.array,
-    events: PropTypes.object,
-    center: PropTypes.array.isRequired,
+    events: PropTypes.array.isRequired,
     zoom: PropTypes.number.isRequired,
-    isOpen: PropTypes.bool,
-    markerId: PropTypes.string
   };
 
   static defaultProps = {
@@ -22,13 +31,31 @@ export default class HomePage extends React.Component {
     zoom: 10,
   };
 
+  static renderHeaders() {
+    return <div style={{ width: "100%", marginBottom: 35 }}>
+      <h1 style={{ color: erfaraBlack, fontSize: "1.2em", fontFamily: "Roboto-Light" }}>Upcoming events recommended for you</h1>
+      <div style={{ width: "100%", marginTop: 10 }}>
+        <span style={{ ...SUBTITLE_STYLE, margin: 0, marginTop: 15 }}>Based on <span style={{ textDecoration: "underline" }}>Chess, Astronomy, Sports, +2 </span>&nbsp;&nbsp;|&nbsp;&nbsp;Around <span style={{ textDecoration: "underline" }}>Santa Clara, CA</span></span>
+        <span style={{ ...SUBTITLE_STYLE, float: "right" }}>Category&nbsp;&nbsp;&nbsp;&nbsp;Filters</span>
+      </div>
+    </div>;
+  }
+
+  static renderList() {
+    return <EventsList 
+      header={HomePage.renderHeaders()}
+      style={{ width: "100%", marginTop: 30 }}
+      hasFeatured={false}
+    />;
+  }
+
   constructor() {
     super();
     autoBind(this);
 
     this.markerId = "";
     this.state = {
-      cardPopup: [<div></div>],
+      cardPopup: [],
       isPopupOpen: false,
       isHovered: false,
       center: DEFAULT_LOCATION,
@@ -39,7 +66,7 @@ export default class HomePage extends React.Component {
     this.setState({ center: geoArray });
     this.setState({ cardPopup: item, isPopupOpen: true });
 
-    if(this.markerId === itemId) {
+    if (this.markerId === itemId) {
       this.setState({ isPopupOpen: !this.state.isPopupOpen});
       this.markerId = "";
     }
@@ -51,14 +78,13 @@ export default class HomePage extends React.Component {
   }
 
   renderMap() {
-    const events = this.props.events;
+    const { events } = this.props;
     const Marker = events.filter(item => item.geoCoordinates)
-                         .map((item, index) => 
+                         .map(item => 
                             <Markers
                               clickMarker={this.clickMarker}
                               sendHoverState={this.getHoverState}
                               event={item}
-                              eventEntry={this.props.eventEntry}
                               lat={item.geoCoordinates.lat} 
                               lng={item.geoCoordinates.lng}
                               key={item.geoCoordinates}
@@ -81,30 +107,6 @@ export default class HomePage extends React.Component {
     );
   }
 
-  static renderHeaders() {
-    const SUBTITLE_STYLE = {
-      color: erfaraBlack,
-      fontSize: "0.9em",
-      fontFamily: "Roboto-Light",
-    };
-
-    return <div style={{ width: "100%", marginBottom: 35 }}>
-      <h1 style={{ color: erfaraBlack, fontSize: "1.2em", fontFamily: "Roboto-Light" }}>Upcoming events recommended for you</h1>
-      <div style={{ width: "100%", marginTop: 10 }}>
-        <span style={{ ...SUBTITLE_STYLE, margin: 0, marginTop: 15 }}>Based on <span style={{ textDecoration: "underline" }}>Chess, Astronomy, Sports, +2 </span>&nbsp;&nbsp;|&nbsp;&nbsp;Around <span style={{ textDecoration: "underline" }}>Santa Clara, CA</span></span>
-        <span style={{ ...SUBTITLE_STYLE, float: "right" }}>Category&nbsp;&nbsp;&nbsp;&nbsp;Filters</span>
-      </div>
-    </div>;
-  }
-
-  static renderList() {
-    return <EventsList 
-      header={HomePage.renderHeaders()}
-      style={{ width: "100%", marginTop: 30 }}
-      hasFeatured={false}
-    />;
-  }
-
   render() {
     return <div>
       {this.renderMap()}
@@ -112,3 +114,5 @@ export default class HomePage extends React.Component {
     </div>;
   }
 }
+
+export default connect(mapStateToProps)(HomePage);

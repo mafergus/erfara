@@ -12,9 +12,13 @@ function mapStateToProps(state) {
 export class MessageList extends React.Component {
 
   static propTypes = {
-    authedUser: PropTypes.object,
+    authedUser: PropTypes.object.isRequired,
     messages: PropTypes.array.isRequired,
     style: PropTypes.object,
+  };
+
+  static defaultProps = {
+    style: {},
   };
 
   constructor() {
@@ -28,6 +32,7 @@ export class MessageList extends React.Component {
 
   render() {
     const { messages, style, authedUser } = this.props;
+    if (!authedUser.hasOwnProperty("uid")) { return null; }
     const STYLE = {
       ...style,
       listStyle: "none",
@@ -36,7 +41,7 @@ export class MessageList extends React.Component {
       overflow: "auto",
     };
     return <ul style={STYLE} ref="list">
-      {messages.map((item, index) => {
+      {messages.map(item => {
         return <MessageListItem key={item.date} message={item} isMine={authedUser.uid === item.from} />;
       })}
     </ul>;

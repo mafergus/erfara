@@ -8,7 +8,7 @@ export default class Attendees extends React.Component {
 
   static propTypes = {
     extended: PropTypes.bool,
-    attendees: PropTypes.array,
+    attendees: PropTypes.array.isRequired,
   }
 
   static defaultProps = {
@@ -25,9 +25,9 @@ export default class Attendees extends React.Component {
     let children = [];
     if (!attendees) { return null; }
     if (extended) {
-      children = attendees.map(user => user && <img alt="Attendee" key={user.uid} style={{ height: 26, width: 26, borderRadius: "50%", objectFit: "cover", marginRight: PADDING }} src={user.photo}/>);
+      children = attendees.map(user => user && <img alt="Attendee" key={user.uid} style={{ height: 26, width: 26, borderRadius: "50%", objectFit: "cover", marginRight: PADDING }} src={user.photo} />);
     } else {
-      children.push(attendees[0] && <img alt="Attendee" key={attendees[0].uid} style={{ height: 26, width: 26, borderRadius: "50%", objectFit: "cover", marginRight: PADDING }} src={attendees[0] && attendees[0].photo}/>);
+      children.push(attendees[0] && <img alt="Attendee" key={attendees[0].uid} style={{ height: 26, width: 26, borderRadius: "50%", objectFit: "cover", marginRight: PADDING }} src={attendees[0] && attendees[0].photo} />);
       if (attendees.length > 1) {
         children.push(<div key="123" style={{ height: 29, width: 29, borderRadius: "50%", backgroundColor: "rgba(0, 0, 0, 0.12)", display: "inline-block", marginRight: PADDING }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", width: "100%" }}>

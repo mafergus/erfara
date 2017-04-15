@@ -13,13 +13,14 @@ export default class EventList extends React.Component {
     style: PropTypes.object,
   };
 
-  constructor() {
-    super();
-    autoBind(this);
-  }
+  static defaultProps = {
+    className: "",
+    style: {},
+    title: "events",
+  };
 
   static renderItem(eventId, event) {
-    const photo = event.photo;
+    const { photo } = event;
     const STYLE = {
       display: "flex",
       alignItems: "center",
@@ -38,6 +39,11 @@ export default class EventList extends React.Component {
         <p style={{ width: "100%", textAlign: "center", color: "white" }}>{event.title}</p>
       </div>
     </Link>;
+  }
+
+  constructor() {
+    super();
+    autoBind(this);
   }
 
   render() {

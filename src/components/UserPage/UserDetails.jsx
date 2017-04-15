@@ -7,34 +7,31 @@ import Place from 'material-ui/svg-icons/maps/place';
 import Face from 'material-ui/svg-icons/action/face';
 import Moment from "moment";
 
-// const STYLE = {
-//   color: darkBlack,
-//   fontWeight: "normal",
-//   fontSize: "0.8em",
-//   display: "inline-block",
-// };
-
 export default class UserDetails extends React.Component {
 
   static propTypes = {
-    user: PropTypes.object,
+    user: PropTypes.object.isRequired,
     style: PropTypes.object,
   };
 
-  constructor() {
-    super();
-    autoBind(this);
-  }
+  static defaultProps = {
+    style: {},
+  };
 
   static renderListItem(Icon, text) {
     return <div style={{ width: "100%", display: "flex", marginBottom: 16 }}>
       <div style={{ height: "100%", margin: "6px 12px 0px 0px" }}>
-        <Icon style={{ color: darkGray }}/>
+        <Icon style={{ color: darkGray }} />
       </div>
       <div style={{ flexGrow: "1", display: "flex", alignItems: "center" }}>
         <p style={{ color: erfaraBlack, fontSize: "0.9em" }}>{text}</p>
       </div>
     </div>;
+  }
+
+  constructor() {
+    super();
+    autoBind(this);
   }
 
   render() {

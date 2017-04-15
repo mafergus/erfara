@@ -3,8 +3,7 @@ import firebase from 'actions/database';
 import Dialog from 'material-ui/Dialog';
 import { lightBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
-import { addUser } from "utils/Api";
-import { getPhoto, uploadFile, checkUserExists } from "utils/Api";
+import { addUser, getPhoto, uploadFile, checkUserExists } from "utils/Api";
 import store from "store/store";
 import { Col, Row } from "react-bootstrap";
 
@@ -19,14 +18,9 @@ export default class AuthModal extends React.Component {
     handleClose: PropTypes.func.isRequired,
   };
 
-  constructor() {
-    super();
-    autoBind(this);
-  }
-
   static onSuccess(result) {
-    const user = result.user;
-    let userData = {
+    const { user } = result;
+    const userData = {
       name: user.displayName,
       uid: user.uid,
       email: user.email,
@@ -42,6 +36,11 @@ export default class AuthModal extends React.Component {
       userData.coverPhoto = url;
       store.dispatch(addUser(userData));
     });
+  }
+
+  constructor() {
+    super();
+    autoBind(this);
   }
 
   handleSignUpFacebook() {

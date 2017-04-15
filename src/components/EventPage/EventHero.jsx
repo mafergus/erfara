@@ -17,11 +17,9 @@ export default class EventHero extends React.Component {
 
   static propTypes = {
     authedUser: PropTypes.object.isRequired,
-    style: PropTypes.object,
-    event: PropTypes.object,
-    owner: PropTypes.object,
-    isRSVPD: PropTypes.bool,
-    onRSVPClick: PropTypes.func,
+    event: PropTypes.object.isRequired,
+    isRSVPD: PropTypes.bool.isRequired,
+    onRSVPClick: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -45,14 +43,18 @@ export default class EventHero extends React.Component {
       />
       <div style={{ width: "75%", height: "100%", position: "relative", margin: "0 auto" }}>
         <div style={{ height: 70, position: "absolute", bottom: 0, left: 0, right: 0 }}>
-          <DateBox timestamp={timestamp} style={{ height: 70, overflow: "hidden" }}/>
+          <DateBox timestamp={timestamp} style={{ height: 70, overflow: "hidden" }} />
           <div style={{ display: "inline-block", height: 70, paddingLeft: 35, overflow: "hidden" }}>
             <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
               <span style={{ fontSize: "1.7em", verticalAlign: "middle" }}>{event.title}</span>
             </div>
           </div>
           <div style={{ float: "right", height: "100%", display: "flex", alignItems: "flex-end", paddingBottom: 5 }}>
-            <RaisedButton label={joinLabel} onClick={Object.keys(authedUser).length > 0 ? onRSVPClick : () => this.setState({ signUpModalOpen: true })} primary />
+            <RaisedButton
+              label={joinLabel}
+              onClick={Object.keys(authedUser).length > 0 ? onRSVPClick : () => this.setState({ signUpModalOpen: true })}
+              primary
+            />
           </div>
         </div>
       </div>

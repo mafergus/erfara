@@ -14,25 +14,29 @@ import Place from 'material-ui/svg-icons/maps/place';
 export default class EventDetails extends React.Component {
 
   static propTypes = {
-    event: PropTypes.object,
+    event: PropTypes.object.isRequired,
     style: PropTypes.object,
   };
 
-  constructor() {
-    super();
-    autoBind(this);
-  }
+  static defaultProps = {
+    style: {},
+  };
 
   static renderListItem(Icon, title, subtitle) {
     return <div style={{ width: "100%", display: "flex", marginBottom: 32 }}>
       <div style={{ height: "100%", margin: "6px 18px 0px 0px" }}>
-        <Icon style={{ color: darkGray }}/>
+        <Icon style={{ color: darkGray }} />
       </div>
       <div style={{ flexGrow: "1" }}>
         <p style={{ color: erfaraBlack, fontSize: "0.9em", marginBottom: "0.4em" }}>{title}</p>
         {subtitle && <p style={{ color: darkGray, fontSize: "0.8em" }}>{subtitle}</p>}
       </div>
     </div>;
+  }
+
+  constructor() {
+    super();
+    autoBind(this);
   }
 
   render() {
