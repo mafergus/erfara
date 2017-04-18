@@ -98,17 +98,47 @@ exports.sendEventJoinMessage = functions.database.ref('/events/{eventId}/attende
     const joiner = values[1].val();
     console.log("Got event owner ", owner,  " and joiner ", joiner);
 
+    if (joiner.uid === owner.uid) { return; }
+
     const mailOptions = {
       from: '"Matt" <matt@erfara.com>',
       to: owner.email
     };
-    mailOptions.subject = `New Memeber Joined your Event ${eventObj.title}!`;
+    mailOptions.subject = `New Member Joined your Event ${eventObj.title}!`;
     mailOptions.text = `Hey ${owner.name}! ${joiner.name} just RVSPd for ${eventObj.title}! Reach out to them and say hi.`;
     return mailTransport.sendMail(mailOptions).then(() => {
       console.log('Email for event joiner sent to:', owner.email);
     });
   });
 });
+
+/**
+ * It goes without saying, but this should be optimized
+ */
+exports.sendEventCreatedEmail = functions.database.ref('/events/{eventId}').onCreate(createdEvent => {
+  const event = createdEvent.data.val();
+  const creatorId = event.userId;
+  const allUsersPromise = admin.database().ref("users").once("value");
+  
+  return allUsersPromise.then(snap => {
+    const users = snap.val();
+    if (users) {
+      allUsers.forEach(user => sendEventEmail(user, event));  
+    }
+  });
+});
+
+function sendEventEmail(recipient, event) {
+  const mailOptions = {
+    from: '"Matt" <matt@erfara.com>',
+    to: recipient.email
+  };
+  const firstName = recipient.name.split(" ")[0] || recipient.name;
+
+  mailOptions.subject = `New Event, ${event.title}, on Erfara!`;
+  mailOptions.text = `Hey ${firstName}! There's a new event near you, check it out here: https://erfara-web.herokuapp.com/events/${event.uid}`;
+  return mailTransport.sendMail(mailOptions);
+}
 
 /**
  * Send an account deleted email confirmation to users who delete their accounts.
@@ -121,7 +151,6 @@ exports.sendByeEmail = functions.auth.user().onDelete(event => {
 
   return sendGoodbyEmail(email, displayName);
 });
-// [END sendByeEmail]
 
 // Sends a welcome email to the given user.
 function sendWelcomeEmail(email, displayName) {
@@ -133,7 +162,7 @@ function sendWelcomeEmail(email, displayName) {
   console.log("Should send welcome email to ", email);
 
   // The user unsubscribed to the newsletter.
-  mailOptions.subject = `Welcome to Erfara!`;
+  mailOptions.subject = "Welcome to Erfara!";
   mailOptions.text = `Hey ${displayName}! Welcome to ${APP_NAME}, have fun! If you have any questions, problems or feedback don't hesitate to email me!\n\n-Matt, Founder of Erfara`;
   return mailTransport.sendMail(mailOptions).then(() => {
     console.log('New welcome email sent to:', email);

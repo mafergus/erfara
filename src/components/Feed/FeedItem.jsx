@@ -46,7 +46,7 @@ export class FeedItem extends React.Component {
 
   renderReplyBox() {
     const { authedUserPhoto } = this.props;
-    return <div className="border" style={{ display: "flex", alignItems: "center", height: 60, marginBottom: 15, marginLeft: 70 }}>
+    return <div className="border" style={{ display: "flex", alignItems: "center", height: 50, marginBottom: 15, marginLeft: 70 }}>
       <img alt="You" style={{ height: 30, width: 30, margin: "0px 7px 0px 12px", borderRadius: "50%" }} src={authedUserPhoto} />
       <TextField 
         hintText="Reply"

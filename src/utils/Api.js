@@ -18,6 +18,14 @@ export function getFacebookInfo(accessToken) {
   });
 }
 
+export function fetchUser(uuid) {
+  return firebase.database().ref("/users/" + uuid).once("value");
+}
+
+export function fetchUsers() {
+  return firebase.database().ref("/users").once("value");
+}
+
 export function addMessage(recipientId, senderId, message, date) {
   const messageData = {
     message,
