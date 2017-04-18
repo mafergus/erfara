@@ -6,7 +6,7 @@ import UserList from "components/UserList";
 import { getEvent } from "actions/eventActions";
 import { joinEvent, leaveEvent } from "utils/Api";
 import EventHero from "components/EventPage/EventHero";
-import Feed from "components/Feed/Feed";
+import FeedContainer from "components/Feed/FeedContainer";
 import { erfaraBlack } from "utils/colors";
 
 const ATTENDEES_LIST = {
@@ -43,11 +43,12 @@ export class EventPage extends React.Component {
 
   static defaultProps = {
     isRSVPD: false,
+    event: null,
   };
 
   static propTypes = {
     authedUser: PropTypes.object.isRequired,
-    event: PropTypes.object.isRequired,
+    event: PropTypes.object,
     getEvent: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
     isRSVPD: PropTypes.bool.isRequired,
@@ -76,7 +77,7 @@ export class EventPage extends React.Component {
 
   render() {
     // if (!this.event) { return <div></div> };
-    const { event, authedUser, attendees, isRSVPD } = this.props;
+    const { event, authedUser, attendees, isRSVPD, params } = this.props;
     if (!event) { return null; }
     return <div style={{ width: "100%", position: "relative" }}>
       <UserList
@@ -109,7 +110,7 @@ export class EventPage extends React.Component {
           >
             <span style={{ color: erfaraBlack, fontSize: "1em" }}>Discussion</span>
             <hr style={{ margin: "0.8em 0em" }} />
-            <Feed eventId={this.props.params.id} />
+            <FeedContainer authedUser={authedUser} feedId={params.id} />
           </div>
         </div>
       </div>

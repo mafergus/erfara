@@ -32,12 +32,13 @@ export default class UserList extends React.Component {
     const { users, title, style, className, isTitlePlural } = this.props;
     const items = [];
     users.forEach(item => {
+      if (!item) { return; } // TODO wtf is this?
       items.push(<AttendeeListItem
         key={items.length}
         user={item}
         userId={item && item.uid}
         name={item && item.name}
-        location={user.location || "San Jose, CA"}
+        location={item ? item.location : "San Jose, CA"}
         image={item && item.photo}
       />);
     });

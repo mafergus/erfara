@@ -6,14 +6,15 @@ export default class Feed extends React.Component {
 
   static propTypes = {
     className: PropTypes.string,
-    children: PropTypes.object,
+    children: PropTypes.node,
     style: PropTypes.object,
-    authedUserPhoto: PropTypes.string.isRequired,
+    authedUserPhoto: PropTypes.string,
     onSendMessage: PropTypes.func.isRequired,
     hideMessageBar: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
+    authedUserPhoto: "",
     className: "",
     style: {},
     children: null,

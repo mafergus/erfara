@@ -7,12 +7,14 @@ import { locationSearchReducer } from "reducers/locationSearchReducer";
 import { categoriesReducer } from "reducers/categoriesReducer";
 import { imagesReducer } from "reducers/imagesReducer";
 import { conversationsReducer } from "reducers/conversationsReducer";
+import { feedReducer } from "reducers/feedReducer";
 
 const appReducer = combineReducers({
   authedUser: authedUserReducer,
   categories: categoriesReducer,
   conversations: conversationsReducer,
   events: eventsReducer,
+  feeds: feedReducer,
   images: imagesReducer,
   locationSearch: locationSearchReducer,
   browser: responsiveStateReducer,

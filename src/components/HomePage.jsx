@@ -2,10 +2,11 @@ import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import GoogleMap from 'google-map-react';
-import EventsList from "components/EventList/EventList";
+import EventsList from "components/EventList/EventsList";
 import { erfaraBlack } from "utils/colors";
 import { DEFAULT_LOCATION } from "utils/constants";
-import Markers from './Markers';
+import MapMarker from 'components/MapMarker';
+import EventListItem from "components/EventList/EventListItem";
 
 const SUBTITLE_STYLE = {
   color: erfaraBlack,
@@ -53,24 +54,19 @@ export class HomePage extends React.Component {
     super();
     autoBind(this);
 
-    this.markerId = "";
     this.state = {
-      cardPopup: [],
       isPopupOpen: false,
       isHovered: false,
       center: DEFAULT_LOCATION,
     };
   }
 
-  clickMarker(item, itemId, geoArray) {
-    this.setState({ center: geoArray });
-    this.setState({ cardPopup: item, isPopupOpen: true });
-
-    if (this.markerId === itemId) {
-      this.setState({ isPopupOpen: !this.state.isPopupOpen});
-      this.markerId = "";
-    }
-    this.markerId = itemId;
+  clickMarker(event) {
+    this.setState({
+      selectedEvent: event,
+      isPopupOpen: true,
+      center: geoArray
+    });
   }
 
   getHoverState(value) {
@@ -79,9 +75,9 @@ export class HomePage extends React.Component {
 
   renderMap() {
     const { events } = this.props;
-    const Marker = events.filter(item => item.geoCoordinates)
+    const markers = events.filter(item => item.geoCoordinates)
                          .map(item => 
-                            <Markers
+                            <MapMarker
                               clickMarker={this.clickMarker}
                               sendHoverState={this.getHoverState}
                               event={item}
@@ -89,8 +85,6 @@ export class HomePage extends React.Component {
                               lng={item.geoCoordinates.lng}
                               key={item.geoCoordinates}
                             />);
-
-    const cardPopup = this.state.cardPopup.map((item) => this.state.isPopupOpen ? item : null);
 
     return (
       <div style={{ width: "100%", height: 240 }}>
@@ -100,8 +94,15 @@ export class HomePage extends React.Component {
           center={this.state.center}
           options={{disableDoubleClickZoom: this.state.isHovered ? true : false}}
         >
-          {Marker}
-          {cardPopup}
+          {markers}
+          {this.state.isPopupOpen && <EventListItem
+            event={this.state.selectedEvent}
+            mouseOver={this.mouseEnter}
+            mouseOut={this.mouseLeave}
+            key={this.state.selectedEvent.uid}
+            marginConstant={index}
+            popUp
+          />}
         </GoogleMap>
       </div>
     );

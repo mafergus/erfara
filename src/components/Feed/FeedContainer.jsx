@@ -3,13 +3,16 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import Feed from "components/Feed/Feed";
 import FeedItem from "components/Feed/FeedItem";
+import { addFeedMessage, addFeedMessageReply } from "utils/Api";
 
 function mapStateToProps(state, props) {
-  const feed = state.feed.get(props.feedId) || {};
-  const users = {};
-  feed.forEach((item, key) => {
-    user[key] = state.users.get(item.userId);
+  const rawFeed = state.feeds.get(props.feedId) || [];
+  const feed = [];
+  rawFeed.forEach((item, key) => { 
+    feed.push({ id: key, ...item.toJS() });
   });
+  const users = {};
+  feed.forEach(item => { users[item.userId] = state.users.get(item.userId); });
   return {
     authedUser: state.authedUser,
     feed,
@@ -32,24 +35,23 @@ export class FeedContainer extends React.Component {
   }
 
   sendMessage(text) {
-    const { feedId } = this.props;
-    store.dispatch(addEventMessage(feedId, authedUser.uid, text, new Date()));
+    const { authedUser, feedId } = this.props;
+    addFeedMessage(feedId, authedUser.uid, text, new Date());
   }
 
-  sendReply(text) {
+  sendReply(feedItemId, text) {
     const { authedUser, feedId } = this.props;
-    addFeedReply(feedId, authedUser.uid, text, new Date(), itemId);
+    addFeedMessageReply(feedId, feedItemId, authedUser.uid, text, new Date());
   }
 
   render() {
     const { feed, authedUser, users } = this.props;
-    const items = Object.entries(feed).map(entry => { return { id: entry[0], ...entry[1] }; });
     return <Feed
       authedUserPhoto={authedUser.photo}
       onSendMessage={this.sendMessage}
       hideMessageBar={!authedUser.hasOwnProperty("uid")}
     >
-      {items.map(item => {
+      {feed.map(item => {
         const user = users[item.userId];
         return <FeedItem
           key={item.id}

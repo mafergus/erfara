@@ -1,10 +1,18 @@
 import React, { PropTypes } from "react";
+import ImmutablePropTypes from "react-immutable-proptypes";
+import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import TextField from "material-ui/TextField";
 import { erfaraBlack } from "utils/colors";
 import Item from "components/Feed/Item";
 
-export default class FeedItem extends React.Component {
+function mapStateToProps(state) {
+  return {
+    users: state.users,
+  };
+}
+
+export class FeedItem extends React.Component {
 
   static propTypes = {
     authedUserPhoto: PropTypes.string.isRequired,
@@ -12,22 +20,8 @@ export default class FeedItem extends React.Component {
     onReply: PropTypes.func.isRequired,
     username: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
+    users: ImmutablePropTypes.map.isRequired,
   };
-
-  static renderReplies(replies) {
-    const replyItems = Object.entries(replies).map(item => { 
-      return <Item
-        key={item[0]}
-        style={{ padding: "1em 0em" }}
-        imageStyle={{ height: 30, width: 30}}
-        message={item[1].message}
-        timestamp={item[1].timestamp}
-      />;
-    });
-    return <div style={{ padding: "1.4em 0em 1.4em 70px", fontSize: "0.9em" }}>
-      {replyItems}
-    </div>;
-  }
 
   constructor() {
     super();
@@ -40,9 +34,9 @@ export default class FeedItem extends React.Component {
   }
 
   onKeyPress(event) {
-    const { onReply } = this.props;
+    const { onReply, feedItem } = this.props;
     if (event.charCode === 13 && this.state.reply.length > 2) { // enter key pressed
-      onReply(this.state.reply);
+      onReply(feedItem.id, this.state.reply);
       this.setState({ 
         reply: "",
         isReplyOpen: false,
@@ -52,7 +46,7 @@ export default class FeedItem extends React.Component {
 
   renderReplyBox() {
     const { authedUserPhoto } = this.props;
-    return <div className="border" style={{ width: "100%", display: "flex", alignItems: "center", height: 60, marginBottom: 15 }}>
+    return <div className="border" style={{ display: "flex", alignItems: "center", height: 60, marginBottom: 15, marginLeft: 70 }}>
       <img alt="You" style={{ height: 30, width: 30, margin: "0px 7px 0px 12px", borderRadius: "50%" }} src={authedUserPhoto} />
       <TextField 
         hintText="Reply"
@@ -68,6 +62,25 @@ export default class FeedItem extends React.Component {
     </div>;
   }
 
+  renderReplies(replies) {
+    const { users } = this.props;
+    const replyItems = Object.entries(replies).map(item => { 
+      const user = users.get(item[1].userId);
+      return <Item
+        key={item[0]}
+        style={{ padding: "1em 0em" }}
+        imageStyle={{ height: 30, width: 30}}
+        username={user.name}
+        image={user.photo}
+        message={item[1].message}
+        timestamp={item[1].timestamp}
+      />;
+    });
+    return <div style={{ padding: "0.5em 0em 0.5em 70px", fontSize: "0.9em" }}>
+      {replyItems}
+    </div>;
+  }
+
   render() {
     const { feedItem, username, image } = this.props;
     return <div style={{ padding: "15px 0px 15px 0px", width: "100%" }}>
@@ -77,8 +90,8 @@ export default class FeedItem extends React.Component {
         image={image}
         timestamp={feedItem.timestamp}
       />
-      {feedItem.replies && FeedItem.renderReplies(feedItem.replies)}
-      <div style={{ padding: "1.4em 0em 1.4em 80px", fontSize: "0.9em" }}>
+      {feedItem.replies && this.renderReplies(feedItem.replies)}
+      <div style={{ padding: "1em 0em 1em 80px", fontSize: "0.9em" }}>
         <span
           className="reply-box"
           onClick={() => this.setState({ isReplyOpen: !this.state.isReplyOpen })}
@@ -91,3 +104,5 @@ export default class FeedItem extends React.Component {
     </div>;
   }
 }
+
+export default connect(mapStateToProps)(FeedItem);

@@ -10,7 +10,7 @@ import { orange500, } from 'material-ui/styles/colors';
 import { darkGray } from "utils/colors";
 import AuthModal from 'components/auth/AuthModal';
 import OnboardingModal from 'components/Onboarding/OnboardingModal';
-import EventsList from "components/EventList/EventList";
+import EventsList from "components/EventList/EventsList";
 import { Grid, Col } from "react-bootstrap";
 
 function mapStateToProps(state) {
