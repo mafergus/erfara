@@ -1,5 +1,4 @@
 import React, { PropTypes } from "react";
-import autoBind from "react-autobind";
 import { erfaraBlack, darkGray } from "utils/colors";
 import Alarm from 'material-ui/svg-icons/action/alarm';
 import Place from 'material-ui/svg-icons/maps/place';
@@ -53,8 +52,8 @@ export default class EventDetails extends React.Component {
         <Row>
           <Col xs={12} lg={3} style={{ display: "inline-block" }}>
             {browser.greaterThan.medium && this.renderTimeTitle()}
-            <Col xs={12} sm={5} lg={12} style={{ padding: 0 }}>{this.renderListItem(Alarm, dateStr, startTimeStr + "-" + endTimeStr)}</Col>
-            <Col xs={12} sm={5} lg={12} style={{ padding: 0 }}>{this.renderListItem(Place, event.locationString)}</Col>
+            <Col xs={12} sm={5} lg={12} style={{ padding: 0 }}>{EventDetails.renderListItem(Alarm, dateStr, startTimeStr + "-" + endTimeStr)}</Col>
+            <Col xs={12} sm={5} lg={12} style={{ padding: 0 }}>{EventDetails.renderListItem(Place, event.locationString)}</Col>
           </Col>
           <Col xs={12} lg={6} style={{ display: "inline-block", marginBottom: 50, padding: browser.greaterThan.large ? "0px 80px" : "0px 20px" }}>
             <span style={{ color: erfaraBlack, fontSize: "1em" }}>Details</span>

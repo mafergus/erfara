@@ -3,7 +3,8 @@ import autoBind from "react-autobind";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router";
-import { getUser } from "actions/userActions";
+import { fetchUser } from "utils/Api";
+import { addUser } from "actions/userActions";
 import Attendees from "components/EventList/Attendees";
 import DateBox from "components/DateBox";
 import { Col } from "react-bootstrap";
@@ -14,12 +15,12 @@ function mapStateToProps(state, props) {
     event,
     attendees: event && Object.keys(event.attendees).map(userId => state.users.get(userId)),
     user: event && state.users.get(event.userId),
-    users: Object.keys(state.users),
+    users: state.users.keySeq().toArray(),
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getUser }, dispatch);
+  return bindActionCreators({ addUser }, dispatch);
 }
 
 export class EventListItem extends React.Component {
@@ -28,7 +29,7 @@ export class EventListItem extends React.Component {
     attendees: PropTypes.array.isRequired,
     event: PropTypes.object.isRequired,
     eventUid: PropTypes.string.isRequired,
-    getUser: PropTypes.func.isRequired,
+    addUser: PropTypes.func.isRequired,
     isFeatured: PropTypes.bool,
     popUp: PropTypes.bool,
     itemStyle: PropTypes.object,
@@ -53,9 +54,12 @@ export class EventListItem extends React.Component {
   }
 
   componentWillMount() {
-    const { event, getUser, users } = this.props;
+    const { event, addUser, users } = this.props;
     if (event && !users.includes(event.userId)) {
-      getUser(event.userId);
+      fetchUser(event.userId).then(snap => {
+        const user = snap.val();
+        if (user) { addUser(user); }
+      });
     }
   }
 

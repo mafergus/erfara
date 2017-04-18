@@ -14,7 +14,7 @@ function mapStateToProps(state) {
 export class MessageList extends React.Component {
 
   static propTypes = {
-    authedUser: PropTypes.object,
+    authedUser: PropTypes.object.isRequired,
     isMobile: PropTypes.bool.isRequired,
     messages: PropTypes.array.isRequired,
     style: PropTypes.object,
@@ -29,21 +29,21 @@ export class MessageList extends React.Component {
     autoBind(this);
   }
 
+  componentDidMount() {
+    this.scrollToBottom();
+  }
+
   componentWillReceiveProps() {
     this.refs.list.scrollTop = this.refs.list.scrollHeight;
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
   }
 
   scrollToBottom() {
     const node = ReactDOM.findDOMNode(this.messagesEnd);
     node.scrollIntoView({behavior: "smooth"});
-  }
-
-  componentDidMount() {
-    this.scrollToBottom();
-  }
-
-  componentDidUpdate() {
-    this.scrollToBottom();
   }
 
   render() {
@@ -56,7 +56,7 @@ export class MessageList extends React.Component {
       overflow: "auto",
     };
     return <ul style={STYLE} ref="list">
-      {messages.map((item, index) => {
+      {messages.map(item => {
         return <MessageListItem
           key={item.date}
           message={item}

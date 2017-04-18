@@ -11,14 +11,6 @@ import { erfaraBlack } from "utils/colors";
 import HorizontalEventAttendees from "components/EventPage/HorizontalEventAttendees";
 import { Col, Row } from "react-bootstrap";
 
-const ATTENDEES_LIST = {
-  position: "absolute",
-  top: "0",
-  width: "200px",
-  marginLeft: "-210px",
-  backgroundColor: "white",
-};
-
 const USER_LIST_STYLE = {
   height: "100%",
   width: "100%",
@@ -69,7 +61,6 @@ export class EventPage extends React.Component {
   static propTypes = {
     authedUser: PropTypes.object.isRequired,
     browser: PropTypes.object.isRequired,
-    uuid: PropTypes.string,
     event: PropTypes.object,
     getEvent: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
@@ -99,19 +90,18 @@ export class EventPage extends React.Component {
 
   render() {
     // if (!this.event) { return <div></div> };
-    const { event, owner, authedUser, attendees, isRSVPD, browser } = this.props;
-    if (!event || !owner) { return null; }
+    const { event, authedUser, attendees, isRSVPD, browser, params } = this.props;
+    if (!event) { return null; }
     return <div style={{ width: "100%", position: "relative" }}>
       <EventHero
         authedUser={authedUser}
         event={event}
-        owner={owner}
         onRSVPClick={this.onRSVP}
         isRSVPD={isRSVPD}
         isExtraSmall={browser.is.extraSmall}
       />
       <div style={{ width: browser.is.extraSmall ? "95%" : "75%", margin: `${browser.is.extraSmall ? "5px" : "15px"} auto 0px auto` }}>
-        <EventDetails style={{ marginBottom: 14 }} event={event} browser={browser}/>
+        <EventDetails style={{ marginBottom: 14 }} event={event} browser={browser} />
         <Row>
           <Col lg={3} sm={12} style={{ paddingRight: browser.greaterThan.large ? 0 : 15 }}>
             {browser.is.extraSmall ? 
@@ -131,7 +121,7 @@ export class EventPage extends React.Component {
             <div className="light-shadow border" style={USER_FEED_STYLE}>
               <span style={{ color: erfaraBlack, fontSize: "1em" }}>Discussion</span>
               <hr style={{ margin: "0.8em 0em" }} />
-              <Feed eventId={this.props.params.id}/>
+              <FeedContainer feedId={params.id} />
             </div>
           </Col>
         </Row>

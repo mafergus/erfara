@@ -18,12 +18,10 @@ export default class EventHero extends React.Component {
 
   static propTypes = {
     authedUser: PropTypes.object.isRequired,
-    style: PropTypes.object,
-    event: PropTypes.object,
-    owner: PropTypes.object,
+    event: PropTypes.object.isRequired,
     isExtraSmall: PropTypes.bool.isRequired,
-    isRSVPD: PropTypes.bool,
-    onRSVPClick: PropTypes.func,
+    isRSVPD: PropTypes.bool.isRequired,
+    onRSVPClick: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -49,7 +47,7 @@ export default class EventHero extends React.Component {
     const joinLabel = isRSVPD ? "Leave" : "Join";
 
     return <div style={{ width: "75%", height: "100%", display: "flex", alignItems: "flex-end", margin: "0 auto" }}>
-      <DateBox timestamp={timestamp} style={{ height: 70, overflow: "hidden" }}/>
+      <DateBox timestamp={timestamp} style={{ height: 70, overflow: "hidden" }} />
       <div style={{ display: "inline-block", height: 70, paddingLeft: 35, overflow: "hidden", flexGrow: "1" }}>
         <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
           <span style={{ fontSize: "1.7em", verticalAlign: "middle" }}>{event.title}</span>

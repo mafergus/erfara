@@ -1,8 +1,10 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
+import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import { getEvents } from "actions/eventActions";
-import { getUsers } from "actions/userActions";
+import { fetchUsers } from "utils/Api";
+import { addUsers } from "actions/userActions";
 import EventListItem from "components/EventList/EventListItem";
 import { Row } from "react-bootstrap";
 
@@ -18,17 +20,14 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    getEvents: () => dispatch(getEvents()),
-    getUsers: () => dispatch(getUsers()),
-  };
+  return bindActionCreators({ getEvents, addUsers }, dispatch);
 }
 
 export class EventsList extends React.Component {
 
   static propTypes = {
     getEvents: PropTypes.func.isRequired,
-    getUsers: PropTypes.func.isRequired,
+    addUsers: PropTypes.func.isRequired,
     style: PropTypes.object,
     itemStyle: PropTypes.object,
     events: PropTypes.array.isRequired,
@@ -55,8 +54,14 @@ export class EventsList extends React.Component {
   }
 
   componentWillMount() {
-    this.props.getEvents();
-    this.props.getUsers();
+    const { getEvents, addUsers } = this.props; 
+    getEvents();
+    fetchUsers().then(snap => {
+      const users = snap.val();
+      if (users) {
+        addUsers(users);
+      }
+    });
   }
 
   renderFeaturedItem(rows, item) {

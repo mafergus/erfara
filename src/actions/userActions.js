@@ -1,5 +1,3 @@
-import firebase from "firebase";
-
 export function addUser(user) {
   return dispatch => dispatch({ type: "GET_USER_SUCCESS", user });
 }

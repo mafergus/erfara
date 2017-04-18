@@ -25,7 +25,7 @@ const THEIR_ITEM_STYLE = {
   borderTopLeftRadius: 0,
 };
 
-const MESSAGE_STYLE  = {
+const MESSAGE_STYLE = {
   color: darkBlack,
   fontSize: "1em",
   margin: "15px 11px 15px 15px",
@@ -42,7 +42,7 @@ const TIMESTAMP_STYLE = {
 export default class MessageListItem extends React.Component {
 
   static propTypes = {
-    message: PropTypes.object,
+    message: PropTypes.object.isRequired,
     isMine: PropTypes.bool.isRequired,
     isMobile: PropTypes.bool.isRequired,
   };

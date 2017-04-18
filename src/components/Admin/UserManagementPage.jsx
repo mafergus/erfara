@@ -2,11 +2,11 @@ import React, { PropTypes } from "react";
 import ImmutablePropTypes from "react-immutable-proptypes";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
-import { getUsers } from "actions/userActions";
+import { addUsers } from "actions/userActions";
+import { fetchUsers, deleteUser } from "utils/Api";
 import { bindActionCreators } from "redux";
 import Dialog from "material-ui/Dialog";
 import RaisedButton from "material-ui/RaisedButton";
-import { deleteUser } from "utils/Api";
 
 function mapStateToProps(state) {
   return {
@@ -15,13 +15,13 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getUsers }, dispatch);
+  return bindActionCreators({ addUsers }, dispatch);
 }
 
 export class UserManagementPage extends React.Component {
 
   static propTypes = {
-    getUsers: PropTypes.func.isRequired,
+    addUsers: PropTypes.func.isRequired,
     users: ImmutablePropTypes.map.isRequired,
   }
 
@@ -35,8 +35,13 @@ export class UserManagementPage extends React.Component {
   }
 
   componentWillMount() {
-    const { getUsers } = this.props;
-    getUsers();
+    const { addUsers } = this.props;
+    fetchUsers().then(snap => {
+      const users = snap.val();
+      if (users) {
+        addUsers(users);
+      }
+    });
   }
 
   renderUser(user) {
