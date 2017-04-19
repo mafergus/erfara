@@ -58,6 +58,7 @@ export class UserPage extends React.Component {
 
   static propTypes = {
     eventsAttending: PropTypes.array.isRequired,
+    eventsCreated: PropTypes.array.isRequired,
     authedUser: PropTypes.object.isRequired,
     isFollowing: PropTypes.bool.isRequired,
     followers: PropTypes.array.isRequired,
