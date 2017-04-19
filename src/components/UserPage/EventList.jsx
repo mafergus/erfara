@@ -7,19 +7,20 @@ import { erfaraBlack} from "utils/colors";
 export default class EventList extends React.Component {
   
   static propTypes = {
-    events: PropTypes.object.isRequired,
+    events: PropTypes.array.isRequired,
     title: PropTypes.string,
     className: PropTypes.any,
     style: PropTypes.object,
   };
 
-  constructor() {
-    super();
-    autoBind(this);
-  }
+  static defaultProps = {
+    className: "",
+    style: {},
+    title: "events",
+  };
 
-  renderItem(eventId, event) {
-    const photo = event.photo;
+  static renderItem(eventId, event) {
+    const { photo } = event;
     const STYLE = {
       display: "flex",
       alignItems: "center",
@@ -33,21 +34,31 @@ export default class EventList extends React.Component {
       backgroundBlendMode: "multiply",
       backgroundColor: "rgba(0,0,0,0.35)",
     };
-    return <Link to={`/event/${eventId}`} style={{ textDecoration: "none" }}>
-      <div key={eventId} style={STYLE} className="user-events-list-item">
+    return <Link key={eventId} to={`/event/${eventId}`} style={{ textDecoration: "none" }}>
+      <div style={STYLE} className="user-events-list-item">
         <p style={{ width: "100%", textAlign: "center", color: "white" }}>{event.title}</p>
       </div>
     </Link>;
   }
 
+  constructor() {
+    super();
+    autoBind(this);
+  }
+
   render() {
     const { events, title, className, style } = this.props;
     if (!events) { return null; }
-    return <div className={`attendeesList border ${className}`} style={{ ...style, backgroundColor: "white", padding: "0.9em 0 0.5em 0" }}>
-      <span style={{ color: erfaraBlack, fontSize: "1em", padding: "0em 1em" }}>{pluralize("event", Object.keys(events).length, true)} {title}</span>
+    return <div
+      className={`attendeesList border ${className}`}
+      style={{ ...style, backgroundColor: "white", padding: "0.9em 0 0.5em 0" }}
+    >
+      <span style={{ color: erfaraBlack, fontSize: "1em", padding: "0em 1em" }}>
+        {pluralize("event", events.length, true)} {title}
+      </span>
       <hr style={{ margin: "0.8em 1em" }} />
       <div style={{ margin: "0em 1em" }}>
-        {Object.entries(events).map(event => this.renderItem(event[0], event[1]))}
+        {events.map(event => EventList.renderItem(event.id, event))}
       </div>
     </div>;
   }

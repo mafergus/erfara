@@ -1,5 +1,5 @@
 import React, { PropTypes } from "react";
-import autoBind from "react-autobind"
+import autoBind from "react-autobind";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Link } from "react-router";
@@ -30,6 +30,17 @@ export class FeaturedItem extends React.Component {
     user: PropTypes.object.isRequired,
   };
 
+  static renderSubtitle(user) {
+    return <div>
+      <img
+        src={user.photo}
+        alt="Creator"
+        style={{ width: 20, height: 20, borderRadius: "50%" }}
+      />
+      {user.name}
+    </div>;
+  }
+
   constructor() {
     super();
     autoBind(this);
@@ -49,7 +60,7 @@ export class FeaturedItem extends React.Component {
         key={eventUid}
         style={{ width: 720, height: 250 }}
         title={event.title}
-        subtitle={user && <div><img src={user.photo} alt="Creator" style={{ width: "20px", height: "20px", borderRadius: "50%" }}/>{user.name}</div>}
+        subtitle={user && FeaturedItem.renderSubtitle(user)}
         actionIcon={<IconButton><span style={{ color: white, fontSize: "2em" }}>3</span><Face color="white" /></IconButton>}
       >
         <img src={event.photo} alt="Event" />

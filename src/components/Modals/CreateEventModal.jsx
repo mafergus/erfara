@@ -8,8 +8,7 @@ import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
-import { addEvent } from "utils/Api";
-import { getPhoto, uploadFile } from "utils/Api";
+import { addEvent, getPhoto, uploadFile } from "utils/Api";
 import SearchBox from 'components/Modals/LocationSearch';
 import "components/Modals/CreateEventModal.scss";
 import { Row, Col } from "react-bootstrap";
@@ -18,7 +17,7 @@ const PLACEHOLDER_PHOTO = "http://files.parsetfss.com/a5e80e30-a275-49f2-989e-e2
 
 function mapStateToProps(state) {
   return {
-    userId: state.authedUser && state.authedUser.uid,
+    authedUser: state.authedUser || null,
   };
 }
 
@@ -28,12 +27,9 @@ function mapStateToProps(state) {
 export class CreateEventModal extends React.Component {
 
   static propTypes = {
-    isLoading: PropTypes.bool,
+    authedUser: PropTypes.object.isRequired,
     isOpen: PropTypes.bool.isRequired,
     onRequestClose: PropTypes.func.isRequired,
-    userId: PropTypes.string,
-    locationFromSearchBox: PropTypes.string,
-    geoLocationFromSearchBox: PropTypes.object
   };
 
   constructor() {
@@ -48,36 +44,33 @@ export class CreateEventModal extends React.Component {
 
   addNewEvent() {
     const { name, description, dateStamp, startTimeStamp, endTimeStamp, advices } = this;
-    const { userId, onRequestClose } = this.props;
+    const { authedUser, onRequestClose } = this.props;
     const locationString = this.state.locationFromSearchBox;
     const geoLocation = this.state.geoLocationFromSearchBox;
 
-    if (!this.props.userId) { 
+    if (!authedUser) { 
       this.disabledProgressCircle();
       return;
     }
 
-    if(!name || !description || !advices) {
-      setTimeout( () => { this.disabledProgressCircle(); }, 2000 );
+    if (!name || !description || !advices) {
+      setTimeout(() => { this.disabledProgressCircle(); }, 2000);
       alert("Please fill all fields");
       return;
-    } else {
-      const searchTerm = name.split(" ")[0];
-      getPhoto(searchTerm)
-      .then(blob => {
-        return uploadFile(blob);
-      })
-      .then(url => {
-        store.dispatch(addEvent(name, description, url, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId, geoLocation));
-        this.disabledProgressCircle();
-        onRequestClose();
-      })
-      .catch(() => {
-        store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, userId, geoLocation));
-        this.disabledProgressCircle();
-        onRequestClose();
-      });
     }
+    const searchTerm = name.split(" ")[0];
+    getPhoto(searchTerm)
+    .then(blob => uploadFile(blob))
+    .then(url => {
+      store.dispatch(addEvent(name, description, url, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, authedUser.userId, geoLocation));
+      this.disabledProgressCircle();
+      onRequestClose();
+    })
+    .catch(() => {
+      store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, authedUser.userId, geoLocation));
+      this.disabledProgressCircle();
+      onRequestClose();
+    });
   }
 
   locationChange(location, geoLocation) {
@@ -101,37 +94,38 @@ export class CreateEventModal extends React.Component {
   }
 
   disabledProgressCircle() {
-    this.setState( {isLoading: false} );
+    this.setState({ isLoading: false });
   }
 
   renderProgressCircle() {
-    if(this.props.userId){
-      if(this.state.isLoading) {
+    const { authedUser, onRequestClose } = this.props;
+    if (authedUser) {
+      if (this.state.isLoading) {
         return ( 
           <div>
             <CircularProgress />
           </div> 
         );
       }
+
       return (
         <RaisedButton 
           label="CREATE"
-          primary={true}
           className="create-btn"
           onClick={() => { this.setState({ isLoading: true }); this.addNewEvent(); }}
+          primary
         />
       );   
     }
-    else {
-      return (
-        <RaisedButton 
-          label="LOG IN"
-          primary={true}
-          className="create-btn"
-          onClick={ () => { this.props.onRequestClose(); }}
-        />
-      );
-    }
+
+    return (
+      <RaisedButton 
+        label="LOG IN"
+        className="create-btn"
+        onClick={() => onRequestClose()}
+        primary
+      />
+    );
   }
 
   renderTitle(style) {
@@ -144,7 +138,7 @@ export class CreateEventModal extends React.Component {
           hintStyle={style.hintStyle}
           underlineShow={false}
           style={style.textFieldStyle}
-          onChange={(event, value) => { this.name = value;}}
+          onChange={(event, value) => { this.name = value; }}
         />
       </div>
     </div>;
@@ -154,7 +148,7 @@ export class CreateEventModal extends React.Component {
     return <div>
       <p className="title-label">Location</p>
       <div className="box">
-        <SearchBox onSelectLocation={this.locationChange}/>
+        <SearchBox onSelectLocation={this.locationChange} />
       </div>
     </div>;
   }
@@ -237,6 +231,8 @@ export class CreateEventModal extends React.Component {
   }
 
   render() {
+    const { authedUser, isOpen, onRequestClose } = this.props;
+    if (!authedUser) { return null; }
     const style = {
       hintStyle: {
         color: "#BDBDBD", 
@@ -248,9 +244,9 @@ export class CreateEventModal extends React.Component {
         top: "12px"
       },
       textFieldStyle: {
-        paddingLeft:"10px",
+        paddingLeft: "10px",
         width: "inherit",
-        fontSize:"12px"
+        fontSize: "12px"
       },
       errorText: {
         marginTop: "10px"
@@ -262,11 +258,17 @@ export class CreateEventModal extends React.Component {
         <Dialog
           contentStyle={{ width: "100%" }}
           modal={false}
-          onRequestClose={this.props.onRequestClose}
-          open={this.props.isOpen}
+          onRequestClose={onRequestClose}
+          open={isOpen}
           autoScrollBodyContent>
           <div>
-            <a href="#" onClick={() => { this.props.onRequestClose(); this.setState({ isLoading: false }); }} className="close-btn">&times;</a>
+            <a
+              href="#"
+              onClick={() => { this.props.onRequestClose(); this.setState({ isLoading: false }); }}
+              className="close-btn"
+            >
+              &times;
+            </a>
             <h3 style={{ marginBottom: "1.5em" }}>Create an Event</h3>
             <Row>
               <Col xs={12} sm={6} className="margin-bottom">{this.renderTitle(style)}</Col>
@@ -290,7 +292,7 @@ export class CreateEventModal extends React.Component {
                     hintStyle={style.descriptionHintStyle}
                     style={style.textFieldStyle}
                     underlineShow={false}
-                    multiLine={true}
+                    multiLine
                     rows={3}
                     rowsMax={3}
                     onChange={(event, value) => { this.description = value; }}

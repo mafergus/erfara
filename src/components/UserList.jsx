@@ -13,9 +13,14 @@ export default class UserList extends React.Component {
   static propTypes = {
     isTitlePlural: PropTypes.bool,
     title: PropTypes.string.isRequired,
-    users: PropTypes.any,
+    users: PropTypes.array.isRequired,
     className: PropTypes.string,
     style: PropTypes.object,
+  };
+
+  static defaultProps = {
+    className: "",
+    style: {},
   };
 
   constructor() {
@@ -25,18 +30,25 @@ export default class UserList extends React.Component {
 
   render() {
     const { users, title, style, className, isTitlePlural } = this.props;
-    let items = [];
-    users && users.forEach(item => {
+    const items = [];
+    users.forEach(item => {
+      if (!item) { return; } // TODO wtf is this?
       items.push(<AttendeeListItem
         key={items.length}
         user={item}
         userId={item && item.uid}
         name={item && item.name}
-        location="San Jose, CA" 
+        location={item ? item.location : "San Jose, CA"}
         image={item && item.photo}
-        />);
+      />);
     });
-    return <PeopleList people={items} peopleType={title} isTitlePlural={isTitlePlural} style={style} className={className}/>;
+
+    return <PeopleList
+      style={style}
+      className={className}
+      people={items}
+      peopleType={title}
+      isTitlePlural={isTitlePlural}
+    />;
   }
-  
 }

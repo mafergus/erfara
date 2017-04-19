@@ -10,8 +10,8 @@ import { lightBlack } from 'material-ui/styles/colors';
 export default class LoggedInUserComponent extends React.Component {
 
   static propTypes = {
-    name: PropTypes.string,
-    image: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
   };
 
   static contextTypes = {
@@ -51,11 +51,9 @@ export default class LoggedInUserComponent extends React.Component {
 
   onSignOut() {
     this.context.router.push('/');
-    firebase.auth().signOut().then(function() {
+    firebase.auth().signOut().then(() => {
       store.dispatch({ type: "SIGN_OUT_USER" });
-    }, function() {
-      alert("oops");
-    });
+    }, () => alert("oops"));
     const emptyUser = {};
     localStorage.setItem("authedUser", JSON.stringify(emptyUser));
   }

@@ -7,9 +7,8 @@ import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
 import CategoriesList from "components/Onboarding/CategoriesList";
 import { Search } from "components/Glyphs";
-import { getCategories } from "utils/Api";
 import { addCategories, addCategorySearchResults } from "actions/categoriesActions";
-import { searchCategories, getPhotoUrl } from "utils/Api";
+import { searchCategories, getPhotoUrl, getCategories } from "utils/Api";
 // import { erfaraBlack } from "utils/colors";
 
 function mapStateToProps(state) {
@@ -30,7 +29,6 @@ export class OnboardingModal extends React.Component {
     addCategories: PropTypes.func.isRequired,
     addCategorySearchResults: PropTypes.func.isRequired,
     categories: PropTypes.array.isRequired,
-    isOpen: PropTypes.bool,
     handleClose: PropTypes.func.isRequired,
     searchResults: PropTypes.array.isRequired,
   }
@@ -90,12 +88,9 @@ export class OnboardingModal extends React.Component {
     }
   }
 
-  onSubmit() {
-
-  }
-
   renderContent() {
-    let { searchResults, categories } = this.props;
+    const { categories } = this.props;
+    let { searchResults } = this.props;
     if (this.state.searchTerm.length === 0) { searchResults = categories; }
     if (this.state.newCategory && searchResults.length === 0) {
       searchResults = [];

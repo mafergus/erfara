@@ -23,8 +23,7 @@ const style = {
   },
 };
 
-const UserMenu = () => (
-  <div>
+const UserMenu = () => <div>
     <Paper style={style.paper}>
       <Menu>
         <MenuItem primaryText="Preview" leftIcon={<RemoveRedEye />} />
@@ -52,7 +51,6 @@ const UserMenu = () => (
         <MenuItem primaryText="Section" rightIcon={<b style={style.rightIcon}>§</b>} />
       </Menu>
     </Paper>
-  </div>
-);
+  </div>;
 
 export default UserMenu;

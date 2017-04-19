@@ -10,11 +10,17 @@ export default class PeopleList extends React.Component {
   };
 
   static propTypes = {
-    people: PropTypes.array,
+    people: PropTypes.array.isRequired,
     peopleType: PropTypes.string,
     isTitlePlural: PropTypes.bool,
     style: PropTypes.object,
     className: PropTypes.string,
+  };
+
+  static defaultProps = {
+    className: "",
+    style: {},
+    peopleType: "People",
   };
 
   constructor() {

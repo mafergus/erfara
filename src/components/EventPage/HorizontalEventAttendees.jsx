@@ -19,7 +19,7 @@ export default function HorizontalEventAttendees({ attendees }) {
       {attendees.map(user => user && <img alt="Attendee"
         key={user.uid}
         style={IMG_STYLE}
-        src={user.photo}/>)
+        src={user.photo} />)
       }
     </div>
   </div>;

@@ -11,17 +11,24 @@ const config = {
 
 firebase.initializeApp(config);
 
-firebase.database().ref('/events').on('value', snapshot => {
+firebase.database().ref('events').on('value', snapshot => {
   const events = snapshot.val();
   if (events) {
     store.dispatch({ type: "GET_EVENTS_SUCCESS", events });
   }
 });
 
-firebase.database().ref('/users').on('value', snapshot => {
+firebase.database().ref('users').on('value', snapshot => {
   const users = snapshot.val();
   if (users) {
     store.dispatch({ type: "GET_USERS_SUCCESS", users });
+  }
+});
+
+firebase.database().ref('feeds').on('value', snapshot => {
+  const feeds = snapshot.val();
+  if (feeds) {
+    store.dispatch({ type: "GET_FEEDS_SUCCESS", feeds });
   }
 });
 

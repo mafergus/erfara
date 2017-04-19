@@ -46,7 +46,10 @@ export default class Attendees extends React.Component {
   };
 
   static defaultProps = {
+    className: "",
     extended: false,
+    style: {},
+    title: "",
   };
   
   constructor() {
@@ -60,14 +63,19 @@ export default class Attendees extends React.Component {
       ...DIV_STYLE,
       ...style,
       backgroundColor: "white",
-      padding: 15,
+      paddingRight: 8,
     };
     let children = [];
-    if (!attendees) return null;
+    if (!attendees) { return null; }
     if (extended) {
-      children = attendees.map(user => user && <img alt="Attendee" key={user.uid} style={IMG_STYLE} src={user.photo}/>);
+      children = attendees.map(user => user && <img alt="Attendee" key={user.uid} style={IMG_STYLE} src={user.photo} />);
     } else {
-      children.push(attendees[0] && <img alt="Attendee" key={attendees[0].uid} style={IMG_STYLE} src={attendees[0] && attendees[0].photo}/>);
+      children.push(attendees[0] && <img
+          alt="Attendee"
+          key={attendees[0].uid}
+          style={IMG_STYLE}
+          src={attendees[0] && attendees[0].photo}
+        />);
       if (attendees.length > 1) {
         children.push(<div key="123" style={CHILD_STYLE}>
           <div style={CHILD_CONTAINER_STYLE}>
@@ -79,9 +87,7 @@ export default class Attendees extends React.Component {
 
     return <div style={STYLE} className={className}>
       {title}
-      <div>
-        {children}
-      </div>
+      {children}
     </div>;
   }
 }

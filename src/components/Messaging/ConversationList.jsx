@@ -10,6 +10,10 @@ export default class ConversationList extends React.Component {
     style: PropTypes.object,
   };
 
+  static defaultProps = {
+    style: {},
+  };
+
   constructor() {
     super();
     autoBind(this);

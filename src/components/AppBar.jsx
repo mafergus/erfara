@@ -1,5 +1,4 @@
 import React, { PropTypes } from "react";
-import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import firebase from "firebase";
@@ -13,7 +12,6 @@ import ErfaraIcon from 'components/ErfaraIcon';
 import AuthModal from 'components/auth/AuthModal';
 import LoggedInUserComponent from "components/LoggedInUserComponent";
 import store from "store/store";
-import { addUser } from "utils/Api";
 
 const STYLE = {
   position: 'fixed',
@@ -34,14 +32,9 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addUser }, dispatch);
-}
-
 export class AppBar extends React.Component {
 
   static propTypes = {
-    addUser: PropTypes.func.isRequired,
     onEventCreate: PropTypes.func.isRequired,
     unreadCount: PropTypes.number.isRequired,
     user: PropTypes.object.isRequired,
@@ -84,12 +77,14 @@ export class AppBar extends React.Component {
       <div style={{ marginTop: "6px" }}>
         <FlatButton 
           label="Sign Up"
-          primary={true}
-          onTouchTap={() => this.setState({ signUpModalOpen: true })} />
+          onTouchTap={() => this.setState({ signUpModalOpen: true })}
+          primary
+        />
         <FlatButton 
           label="Log In"
-          primary={true}
-          onTouchTap={() => this.setState({ logInModalOpen: true })} />
+          onTouchTap={() => this.setState({ logInModalOpen: true })}
+          primary
+        />
         <AuthModal 
           title="Sign Up"
           isOpen={this.state.signUpModalOpen}
@@ -115,16 +110,16 @@ export class AppBar extends React.Component {
       <div className="create-event">
         <FlatButton
           label="Create Event"
-          primary={true}
           onTouchTap={onEventCreate}
+          primary
         />
       </div>
       <Badge
         style={{ padding: 0 }}
         badgeContent={this.props.unreadCount}
-        secondary={true}
         badgeStyle={badgeStyle}
         onTouchTap={() => this.context.router.push("/messages")}
+        secondary
       >
         <IconButton
           style={{ height: "50px", width: "50px", padding: "10px" }}
@@ -161,10 +156,10 @@ export class AppBar extends React.Component {
           onTouchTap={this.onTitleTouchTap}
         />
       }
-      iconElementRight={ this.renderIconRight() }
+      iconElementRight={this.renderIconRight()}
       style={STYLE}
     />;
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppBar);
+export default connect(mapStateToProps)(AppBar);

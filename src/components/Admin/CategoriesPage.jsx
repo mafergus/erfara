@@ -11,6 +11,18 @@ import CircularProgress from 'material-ui/CircularProgress';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { autoAddCategory, updateCategory, getPhotos, uploadFile, deleteCategory } from "utils/Api";
 
+const CATEGORY_ITEM_STYLE = {
+  height: 200,
+  width: 200,
+  backgroundPosition: "50% 50%",
+  backgroundSize: "cover",
+  backgroundBlendMode: "multiply",
+  backgroundColor: "rgba(0,0,0,0.35)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
 function mapStateToProps(state) {
   return {
     categories: state.categories,
@@ -21,8 +33,8 @@ function mapStateToProps(state) {
 export class CategoriesPage extends React.Component {
 
   static propTypes = {
-    categories: PropTypes.object,
-    images: PropTypes.array,
+    categories: PropTypes.object.isRequired,
+    images: PropTypes.array.isRequired,
   };
   
   constructor() {
@@ -37,7 +49,7 @@ export class CategoriesPage extends React.Component {
     };
 
     firebase.database().ref('/categories').orderByChild("name").on('value', snapshot => {
-      let categories = [];
+      const categories = [];
       snapshot.forEach(child => {
         const value = child.val();
         categories.push({ ...value, id: child.key });
@@ -110,7 +122,7 @@ export class CategoriesPage extends React.Component {
   renderPhotosModal() {
     const { images } = this.props;
     let rowItems = [];
-    let rows = [];
+    const rows = [];
     images.forEach(image => {
       if (rowItems.length === 4) {
         rows.push(<Row key={rows.length}>{rowItems}</Row>);
@@ -143,23 +155,27 @@ export class CategoriesPage extends React.Component {
       open={this.state.categoryModalOpen}>
       {this.state.photoLoading ? <CircularProgress /> :
        <div style={{ overflowY: "scroll", width: "100%", height: 500 }}>
-        <img style={{ width: 640, height: 280 }} src={category && category.image}/>
+        <img style={{ width: 640, height: 280 }} src={category && category.image} />
         <RaisedButton onTouchTap={this.getImages} primary>Change Image</RaisedButton>
-        <br/>
+        <br />
         <TextField 
           hintText="Name"
           defaultValue={category ? category.name : ""}
           onChange={(event, value) => { this.setState({ newName: value }); }}
           onKeyPress={this.updateCategoryName}
         />
-        <br/>
+        <br />
         <RaisedButton onTouchTap={this.deleteCategory.bind(null, category && category.id)} primary>Delete</RaisedButton>
       </div>}
     </Dialog>;
   }
 
   renderCategoryItem(key, category) {
-    return <div onClick={() => this.setState({ categoryModalOpen: true, selectedCategory: category }) } className="hoverable" style={{ height: 200, width: 200, backgroundImage: `url(${category.image})`, backgroundPosition: "50% 50%", backgroundSize: "cover", backgroundBlendMode: "multiply", backgroundColor: "rgba(0,0,0,0.35)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    return <div
+      onClick={() => this.setState({ categoryModalOpen: true, selectedCategory: category })}
+      className="hoverable"
+      style={{ ...CATEGORY_ITEM_STYLE, backgroundImage: `url(${category.image})` }}
+    >
       <p style={{ color: "white", fontSize: "1.4em" }}>{category.name}</p>
     </div>;
   }
@@ -168,9 +184,9 @@ export class CategoriesPage extends React.Component {
     const { categories } = this.props;
     if (!categories) { return null; }
     let rowItems = [];
-    let rows = [];
+    const rows = [];
     categories.forEach((category, key) => {
-      if (rowItems.length == 4) {
+      if (rowItems.length === 4) {
         rows.push(<Row key={rows.length} style={{ marginBottom: 15 }}>{rowItems}</Row>);
         rowItems = [];
       }
@@ -189,7 +205,7 @@ export class CategoriesPage extends React.Component {
           value={this.state.category}
           style={{ width: "90%", marginLeft: "10px", marginRight: "10px", marginBottom: "1.5em" }}
           onKeyPress={this.onKeyPress}
-          onChange={ (event, value) => { this.setState({ category: value }); }}
+          onChange={(event, value) => { this.setState({ category: value }); }}
         />
       </div>
       {rows}

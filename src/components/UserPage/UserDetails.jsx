@@ -7,34 +7,31 @@ import Place from 'material-ui/svg-icons/maps/place';
 import Face from 'material-ui/svg-icons/action/face';
 import Moment from "moment";
 
-// const STYLE = {
-//   color: darkBlack,
-//   fontWeight: "normal",
-//   fontSize: "0.8em",
-//   display: "inline-block",
-// };
-
 export default class UserDetails extends React.Component {
 
   static propTypes = {
-    user: PropTypes.object,
+    user: PropTypes.object.isRequired,
     style: PropTypes.object,
   };
 
-  constructor() {
-    super();
-    autoBind(this);
-  }
+  static defaultProps = {
+    style: {},
+  };
 
-  renderListItem(Icon, text) {
+  static renderListItem(Icon, text) {
     return <div style={{ width: "100%", display: "flex", marginBottom: 16 }}>
       <div style={{ height: "100%", margin: "6px 12px 0px 0px" }}>
-        <Icon style={{ color: darkGray }}/>
+        <Icon style={{ color: darkGray }} />
       </div>
       <div style={{ flexGrow: "1", display: "flex", alignItems: "center" }}>
         <p style={{ color: erfaraBlack, fontSize: "0.9em" }}>{text}</p>
       </div>
     </div>;
+  }
+
+  constructor() {
+    super();
+    autoBind(this);
   }
 
   render() {
@@ -47,10 +44,10 @@ export default class UserDetails extends React.Component {
         <div style={{ height: "100%", width: "25%", display: "inline-block" }}>
           <span style={{ color: erfaraBlack, fontSize: "1em" }}>Details</span>
           <hr style={{ margin: "10px 0px 20px 0px" }} />
-          {this.renderListItem(Home, "Lives in " + location)}
-          {this.renderListItem(Place, "From " + hometown)}
-          {this.renderListItem(Face, age + " years old")}
-          {this.renderListItem(Karma, "78 Karma Points")}
+          {UserDetails.renderListItem(Home, "Lives in " + location)}
+          {UserDetails.renderListItem(Place, "From " + hometown)}
+          {UserDetails.renderListItem(Face, age + " years old")}
+          {UserDetails.renderListItem(Karma, "78 Karma Points")}
         </div>
         <div style={{ height: "100%", width: "50%", display: "inline-block", padding: "0 80px" }}>
           <span style={{ color: erfaraBlack, fontSize: "1em" }}>Bio</span>

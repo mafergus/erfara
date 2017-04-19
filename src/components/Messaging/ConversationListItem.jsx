@@ -37,7 +37,7 @@ export class ConversationListItem extends React.Component {
   static propTypes = {
     authedUser: PropTypes.object.isRequired,
     getUser: PropTypes.func.isRequired,
-    user: PropTypes.object,
+    user: PropTypes.object.isRequired,
     conversation: PropTypes.object.isRequired,
     conversationId: PropTypes.string.isRequired,
   };
@@ -56,27 +56,31 @@ export class ConversationListItem extends React.Component {
 
   render() {
     const { authedUser, conversation, conversationId, user } = this.props;
-    const message = Object.entries(this.props.conversation.messages).slice(-1)[0][1];
-    const photo = user && user.photo;
+    if (!conversation || !user) { return null; }
+    const message = Object.entries(conversation.messages).slice(-1)[0][1];
+    const photo = user.photo;
     const moment = new Moment(message.date);
-    if (!conversation || !user) { return <div/>; }
     return <Link to={`/messages/${conversationId}`} style={{ textDecoration: "none" }}>
       <li style={{ display: "flex", alignItems: "center", height: 90, position: "relative" }}>
         <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <img src={photo} alt="Sender" style={IMG_STYLE}/>
+          <img src={photo} alt="Sender" style={IMG_STYLE} />
         </div>
         <div style={{ width: "50%", display: "inline-block", flexGrow: "1", paddingRight: 15 }}>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <span className="title ellipsis" style={{ color: darkBlack, fontSize: "1.2em", fontWeight: "500", flexGrow: "1" }}>{user.name}</span>
-            <span style={{ color: minBlack, fontSize: "0.8em" }}>{moment.fromNow()}</span>
+            <span className="title ellipsis" style={{ color: darkBlack, fontSize: "1.2em", fontWeight: "500", flexGrow: "1" }}>
+              {user.name}
+            </span>
+            <span style={{ color: minBlack, fontSize: "0.8em" }}>
+              {moment.fromNow()}
+            </span>
           </div>
           <p className="subtitle ellipsis" style={{ color: lightBlack, fontSize: "0.95em", marginTop: "0.3em" }}>{message.message}</p>
         </div>
         {getUnreadMessageCountForConversation(authedUser, conversation) > 0 && <Badge
           style={{ padding: 0 }}
-          primary={true}
           badgeContent={getUnreadMessageCountForConversation(authedUser, conversation)}
           badgeStyle={{ top: 2, right: 15 }}
+          primary
         />}
       </li>
     </Link>;

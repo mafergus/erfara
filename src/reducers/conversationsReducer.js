@@ -5,10 +5,11 @@ const INITIAL_STATE = Immutable.Map().set("unreadMessages", 0).set("selectedConv
 export function conversationsReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case "ADD_CONVERSATIONS_SUCCESS": {
+      let newState = state;
       Object.entries(action.conversations).forEach(entry => {
-        state = state.setIn(["map", entry[0]], entry[1]);
+        newState = newState.setIn(["map", entry[0]], entry[1]);
       });
-      return state;
+      return newState;
     }
     case "SET_UNREAD_MESSAGE_COUNT": return state.set("unreadMessages", action.count);
     case "SET_SELECTED_CONVERSATION": return state.set("selectedConversation", action.index);

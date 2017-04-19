@@ -3,8 +3,7 @@ import firebase from 'actions/database';
 import Dialog from 'material-ui/Dialog';
 import { lightBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
-import { addUser } from "utils/Api";
-import { getPhoto, uploadFile, checkUserExists } from "utils/Api";
+import { addUser, getPhoto, uploadFile, checkUserExists } from "utils/Api";
 import store from "store/store";
 import { Col, Row } from "react-bootstrap";
 
@@ -19,14 +18,9 @@ export default class AuthModal extends React.Component {
     handleClose: PropTypes.func.isRequired,
   };
 
-  constructor() {
-    super();
-    autoBind(this);
-  }
-
-  onSuccess(result) {
-    const user = result.user;
-    let userData = {
+  static onSuccess(result) {
+    const { user } = result;
+    const userData = {
       name: user.displayName,
       uid: user.uid,
       email: user.email,
@@ -44,6 +38,11 @@ export default class AuthModal extends React.Component {
     });
   }
 
+  constructor() {
+    super();
+    autoBind(this);
+  }
+
   handleSignUpFacebook() {
     this.props.handleClose();
     const provider = new firebase.auth.FacebookAuthProvider();
@@ -52,9 +51,9 @@ export default class AuthModal extends React.Component {
     provider.addScope("user_location");
     provider.addScope("user_about_me");
     firebase.auth().signInWithPopup(provider)
-    .then(this.onSuccess)
+    .then(AuthModal.onSuccess)
     .catch(error => {
-      if (error.code == "auth/account-exists-with-different-credential") {
+      if (error.code === "auth/account-exists-with-different-credential") {
         alert(error.message);
       }
     });
@@ -65,9 +64,9 @@ export default class AuthModal extends React.Component {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/plus.login');
     firebase.auth().signInWithPopup(provider)
-    .then(this.onSuccess)
+    .then(AuthModal.onSuccess)
     .catch(error => {
-      if (error.code == "auth/account-exists-with-different-credential") {
+      if (error.code === "auth/account-exists-with-different-credential") {
         alert(error.message);
       }
     });

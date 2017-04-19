@@ -1,20 +1,30 @@
 import React, { PropTypes } from "react";
+import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import GoogleMap from 'google-map-react';
-import EventsList from "components/EventList/EventList";
+import EventsList from "components/EventList/EventsList";
 import { erfaraBlack } from "utils/colors";
 import { DEFAULT_LOCATION } from "utils/constants";
-import Markers from './Markers';
+import MapMarker from 'components/MapMarker';
+import EventListItem from "components/EventList/EventListItem";
 
-export default class HomePage extends React.Component {
+const SUBTITLE_STYLE = {
+  color: erfaraBlack,
+  fontSize: "0.9em",
+  fontFamily: "Roboto-Light",
+};
+
+function mapStateToProps(state) {
+  return {
+    events: state.events.valueSeq(),
+  };
+}
+
+export class HomePage extends React.Component {
 
   static propTypes = {
-    eventEntry: PropTypes.array,
-    events: PropTypes.object,
-    center: PropTypes.array.isRequired,
+    events: PropTypes.array.isRequired,
     zoom: PropTypes.number.isRequired,
-    isOpen: PropTypes.bool,
-    markerId: PropTypes.string
   };
 
   static defaultProps = {
@@ -22,72 +32,7 @@ export default class HomePage extends React.Component {
     zoom: 10,
   };
 
-  constructor() {
-    super();
-    autoBind(this);
-
-    this.markerId = "";
-    this.state = {
-      cardPopup: [<div></div>],
-      isPopupOpen: false,
-      isHovered: false,
-      center: DEFAULT_LOCATION,
-    };
-  }
-
-  clickMarker(item, itemId, geoArray) {
-    this.setState({ center: geoArray });
-    this.setState({ cardPopup: item, isPopupOpen: true });
-
-    if(this.markerId === itemId) {
-      this.setState({ isPopupOpen: !this.state.isPopupOpen});
-      this.markerId = "";
-    }
-    this.markerId = itemId;
-  }
-
-  getHoverState(value) {
-    this.setState({isHovered: value});
-  }
-
-  renderMap() {
-    const events = this.props.events;
-    const Marker = events.filter(item => item.geoCoordinates)
-                         .map((item, index) => 
-                            <Markers
-                              clickMarker={this.clickMarker}
-                              sendHoverState={this.getHoverState}
-                              event={item}
-                              eventEntry={this.props.eventEntry}
-                              lat={item.geoCoordinates.lat} 
-                              lng={item.geoCoordinates.lng}
-                              key={index}
-                            />);
-
-    const cardPopup = this.state.cardPopup.map((item) => this.state.isPopupOpen ? item : null);
-
-    return (
-      <div style={{ width: "100%", height: 240 }}>
-        <GoogleMap
-          bootstrapURLKeys={{ key: "AIzaSyAlndrl6ZoeFfv0UURwByPWrxPbpYBAXEk" }}
-          zoom={this.props.zoom}
-          center={this.state.center}
-          options={{disableDoubleClickZoom: this.state.isHovered ? true : false}}
-        >
-          {Marker}
-          {cardPopup}
-        </GoogleMap>
-      </div>
-    );
-  }
-
-  renderHeaders() {
-    const SUBTITLE_STYLE = {
-      color: erfaraBlack,
-      fontSize: "0.9em",
-      fontFamily: "Roboto-Light",
-    };
-
+  static renderHeaders() {
     return <div style={{ width: "100%", marginBottom: 35 }}>
       <h1 style={{ color: erfaraBlack, fontSize: "1.2em", fontFamily: "Roboto-Light" }}>Upcoming events recommended for you</h1>
       <div style={{ width: "100%", marginTop: 10 }}>
@@ -97,18 +42,78 @@ export default class HomePage extends React.Component {
     </div>;
   }
 
-  renderList() {
+  static renderList() {
     return <EventsList 
-      header={this.renderHeaders()}
+      header={HomePage.renderHeaders()}
       style={{ width: "100%", marginTop: 30 }}
       hasFeatured={false}
     />;
   }
 
+  constructor() {
+    super();
+    autoBind(this);
+
+    this.state = {
+      isPopupOpen: false,
+      isHovered: false,
+      center: DEFAULT_LOCATION,
+    };
+  }
+
+  clickMarker(event) {
+    this.setState({
+      selectedEvent: event,
+      isPopupOpen: true,
+      center: geoArray
+    });
+  }
+
+  getHoverState(value) {
+    this.setState({isHovered: value});
+  }
+
+  renderMap() {
+    const { events } = this.props;
+    const markers = events.filter(item => item.geoCoordinates)
+                         .map(item => 
+                            <MapMarker
+                              clickMarker={this.clickMarker}
+                              sendHoverState={this.getHoverState}
+                              event={item}
+                              lat={item.geoCoordinates.lat} 
+                              lng={item.geoCoordinates.lng}
+                              key={item.geoCoordinates}
+                            />);
+
+    return (
+      <div style={{ width: "100%", height: 240 }}>
+        <GoogleMap
+          bootstrapURLKeys={{ key: "AIzaSyAlndrl6ZoeFfv0UURwByPWrxPbpYBAXEk" }}
+          zoom={this.props.zoom}
+          center={this.state.center}
+          options={{disableDoubleClickZoom: this.state.isHovered ? true : false}}
+        >
+          {markers}
+          {this.state.isPopupOpen && <EventListItem
+            event={this.state.selectedEvent}
+            mouseOver={this.mouseEnter}
+            mouseOut={this.mouseLeave}
+            key={this.state.selectedEvent.uid}
+            marginConstant={index}
+            popUp
+          />}
+        </GoogleMap>
+      </div>
+    );
+  }
+
   render() {
     return <div>
       {this.renderMap()}
-      {this.renderList()}
+      {HomePage.renderList()}
     </div>;
   }
 }
+
+export default connect(mapStateToProps)(HomePage);

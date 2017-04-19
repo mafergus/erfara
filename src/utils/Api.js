@@ -10,9 +10,8 @@ export function getFacebookInfo(accessToken) {
     fetch(`https://graph.facebook.com/me?fields=id,name,about,age_range,location,hometown,birthday&access_token=${accessToken}`).then(response => {
       if (response.ok) {
         return response.json();
-      } else {
-        reject(new Error(response.statusText));
       }
+      reject(new Error(response.statusText));
     }).then(json => {
       resolve(json);
     });
@@ -28,28 +27,22 @@ export function fetchUsers() {
 }
 
 export function addMessage(recipientId, senderId, message, date) {
-  return dispatch => {
-    var messageData = {
-      message,
-      date,
-      from: senderId,
-    };
-
-    var newMessageKey = firebase.database().ref().child("/conversations/users/" + recipientId + senderId + "/messages").push().key;
-
-    var updates = {};
-    updates["/conversations/users/" + recipientId + "/" + senderId + "/messages/" + newMessageKey] = messageData;
-    updates["/conversations/users/" + senderId + "/" + recipientId + "/messages/" + newMessageKey] = messageData;
-
-    return firebase.database().ref().update(updates).then(() => {
-      dispatch(readMessage(senderId, recipientId, newMessageKey));
-    });
+  const messageData = {
+    message,
+    date,
+    from: senderId,
   };
+  const newMessageKey = firebase.database().ref().child("/conversations/users/" + recipientId + senderId + "/messages").push().key;
+  const updates = {};
+  updates["/conversations/users/" + recipientId + "/" + senderId + "/messages/" + newMessageKey] = messageData;
+  updates["/conversations/users/" + senderId + "/" + recipientId + "/messages/" + newMessageKey] = messageData;
+
+  return firebase.database().ref().update(updates).then(() => readMessage(senderId, recipientId, newMessageKey));
 }
 
 export function readMessage(userId, conversationId, messageId) {
   if (!userId || !conversationId || !messageId || userId === conversationId) { return; }
-  var updates = {};
+  const updates = {};
   updates["/conversations/users/" + userId + "/" + conversationId + "/lastReadMessage"] = messageId;
   firebase.database().ref().update(updates);
 }
@@ -60,7 +53,7 @@ export function searchCategories(searchTerm) {
       .orderByChild("name")
       .startAt(searchTerm)
       .endAt(searchTerm+"\uf8ff").once("value", snap => {
-        let categories = [];
+        const categories = [];
         snap.forEach(child => {
           const value = child.val();
           categories.push({ ...value, id: child.key });
@@ -73,7 +66,7 @@ export function searchCategories(searchTerm) {
 export function getCategories() {
   return new Promise((resolve, reject) => {
     firebase.database().ref("/categories").orderByChild("name").once("value", snap => {
-      let categories = [];
+      const categories = [];
       snap.forEach(child => {
         const value = child.val();
         categories.push({ ...value, id: child.key });
@@ -96,7 +89,7 @@ export function autoAddCategory(name) {
 }
 
 export function deleteCategory(key) {
-  var updates = {};
+  const updates = {};
   updates["categories/" + key] = null;
 
   return firebase.database().ref().update(updates);
@@ -104,7 +97,7 @@ export function deleteCategory(key) {
 
 export function updateCategory(key, name, image) {
   return new Promise((resolve, reject) => {
-    let update = {};
+    const update = {};
     update["categories/" + key + "/image"] = image;
     update["categories/" + key + "/name"] = name;
     firebase.database().ref().update(update).then(() => {
@@ -126,11 +119,10 @@ export function getCoordinates(searchTerm) {
   return new Promise((resolve, reject) => {
     fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${searchTerm}&key=${PLACES_API_KEY}`,
       {mode: 'cors'}).then(response => {
-        if(response.ok) {
+        if (response.ok) {
           return response.json();
-        } else {
-          reject(new Error(response.statusText));
         }
+        reject(new Error(response.statusText));
       }).then(json => {
         resolve(json);
       });
@@ -143,9 +135,8 @@ export function autoCompletePlaces(searchTerm) {
       {mode: 'cors'}).then(response => {
         if (response.ok) {
           return response.json();
-        } else {
-          reject(new Error(response.statusText));
         }
+        reject(new Error(response.statusText));
       }).then(json => {
         resolve(json);
       });
@@ -154,7 +145,7 @@ export function autoCompletePlaces(searchTerm) {
 
 export function checkUserExists(uid) {
   return new Promise((resolve, reject) => {
-    firebase.database().ref(`/users/${uid}`).once('value', function(snapshot) {
+    firebase.database().ref(`/users/${uid}`).once('value', snapshot => {
       const user = snapshot.val();
       if (user) {
         reject(new Error("User exists!"));
@@ -169,7 +160,7 @@ export function addUser(user) {
   return dispatch => {
     if (Object.keys(user).length === 0) { return dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user }); }
 
-    let updates = {};
+    const updates = {};
     updates["users/" + user.uid + "/name"] = user.name;
     updates["users/" + user.uid + "/uid"] = user.uid;
     updates["users/" + user.uid + "/email"] = user.email;
@@ -178,7 +169,6 @@ export function addUser(user) {
     updates["users/" + user.uid + "/hometown"] = user.hometown || "";
     updates["users/" + user.uid + "/location"] = user.location || "";
     updates["users/" + user.uid + "/coverPhoto"] = user.coverPhoto || PLACEHOLDER_PHOTO;
-    updates["users/"];
 
     firebase.database().ref().update(updates).then(() => {
       dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user });
@@ -188,7 +178,7 @@ export function addUser(user) {
 }
 
 export function deleteUser(userId) {
-  let updates = {};
+  const updates = {};
   updates["users/" + userId] = null;
   updates["conversations/" + userId] = null;
 
@@ -196,14 +186,14 @@ export function deleteUser(userId) {
 }
 
 export function followUser(followerId, userId) {
-  var updates = {};
+  const updates = {};
   updates["/users/" + userId + "/followers/" + followerId] = true;
   updates["/users/" + followerId + "/following/" + userId] = true;
   return firebase.database().ref().update(updates);
 }
 
 export function unfollowUser(followerId, userId) {
-  var updates = {};
+  const updates = {};
   updates["/users/" + userId + "/followers/" + followerId] = null;
   updates["/users/" + followerId + "/following/" + userId] = null;
   return firebase.database().ref().update(updates);
@@ -218,7 +208,7 @@ export function addUserFeedback(senderId, recipientId, message, timestamp) {
   };
   const newUserFeedbackKey = firebase.database().ref().child(url).push().key;
 
-  var updates = {};
+  const updates = {};
   updates[url + newUserFeedbackKey] = feedData;
 
   return firebase.database().ref().update(updates);
@@ -233,7 +223,7 @@ export function addUserFeedReply(senderId, userId, message, timestamp, parentId)
   };
   const newEventMessageKey = firebase.database().ref().child(url).push().key;
 
-  var updates = {};
+  const updates = {};
   updates[url + newEventMessageKey] = messageData;
 
   return firebase.database().ref().update(updates);
@@ -245,9 +235,8 @@ export function getPhotoUrl(searchTerm, isThumbnail=false) {
     fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}${photoParam}&image_type=photo`).then(response => {
       if (response.ok) {
         return response.json();
-      } else {
-        reject(new Error(response.statusText));
       }
+      reject(new Error(response.statusText));
     }).then(json => {
       if (json && json.hits && json.hits.length > 0) {
         const urlType = isThumbnail ? "previewURL" : "webformatURL";
@@ -266,9 +255,8 @@ export function getPhotos(searchTerm) {
     fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}${photoParam}&image_type=photo`).then(response => {
       if (response.ok) {
         return response.json();
-      } else {
-        reject(new Error(response.statusText));
       }
+      reject(new Error(response.statusText));
     }).then(json => {
       if (json && json.hits && json.hits.length > 0) {
         resolve(json);
@@ -286,15 +274,41 @@ export function getPhoto(searchTerm) {
     .then(response => {
       if (response && response.ok) {
         return response.blob();
-      } else {
-        reject(new Error(response.statusText));
       }
+      reject(new Error(response.statusText));
     }).then(blob => {
       resolve(blob);
     }).catch(error => {
       resolve(error);
     });
   });
+}
+
+export function addFeedMessage(feedId, userId, message, timestamp) {
+  const messageData = {
+    message,
+    userId,
+    timestamp,
+  };
+  const newFeedItemKey = firebase.database().ref(`feeds/${feedId}`).push().key;
+  const updates = {};
+  updates[`feeds/${feedId}/` + newFeedItemKey] = messageData;
+
+  return firebase.database().ref().update(updates);
+}
+
+export function addFeedMessageReply(feedId, feedItemId, userId, message, timestamp) {
+  const url = `feeds/${feedId}/${feedItemId}/replies/`;
+  const messageData = {
+    message,
+    userId,
+    timestamp,
+  };
+  const newFeedItemKey = firebase.database().ref(url).push().key;
+  const updates = {};
+  updates[url + newFeedItemKey] = messageData;
+
+  return firebase.database().ref().update(updates);
 }
 
 export function addEventMessage(eventId, userId, message, timestamp) {
@@ -306,8 +320,7 @@ export function addEventMessage(eventId, userId, message, timestamp) {
       timestamp,
     };
     const newEventMessageKey = firebase.database().ref().child(url).push().key;
-
-    var updates = {};
+    const updates = {};
     updates[url + newEventMessageKey] = messageData;
 
     return firebase.database().ref().update(updates);
@@ -316,19 +329,19 @@ export function addEventMessage(eventId, userId, message, timestamp) {
 
 export function uploadFile(file, directory="images/") {
   return new Promise((resolve, reject) => {
-    var storageRef = firebase.storage().ref();
+    const storageRef = firebase.storage().ref();
     // Create the file metadata
-    var metadata = {
+    const metadata = {
       contentType: 'image/jpeg'
     };
 
     // Upload file and metadata to the object 'images/mountains.jpg'
-    var uploadTask = storageRef.child(directory + new Date().getTime()).put(file, metadata);
+    const uploadTask = storageRef.child(directory + new Date().getTime()).put(file, metadata);
     // Listen for state changes, errors, and completion of the upload.
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
-      () => {},
+      null,
       error => reject(error), 
-      () => resolve(uploadTask.snapshot.downloadURL) );
+      () => resolve(uploadTask.snapshot.downloadURL));
   });
 }
 
@@ -341,21 +354,21 @@ export function addFeedReply(eventId, userId, message, timestamp, parentId) {
   };
   const newEventMessageKey = firebase.database().ref().child(url).push().key;
 
-  var updates = {};
+  const updates = {};
   updates[url + newEventMessageKey] = messageData;
 
   return firebase.database().ref().update(updates);
 }
 
 export function joinEvent(eventId, userId) {
-  var updates = {};
+  const updates = {};
   updates["/events/" + eventId + "/attendees/" + userId] = true;
   updates["/users/" + userId + "/attending/" + eventId] = true;
   return firebase.database().ref().update(updates);
 }
 
 export function leaveEvent(eventId, userId) {
-  var updates = {};
+  const updates = {};
   updates["/events/" + eventId + "/attendees/" + userId] = null;
   updates["/users/" + userId + "/attending/" + eventId] = null;
   return firebase.database().ref().update(updates);
@@ -363,9 +376,9 @@ export function leaveEvent(eventId, userId) {
 
 export function addEvent(title, description, photo, date, startTime, endTime, advices, locationString, userId, geoCoordinates) {
   return () => {
-    let attendees = {};
+    const attendees = {};
     attendees[userId] = true;
-    var eventData = {
+    const eventData = {
       title,
       description,
       photo,
@@ -379,19 +392,28 @@ export function addEvent(title, description, photo, date, startTime, endTime, ad
       attendees,
     };
 
-    var newEventKey = firebase.database().ref().child('events').push().key;
+    const newEventKey = firebase.database().ref().child('events').push().key;
 
     // Write the new post's data simultaneously in the posts list and the user's post list.
-    var updates = {};
+    const updates = {};
     updates["/events/" + newEventKey] = eventData;
-    updates["/users/" + userId + "/events/" +  newEventKey] = eventData;
+    updates["/users/" + userId + "/events/" + newEventKey] = eventData;
 
     return firebase.database().ref().update(updates);
   };
 }
 
+export function getFeeds() {
+  return firebase.database().ref("feeds").once("value").then(snap => {
+    const feeds = snap.val();
+    if (feeds) {
+      return feeds;
+    }
+  });
+}
+
 function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
+  const minVal = Math.ceil(min);
+  const maxVal = Math.floor(max);
+  return Math.floor(Math.random() * (maxVal - minVal)) + minVal;
 }

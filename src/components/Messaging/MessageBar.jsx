@@ -7,8 +7,12 @@ export default class MessageBar extends React.Component {
 
   static propTypes = {
     style: PropTypes.object,
-    onSend: PropTypes.func,
-  }
+    onSend: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    style: {},
+  };
   
   constructor() {
     super();
@@ -20,7 +24,8 @@ export default class MessageBar extends React.Component {
   }
 
   onSendClicked() {
-    this.props.onSend(this.state.message);
+    const { onSend } = this.props;
+    onSend(this.state.message);
     this.setState({ message: "" });
   }
 
@@ -45,7 +50,7 @@ export default class MessageBar extends React.Component {
         value={this.state.message}
         style={{ width: "80%", marginLeft: 28, marginTop: 10 }}
         onKeyPress={this.onKeyPress}
-        onChange={ (event, value) => { this.setState({ message: value }); }}
+        onChange={(event, value) => { this.setState({ message: value }); }}
         autoFocus
       />
     </div>;

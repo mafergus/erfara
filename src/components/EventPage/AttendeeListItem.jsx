@@ -12,10 +12,10 @@ const IMG_STYLE = {
   verticalAlign: "middle",
 };
 
-export default function AttendeesListItem({ userId, name, image, location }) {
+export default function AttendeeListItem({ userId, name, image, location }) {
   return <Link to={`/users/${userId}`} style={{ textDecoration: "none" }}>
     <Col xs={6} lg={12} className="hover" style={{ padding: "1em 1.5em", display: "flex" }}>
-      <img src={image || USER_PLACEHOLDER} alt="User" style={IMG_STYLE}/>
+      <img src={image || USER_PLACEHOLDER} alt="User" style={IMG_STYLE} />
       <div style={{ flexGrow: "1", verticalAlign: "middle", overflow: "hidden" }}>
         <p className="ellipsis" style={{ color: darkBlack, fontSize: "1em" }}>{name || "Deleted User" }</p>
         <p style={{ color: lightBlack, fontSize: "0.8em" }}>{location || "Unknown Location"}</p>
@@ -24,9 +24,15 @@ export default function AttendeesListItem({ userId, name, image, location }) {
   </Link>;
 }
 
-AttendeesListItem.propTypes = {
+AttendeeListItem.propTypes = {
   name: PropTypes.string,
   image: PropTypes.string,
   location: PropTypes.string,
-  userId: PropTypes.string,
+  userId: PropTypes.string.isRequired,
+};
+
+AttendeeListItem.defaultProps = {
+  name: "Deleted User",
+  image: USER_PLACEHOLDER,
+  location: "Unknown Location",
 };

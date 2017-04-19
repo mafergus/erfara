@@ -1,33 +1,26 @@
 import React, { PropTypes } from "react";
+import ImmutablePropTypes from "react-immutable-proptypes";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import { bindActionCreators } from "redux";
 import TextField from "material-ui/TextField";
 import { erfaraBlack } from "utils/colors";
-import { getUser } from "actions/userActions";
 import Item from "components/Feed/Item";
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
-    authedUser: state.authedUser,
-    user: state.users.get(props.userId),
+    users: state.users,
   };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getUser }, dispatch);
 }
 
 export class FeedItem extends React.Component {
 
   static propTypes = {
-    authedUser: PropTypes.object,
+    authedUserPhoto: PropTypes.string.isRequired,
     feedItem: PropTypes.object.isRequired,
-    feedItemId: PropTypes.string.isRequired,
-    getUser: PropTypes.func.isRequired,
     onReply: PropTypes.func.isRequired,
-    user: PropTypes.object,
-    userId: PropTypes.string,
+    username: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    users: ImmutablePropTypes.map.isRequired,
   };
 
   constructor() {
@@ -40,17 +33,10 @@ export class FeedItem extends React.Component {
     };
   }
 
-  componentWillMount() {
-    const { userId, getUser } = this.props;
-    if (userId) {
-      getUser(userId);
-    }
-  }
-
   onKeyPress(event) {
-    const { onReply, feedItemId } = this.props;
+    const { onReply, feedItem } = this.props;
     if (event.charCode === 13 && this.state.reply.length > 2) { // enter key pressed
-      onReply(feedItemId, this.state.reply);
+      onReply(feedItem.id, this.state.reply);
       this.setState({ 
         reply: "",
         isReplyOpen: false,
@@ -59,9 +45,9 @@ export class FeedItem extends React.Component {
   }
 
   renderReplyBox() {
-    const { authedUser } = this.props;
-    return <div className="border" style={{ width: "100%", display: "flex", alignItems: "center", height: 50, marginBottom: 15 }}>
-      <img alt="You" style={{ height: 30, width: 30, margin: "0px 7px 0px 12px", borderRadius: "50%" }} src={authedUser.photo}/>
+    const { authedUserPhoto } = this.props;
+    return <div className="border" style={{ display: "flex", alignItems: "center", height: 50, marginBottom: 15, marginLeft: 70 }}>
+      <img alt="You" style={{ height: 30, width: 30, margin: "0px 7px 0px 12px", borderRadius: "50%" }} src={authedUserPhoto} />
       <TextField 
         hintText="Reply"
         hintStyle={{ fontSize: "0.9em" }}
@@ -77,30 +63,46 @@ export class FeedItem extends React.Component {
   }
 
   renderReplies(replies) {
+    const { users } = this.props;
     const replyItems = Object.entries(replies).map(item => { 
+      const user = users.get(item[1].userId);
       return <Item
+        key={item[0]}
         style={{ padding: "1em 0em" }}
         imageStyle={{ height: 30, width: 30}}
+        username={user.name}
+        image={user.photo}
         message={item[1].message}
         timestamp={item[1].timestamp}
-        userId={item[1].userId}
       />;
     });
-    return <div style={{ fontSize: "0.9em" }}>
+    return <div style={{ padding: "0.5em 0em 0.5em 70px", fontSize: "0.9em" }}>
       {replyItems}
     </div>;
   }
 
   render() {
-    const { feedItem, user } = this.props;
-    return <div style={{ width: "100%" }}>
-      <Item message={feedItem.message} timestamp={feedItem.timestamp} user={user}/>
+    const { feedItem, username, image } = this.props;
+    return <div style={{ padding: "15px 0px 15px 0px", width: "100%" }}>
+      <Item
+        message={feedItem.message}
+        username={username}
+        image={image}
+        timestamp={feedItem.timestamp}
+      />
       {feedItem.replies && this.renderReplies(feedItem.replies)}
-      <div style={{ padding: "0.6em 0em 1.4em 80px", fontSize: "0.9em" }}><span className="reply-box" onClick={() => this.setState({ isReplyOpen: !this.state.isReplyOpen })}>Reply</span></div>
-      {this.state.isReplyOpen && this.renderReplyBox() }
-      <hr style={{ marginTop: 0, marginBottom: 30 }}/>
+      <div style={{ padding: "1em 0em 1em 80px", fontSize: "0.9em" }}>
+        <span
+          className="reply-box"
+          onClick={() => this.setState({ isReplyOpen: !this.state.isReplyOpen })}
+        >
+          Reply
+        </span>
+      </div>
+      {this.state.isReplyOpen && this.renderReplyBox()}
+      <hr />
     </div>;
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FeedItem);
+export default connect(mapStateToProps)(FeedItem);

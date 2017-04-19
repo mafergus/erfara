@@ -7,12 +7,14 @@ import { locationSearchReducer } from "reducers/locationSearchReducer";
 import { categoriesReducer } from "reducers/categoriesReducer";
 import { imagesReducer } from "reducers/imagesReducer";
 import { conversationsReducer } from "reducers/conversationsReducer";
+import { feedReducer } from "reducers/feedReducer";
 
 const appReducer = combineReducers({
   authedUser: authedUserReducer,
   categories: categoriesReducer,
   conversations: conversationsReducer,
   events: eventsReducer,
+  feeds: feedReducer,
   images: imagesReducer,
   locationSearch: locationSearchReducer,
   browser: responsiveStateReducer,
@@ -20,11 +22,12 @@ const appReducer = combineReducers({
 });
 
  const rootReducer = (state, action) => {
+  let newState = state;
   if (action.type === "SIGN_OUT_USER") {
-    state = undefined;
+    newState = undefined;
   }
 
-  return appReducer(state, action);
+  return appReducer(newState, action);
 };
 
 export default rootReducer;

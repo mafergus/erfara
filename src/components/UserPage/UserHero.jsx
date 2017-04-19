@@ -16,7 +16,6 @@ export default class UserHero extends React.Component {
 
   static propTypes = {
     authedUser: PropTypes.object.isRequired,
-    style: PropTypes.object,
     isFollowing: PropTypes.bool.isRequired,
     onFollowClick: PropTypes.func.isRequired,
     onSendMessage: PropTypes.func.isRequired,
