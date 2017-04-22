@@ -88,14 +88,14 @@ export default class AuthModal extends React.Component {
             <div style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <button
                 className="googleSignUpButton"
-                onClick={this.handleSignUpGoogle}></button>
+                onTouchTap={this.handleSignUpGoogle}></button>
             </div>
           </Col>
           <Col sm={6} xs={12} style={{ height: "100%" }}>
             <div style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <button
                 className="facebookSignUpButton"
-                onClick={this.handleSignUpFacebook}></button>
+                onTouchTap={this.handleSignUpFacebook}></button>
             </div>
           </Col>
         </Row>

@@ -118,7 +118,7 @@ export class OnboardingModal extends React.Component {
       <div style={{ height: 65, backgroundColor: "blue" }}>
         <RaisedButton 
           label="Continue"
-          onClick={this.onSubmit}
+          onTouchTap={this.onSubmit}
           primary
         />
       </div>

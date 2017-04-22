@@ -94,7 +94,7 @@ export class FeedItem extends React.Component {
       <div style={{ padding: "1em 0em 1em 80px", fontSize: "0.9em" }}>
         <span
           className="reply-box"
-          onClick={() => this.setState({ isReplyOpen: !this.state.isReplyOpen })}
+          onTouchTap={() => this.setState({ isReplyOpen: !this.state.isReplyOpen })}
         >
           Reply
         </span>

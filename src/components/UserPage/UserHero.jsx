@@ -49,8 +49,8 @@ export default class UserHero extends React.Component {
             </div>
           </div>
           <div style={{ float: "right", height: "100%", display: "flex", alignItems: "flex-end" }}>
-            <RaisedButton label="Message" onClick={onSendMessage} style={{ marginRight: "0.7em" }} />
-            <RaisedButton label={followLabel} onClick={Object.keys(authedUser).length > 0 ? onFollowClick : () => this.setState({ showAuthModal: true })} primary />
+            <RaisedButton label="Message" onTouchTap={onSendMessage} style={{ marginRight: "0.7em" }} />
+            <RaisedButton label={followLabel} onTouchTap={Object.keys(authedUser).length > 0 ? onFollowClick : () => this.setState({ showAuthModal: true })} primary />
           </div>
         </div>
       </div>

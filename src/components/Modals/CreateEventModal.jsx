@@ -112,7 +112,7 @@ export class CreateEventModal extends React.Component {
         <RaisedButton 
           label="CREATE"
           className="create-btn"
-          onClick={() => { this.setState({ isLoading: true }); this.addNewEvent(); }}
+          onTouchTap={() => { this.setState({ isLoading: true }); this.addNewEvent(); }}
           primary
         />
       );   
@@ -122,7 +122,7 @@ export class CreateEventModal extends React.Component {
       <RaisedButton 
         label="LOG IN"
         className="create-btn"
-        onClick={() => onRequestClose()}
+        onTouchTap={() => onRequestClose()}
         primary
       />
     );
@@ -264,7 +264,7 @@ export class CreateEventModal extends React.Component {
           <div>
             <a
               href="#"
-              onClick={() => { this.props.onRequestClose(); this.setState({ isLoading: false }); }}
+              onTouchTap={() => { this.props.onRequestClose(); this.setState({ isLoading: false }); }}
               className="close-btn"
             >
               &times;
