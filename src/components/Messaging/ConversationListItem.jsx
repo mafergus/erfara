@@ -4,7 +4,6 @@ import autoBind from "react-autobind";
 import { Link } from "react-router";
 import { darkBlack, lightBlack, minBlack } from "material-ui/styles/colors";
 import Badge from 'material-ui/Badge';
-import { getUser } from "actions/userActions";
 import Moment from "moment";
 import { getUnreadMessageCountForConversation } from "utils/helpers";
 
@@ -12,12 +11,6 @@ function mapStateToProps(state, props) {
   return {
     authedUser: state.authedUser,
     user: state.users.get(props.conversationId),
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    getUser: () => dispatch(getUser),
   };
 }
 
@@ -36,7 +29,6 @@ export class ConversationListItem extends React.Component {
 
   static propTypes = {
     authedUser: PropTypes.object.isRequired,
-    getUser: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     conversation: PropTypes.object.isRequired,
     conversationId: PropTypes.string.isRequired,
@@ -45,13 +37,6 @@ export class ConversationListItem extends React.Component {
   constructor() {
     super();
     autoBind(this);
-  }
-
-  componentWillMount() {
-    const messageEntries = this.props.conversation && Object.values(this.props.conversation.messages);
-    if (this.props.conversation && messageEntries.length > 0) {
-      this.props.getUser(this.props.conversationId);
-    }
   }
 
   render() {
@@ -87,4 +72,4 @@ export class ConversationListItem extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConversationListItem);
+export default connect(mapStateToProps)(ConversationListItem);

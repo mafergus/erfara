@@ -1,25 +1,19 @@
 import React, { PropTypes } from "react";
-import ImmutablePropTypes from "react-immutable-proptypes";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import ConversationList from "components/Messaging/ConversationList";
 
 function mapStateToProps(state) {
+  const conversations = state.conversations.get("map").map((item, key) => { return { id: key, ...item }; });
   return {
-    // Immutable Map
-    conversations: state.conversations.get("map") || {},
+    conversations: conversations || [],
   };
 }
 
 export class MobileConversationList extends React.Component {
 
   static propTypes = {
-    conversations: ImmutablePropTypes.map.isRequired,
-    params: PropTypes.object,
-  };
-
-  static defaultProps = {
-    params: {id: ""},
+    conversations: PropTypes.array.isRequired,
   };
   
   constructor(props) {
@@ -28,12 +22,10 @@ export class MobileConversationList extends React.Component {
   }
 
   render() {
-    const { conversations, params } = this.props;
-    const conversation = conversations.get(params.id) || conversations.valueSeq().first();
-    if (!conversation) { return null; }
+    const { conversations } = this.props;
     return <div style={{ width: "100%", height: "100%", position: "fixed", maxWidth: "1440px", top: "64px", left: "0", display: "flex" }}>
       <ConversationList 
-        conversations={conversations.map((item, key) => { return { id: key, ...item }; })}
+        conversations={conversations}
         style={{ display: "inline-block", height: "100%", width: "100%", marginTop: "0px" }}
       />
     </div>;

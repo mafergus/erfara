@@ -1,5 +1,4 @@
 import React, { PropTypes } from "react";
-import ImmutablePropTypes from "react-immutable-proptypes";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import ConversationList from "components/Messaging/ConversationList";
@@ -7,11 +6,16 @@ import MessagesWindow from "components/Messaging/MessagesWindow";
 import store from "store/store";
 import { addMessage, readMessage } from "utils/Api";
 
-function mapStateToProps(state) {
+function mapStateToProps(state, props) {
+  const conversations = [];
+  state.conversations.get("map").forEach((item, key) => {
+    conversations.push({ id: key, ...item });
+  });
   return {
     authedUser: state.authedUser,
+    conversation: state.conversations.getIn(["map", props.params.id]) || {},
     // Immutable Map
-    conversations: state.conversations.get("map") || {},
+    conversations: conversations || [],
   };
 }
 
@@ -19,7 +23,8 @@ export class MessagingPage extends React.Component {
 
   static propTypes = {
     authedUser: PropTypes.object.isRequired,
-    conversations: ImmutablePropTypes.map.isRequired,
+    conversation: PropTypes.object.isRequired,
+    conversations: PropTypes.array.isRequired,
     params: PropTypes.object,
   };
 
@@ -63,13 +68,12 @@ export class MessagingPage extends React.Component {
   }
 
   render() {
-    const { conversations, params } = this.props;
-    const conversation = conversations.get(params.id) || conversations.valueSeq().first();
-    if (!conversation) { return null; }
-    const messages = Object.entries(conversation.messages).map(entry => { return { id: entry[0], ...entry[1] }; });
+    const { conversation, conversations } = this.props;
+    const messages = conversation.hasOwnProperty("messages") ? 
+      Object.entries(conversation.messages).map(entry => { return { id: entry[0], ...entry[1] }; }) : [];
     return <div style={{ width: "100%", height: "100%", position: "fixed", maxWidth: 1440, top: 64, left: 0, display: "flex" }}>
       <ConversationList 
-        conversations={conversations.map((item, key) => { return { id: key, ...item }; })}
+        conversations={conversations}
         style={{ display: "inline-block", height: "100%", width: "30%", marginTop: "0px" }}
       />
       <MessagesWindow

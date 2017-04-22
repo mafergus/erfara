@@ -23,7 +23,7 @@ export default class MessagesWindow extends React.Component {
 
   componentDidMount() {
     const { messages, onReadMessage } = this.props;
-    if (messages) {
+    if (messages.length) {
       const lastMessage = messages.slice(-1)[0];
       onReadMessage(lastMessage.id);
     }
@@ -31,8 +31,10 @@ export default class MessagesWindow extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { messages, onReadMessage } = nextProps;
-    const lastMessage = messages.slice(-1)[0];
-    onReadMessage(lastMessage.id);
+    if (messages.length) {
+      const lastMessage = messages.slice(-1)[0];
+      onReadMessage(lastMessage.id);
+    }
   }
 
   render() {
