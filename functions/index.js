@@ -33,6 +33,7 @@ const mailTransport = nodemailer.createTransport(
 // Your company name to include in the emails
 // TODO: Change this to your app or company name to customize the email sent.
 const APP_NAME = 'Erfara';
+const MATT_UID = "AzY3yIip3UaBPicyqgnin7WdHwD2";
 
 /**
  * Sends a welcome email to new user.
@@ -57,17 +58,16 @@ exports.sendWelcomeMessage = functions.auth.user().onCreate(event => {
   return admin.database().ref("users").orderByChild("email").equalTo("matt@erfara.com").once("value")
   .then(snap => {
     const mattUser = snap.val();
-    console.log("Got matt@erfara.com ", "JoEQsdvoWGaWUfIcnSPuS0iwY0g1");
     const messageData = {
       message: "Welcome to Erfara! Enjoy!",
       date: new Date(),
-      from: "JoEQsdvoWGaWUfIcnSPuS0iwY0g1",
+      from: MATT_UID,
     };
-    const url = `/conversations/users/${user.uid}/JoEQsdvoWGaWUfIcnSPuS0iwY0g1/messages/`;
+    const url = `/conversations/users/${user.uid}/${MATT_UID}/messages/`;
     const newMessageKey = admin.database().ref().child(url).push().key;
     var updates = {};
-    updates[`/conversations/users/${user.uid}/JoEQsdvoWGaWUfIcnSPuS0iwY0g1/messages/` + newMessageKey] = messageData;
-    updates[`/conversations/users/JoEQsdvoWGaWUfIcnSPuS0iwY0g1/${user.uid}/messages/` + newMessageKey] = messageData;
+    updates[`/conversations/users/${user.uid}/${MATT_UID}/messages/` + newMessageKey] = messageData;
+    updates[`/conversations/users/${MATT_UID}/${user.uid}/messages/` + newMessageKey] = messageData;
 
     return admin.database().ref().update(updates);
   });

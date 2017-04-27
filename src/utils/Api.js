@@ -65,8 +65,11 @@ export function searchCategories(searchTerm) {
 }
 
 export function getCategories() {
+  debugger;
   return new Promise((resolve, reject) => {
+    debugger;
     firebase.database().ref("/categories").orderByChild("name").once("value", snap => {
+      debugger;
       const categories = [];
       snap.forEach(child => {
         const value = child.val();

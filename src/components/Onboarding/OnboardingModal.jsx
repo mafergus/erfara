@@ -68,6 +68,7 @@ export class OnboardingModal extends React.Component {
 
   componentWillMount() {
     const { addCategories } = this.props;
+    debugger;
     getCategories().then(categories => addCategories(categories));
   }
 
