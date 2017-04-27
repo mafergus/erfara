@@ -115,10 +115,14 @@ exports.sendEventJoinMessage = functions.database.ref('/events/{eventId}/attende
 /**
  * It goes without saying, but this should be optimized
  */
-exports.sendEventCreatedEmail = functions.database.ref('/events/{eventId}').onCreate(createdEvent => {
+exports.sendEventCreatedEmail = functions.database.ref('/events/{eventId}').onWrite(createdEvent => {
   const event = createdEvent.data.val();
   const creatorId = event.userId;
   const allUsersPromise = admin.database().ref("users").once("value");
+
+  if (event.data.previous.val()) { 
+    return;
+  }
   
   return allUsersPromise.then(snap => {
     const users = snap.val();
@@ -134,6 +138,8 @@ function sendEventEmail(recipient, event) {
     to: recipient.email
   };
   const firstName = recipient.name.split(" ")[0] || recipient.name;
+
+  console.log("Sending event created notification email to ", recipient.email, ` for ${event.title}`);
 
   mailOptions.subject = `New Event, ${event.title}, on Erfara!`;
   mailOptions.text = `Hey ${firstName}! There's a new event near you, check it out here: https://erfara-web.herokuapp.com/events/${event.uid}`;
