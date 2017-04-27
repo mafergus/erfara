@@ -21,7 +21,9 @@ export default class CategoriesList extends React.Component {
     const rows = [];
     let combinedCategories = [];
     let filteredCategories = [...categories];
-    if (selectedCategories) { 
+    if (selectedCategories) {
+      // This is pretty ugly, but basically we wanted to filter selected categories
+      // but ignore any new categories
       filteredCategories = filteredCategories.filter(item => !selectedCategories.some(selectedCat => selectedCat.id === item.id));
       combinedCategories = [...combinedCategories, ...selectedCategories]; 
     }
@@ -36,7 +38,7 @@ export default class CategoriesList extends React.Component {
           <CategoryListItem
             key={category.id || category.name}
             category={category}
-            isSelected={selectedCategories ? selectedCategories.some(item => item.id === category.id) : false}
+            isSelected={selectedCategories ? selectedCategories.some(item => item.hasOwnProperty("id") && item.id === category.id) : false}
             onClick={onCategorySelected}
             style={items.length === 3 ? { "marginRight": 0 } : {}}
           />

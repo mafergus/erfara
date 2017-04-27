@@ -1,19 +1,38 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import store from "store/store";
 import Dialog from 'material-ui/Dialog';
 import autoBind from 'react-autobind';
 import TextField from "material-ui/TextField";
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import { addEvent, getPhoto, uploadFile } from "utils/Api";
-import SearchBox from 'components/Modals/LocationSearch';
 import "components/Modals/CreateEventModal.scss";
 import { Row, Col } from "react-bootstrap";
+import GooglePlacesSuggest from "components/GooglePlacesSuggest";
 
 const PLACEHOLDER_PHOTO = "http://files.parsetfss.com/a5e80e30-a275-49f2-989e-e218e12017db/tfss-02ed6157-7aa6-4ffa-b530-16f711fb8f59-muir-woods.jpg";
+
+const TEXTFIELD_STYLE = {
+  paddingLeft: 10,
+  width: "inherit",
+  fontSize: "1em",
+};
+
+const HINT_STYLE = {
+  fontSize: "1em",
+};
+
+const items = [];
+items.push(<MenuItem value={items.length} key="30min" primaryText="30 mins" />);
+items.push(<MenuItem value={items.length} key="1hr" primaryText="1 hr" />);
+items.push(<MenuItem value={items.length} key="130hr" primaryText="1:30 hrs" />);
+items.push(<MenuItem value={items.length} key="2hr" primaryText="2 hrs" />);
+items.push(<MenuItem value={items.length} key="230hr" primaryText="2:30 hrs" />);
+items.push(<MenuItem value={items.length} key="3hrs" primaryText="3 hrs" />);
 
 function mapStateToProps(state) {
   return {
@@ -36,108 +55,107 @@ export class CreateEventModal extends React.Component {
     super();
     autoBind(this);
 
-    this.state = { isLoading: false, locationFromSearchBox: "", geoLocationFromSearchBox: {} };
-    this.dateStamp = new Date();
-    this.startTimeStamp = new Date();
-    this.endTimeStamp = new Date();
+    const startTime = new Date();
+    startTime.setMinutes(0);
+    startTime.setHours((startTime.getHours() + 1) % 24);
+
+    this.state = {
+      isLoading: false,
+      location: null,
+      geoCoords: {},
+      durationItem: 1,
+      hintColor: "#BDBDBD",
+      date: new Date(),
+      time: startTime,
+      toBring: "",
+    };
   }
 
   addNewEvent() {
-    const { name, description, dateStamp, startTimeStamp, endTimeStamp, advices } = this;
+    const { name, description } = this;
     const { authedUser, onRequestClose } = this.props;
-    const locationString = this.state.locationFromSearchBox;
-    const geoLocation = this.state.geoLocationFromSearchBox;
+    const { location, geoCoords, date, time, toBring } = this.state;
 
-    if (!authedUser) { 
-      this.disabledProgressCircle();
+    if (!this.validateInput()) {
+      this.setState({ hintColor: "red" });
       return;
     }
 
-    if (!name || !description || !advices) {
-      setTimeout(() => { this.disabledProgressCircle(); }, 2000);
-      alert("Please fill all fields");
-      return;
-    }
+    this.setState({ isLoading: true });
     const searchTerm = name.split(" ")[0];
     getPhoto(searchTerm)
     .then(blob => uploadFile(blob))
     .then(url => {
-      store.dispatch(addEvent(name, description, url, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, authedUser.userId, geoLocation));
-      this.disabledProgressCircle();
+      addEvent(name, description, url, date, time, this.getEndTime(time),
+        toBring, location.description, authedUser.uid, geoCoords);
+      this.setState({ isLoading: false });
       onRequestClose();
     })
     .catch(() => {
-      store.dispatch(addEvent(name, description, PLACEHOLDER_PHOTO, dateStamp, startTimeStamp, endTimeStamp, advices, locationString, authedUser.userId, geoLocation));
-      this.disabledProgressCircle();
+      addEvent(name, description, PLACEHOLDER_PHOTO, date, time, this.getEndTime(time),
+        toBring, location.description, authedUser.uid, geoCoords);
+      this.setState({ isLoading: false });
       onRequestClose();
     });
   }
 
-  locationChange(location, geoLocation) {
-    this.setState({locationFromSearchBox: location, geoLocationFromSearchBox: geoLocation});
+  getEndTime() {
+    let durationTime = 0;
+    const { time, durationItem } = this.state;
+    switch (durationItem) {
+      case 0: { durationTime = 30; break; }
+      case 1: { durationTime = 60; break; }
+      case 2: { durationTime = 90; break; }
+      case 3: { durationTime = 120; break; }
+      case 4: { durationTime = 150; break; }
+      case 5: { durationTime = 180; break; }
+      default: { durationTime = 60; break; }
+    }
+    const newTime = new Date(time.getTime());
+    newTime.setMinutes(newTime.getMinutes() + durationTime);
+    return newTime;
   }
 
-  dateChange(placeholder, date) {
-    this.dateStamp.setFullYear(date.getFullYear());
-    this.dateStamp.setMonth(date.getMonth());
-    this.dateStamp.setDate(date.getDate());
+  validateInput() {
+    const { name, description } = this;
+    const { location } = this.state;
+
+    return name && description && location;
   }
 
-  startTimeChange(placeholder, date) {
-    this.startTimeStamp.setHours(date.getHours());
-    this.startTimeStamp.setMinutes(date.getMinutes());
-  }
-
-  endTimeChange(placeholder, date) {
-    this.endTimeStamp.setHours(date.getHours());
-    this.endTimeStamp.setMinutes(date.getMinutes());
-  }
-
-  disabledProgressCircle() {
-    this.setState({ isLoading: false });
-  }
-
-  renderProgressCircle() {
+  renderSubmitButton() {
     const { authedUser, onRequestClose } = this.props;
     if (authedUser) {
       if (this.state.isLoading) {
-        return ( 
-          <div>
-            <CircularProgress />
-          </div> 
-        );
+        return <CircularProgress />;
       }
 
-      return (
-        <RaisedButton 
+      return <RaisedButton 
           label="CREATE"
           className="create-btn"
-          onTouchTap={() => { this.setState({ isLoading: true }); this.addNewEvent(); }}
+          onTouchTap={() => { this.addNewEvent(); }}
           primary
-        />
-      );   
+        />;
     }
 
-    return (
-      <RaisedButton 
+    return <RaisedButton 
         label="LOG IN"
         className="create-btn"
         onTouchTap={() => onRequestClose()}
         primary
-      />
-    );
+      />;
   }
 
-  renderTitle(style) {
+  renderTitle() {
     return <div>
-      <p className="title-label">Event Title</p>
+      <h4 className="title-label">Event Title</h4>
       <div className="box">
         <TextField
           name="title"
           hintText="Give your event a short name"
-          hintStyle={style.hintStyle}
+          hintStyle={{ HINT_STYLE, color: this.state.hintColor }}
           underlineShow={false}
-          style={style.textFieldStyle}
+          style={TEXTFIELD_STYLE}
           onChange={(event, value) => { this.name = value; }}
         />
       </div>
@@ -146,85 +164,91 @@ export class CreateEventModal extends React.Component {
 
   renderLocation() {
     return <div>
-      <p className="title-label">Location</p>
+      <h4 className="title-label">Location</h4>
       <div className="box">
-        <SearchBox onSelectLocation={this.locationChange} />
+        <GooglePlacesSuggest
+          hintStyle={{ HINT_STYLE, color: this.state.hintColor }}
+          onSelectSuggest={(location, geoCoords) => this.setState({ location, geoCoords })}
+        />
       </div>
     </div>;
   }
 
-  renderDate(style) {
+  renderDate() {
+    const minDate = new Date();
+    minDate.setHours(0, 0, 0, 0);
+
     return <div className="event-date">
-      <div className="title-label">
-        <p>Date</p>
-      </div>
+      <h4 className="title-label">Date</h4>
       <div className="box box-small">
         <DatePicker 
           name="date"
           hintText="7/23/17"
-          hintStyle={style.hintStyle}
-          textFieldStyle={style.textFieldStyle}
+          hintStyle={{ HINT_STYLE, color: this.state.hintColor }}
+          minDate={minDate}
+          textFieldStyle={TEXTFIELD_STYLE}
           underlineShow={false} 
-          onChange={this.dateChange} />
+          onChange={(placeholder, date) => this.setState({ date })}
+          value={this.state.date}
+          formatDate={new Intl.DateTimeFormat('en-US', {
+            day: "numeric",
+            month: "short",
+          }).format}
+        />
       </div>
     </div>;
   }
 
-  renderStartTime(style) {
-    const startTime = new Date();
-    startTime.setMinutes(0);
-    startTime.setHours((startTime.getHours() + 1) % 24);
+  renderStartTime() {
 
     return <div className="start-time">
-      <div className="title-label">
-        <p>Start Time</p>
-      </div>
+      <h4 className="title-label">Start Time</h4>
       <div className="box box-small">
         <TimePicker 
           name="startTime"
-          hintText="4:00 PM"
-          defaultTime={startTime}
-          hintStyle={style.hintStyle}
-          textFieldStyle={style.textFieldStyle}
+          value={this.state.time}
+          hintStyle={{ HINT_STYLE, color: this.state.hintColor }}
+          textFieldStyle={TEXTFIELD_STYLE}
           underlineShow={false}  
-          onChange={this.startTimeChange} />
+          onChange={(event, date) => this.setState({ startTime: date })} />
       </div>
     </div>;
   }
 
-  renderEndTime(style) {
+  renderEndTime() {
     const endTime = new Date();
     endTime.setHours((endTime.getHours() + 2) % 24);
     endTime.setMinutes(0);
 
     return <div className="end-time">
-      <div className="title-label">
-        <p>End Time</p>
-      </div>
+      <h4 className="title-label">Length</h4>
       <div className="box box-small">
-        <TimePicker 
-          name="endTime"
-          defaultTime={endTime}
-          hintText="5:00 PM"
-          hintStyle={style.hintStyle}
-          textFieldStyle={style.textFieldStyle}
-          underlineShow={false}  
-          onChange={this.endTimeChange} />
+        <DropDownMenu
+          style={{ width: "100%", marginTop: -4 }}
+          labelStyle={{ paddingLeft: 10, paddingRight: 5, fontSize: "1em" }}
+          iconStyle={{ right: 0, paddingRight: 0, paddingLeft: 0, width: 24 }}
+          maxHeight={300}
+          value={this.state.durationItem}
+          onChange={(event, index, value) => this.setState({ durationItem: value })}
+          underlineStyle={{ display: "none" }}
+        >
+          {items}
+        </DropDownMenu>
       </div>
     </div>;
   }
 
-  renderToBring(style) {
+  renderToBring() {
     return <div>
-      <p className="title-label">What should invitees bring?</p>
+      <h4 className="title-label">What should invitees bring?</h4>
       <div className="box">
         <TextField
           name="info"
           hintText="i.e. water bottle, comfortable shoes"
-          hintStyle={style.hintStyle}
-          style={style.textFieldStyle}
+          hintStyle={HINT_STYLE}
+          style={TEXTFIELD_STYLE}
           underlineShow={false}
-          onChange={(event, value) => { this.advices = value; }}
+          onChange={(event, value) => this.setState({ toBring: value })}
         />
       </div>
     </div>;
@@ -233,25 +257,6 @@ export class CreateEventModal extends React.Component {
   render() {
     const { authedUser, isOpen, onRequestClose } = this.props;
     if (!authedUser) { return null; }
-    const style = {
-      hintStyle: {
-        color: "#BDBDBD", 
-        fontSize: "12px"
-      },
-      descriptionHintStyle: {
-        color: "#BDBDBD", 
-        fontSize: "12px",
-        top: "12px"
-      },
-      textFieldStyle: {
-        paddingLeft: "10px",
-        width: "inherit",
-        fontSize: "12px"
-      },
-      errorText: {
-        marginTop: "10px"
-      }
-    };
 
     return (
       <div className="popup-dialog">
@@ -271,26 +276,24 @@ export class CreateEventModal extends React.Component {
             </a>
             <h3 style={{ marginBottom: "1.5em" }}>Create an Event</h3>
             <Row>
-              <Col xs={12} sm={6} className="margin-bottom">{this.renderTitle(style)}</Col>
+              <Col xs={12} sm={6} className="margin-bottom">{this.renderTitle()}</Col>
               <Col xs={12} sm={6} className="margin-bottom">{this.renderLocation()}</Col>
             </Row>
             <Row>
-              <Col xs={4} sm={2} className="margin-bottom">{this.renderDate(style)}</Col>
-              <Col xs={4} sm={2} className="margin-bottom">{this.renderStartTime(style)}</Col>
-              <Col xs={4} sm={2} className="margin-bottom">{this.renderEndTime(style)}</Col>
-              <Col xs={12} sm={6} className="margin-bottom">{this.renderToBring(style)}</Col>
+              <Col xs={4} sm={2} className="margin-bottom">{this.renderDate()}</Col>
+              <Col xs={4} sm={2} className="margin-bottom">{this.renderStartTime()}</Col>
+              <Col xs={4} sm={2} className="margin-bottom">{this.renderEndTime()}</Col>
+              <Col xs={12} sm={6} className="margin-bottom">{this.renderToBring()}</Col>
             </Row>
             <div className="row-3">
               <div className="event-description" >
-                <div className="title-label">
-                  <p>Event Description</p>
-                </div>
+                <h4 className="title-label">Event Description</h4>
                 <div className="box box-big">
                   <TextField
                     name="description"
                     hintText="Give more detail so people know what your event is about"
-                    hintStyle={style.descriptionHintStyle}
-                    style={style.textFieldStyle}
+                    hintStyle={{ HINT_STYLE, top: 12, color: this.state.hintColor }}
+                    style={TEXTFIELD_STYLE}
                     underlineShow={false}
                     multiLine
                     rows={3}
@@ -300,8 +303,8 @@ export class CreateEventModal extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="row-4">
-              {this.renderProgressCircle()}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: 25 }}>
+              {this.renderSubmitButton()}
             </div>
           </div>
         </Dialog>

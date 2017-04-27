@@ -8,6 +8,7 @@ import { addUser } from "actions/userActions";
 import Attendees from "components/EventList/Attendees";
 import DateBox from "components/DateBox";
 import { Col } from "react-bootstrap";
+import Moment from "moment";
 
 function mapStateToProps(state, props) {
   const event = state.events.get(props.eventUid);
@@ -66,6 +67,7 @@ export class EventListItem extends React.Component {
   renderEventDetails() {
     const { event, attendees, isFeatured, popUp } = this.props;
     const timestamp = new Date(event.date);
+    const moment = new Moment(event.date);
 
     return <div style={{ width: "100%", height: popUp ? 40 : 70, marginTop: -5, position: "relative", display: "flex", alignItems: "center", backgroundColor: "white" }}>
       <DateBox style={{height: popUp ? 40 : 70 }} timestamp={timestamp} />
@@ -73,7 +75,7 @@ export class EventListItem extends React.Component {
         <p style={{ color: "#424242", textAlign: "left" }}>
           <span style={{ fontSize: "1em" }}>{event.title}</span>
           <br />
-          <span style={{ fontSize: "0.8em" }}>Fri 8PM &nbsp; &#8226; &nbsp; {event.locationString}</span>
+          <span style={{ fontSize: "0.8em" }}>{moment.format("ddd, hA")} &nbsp; &#8226; &nbsp; {event.locationString}</span>
         </p>
       </div>
       <div style={{ display: "flex", alignItems: "center" }}>

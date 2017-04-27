@@ -13,6 +13,9 @@ injectTapEventPlugin();
 const mountNode = document.createElement('div');
 mountNode.setAttribute("id", "mountNode");
 document.body.appendChild(mountNode);
+// var s = document.createElement('script');
+// s.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyChUwoYCrqOAWuO3YW-f_4bShyyH7UkbEc&libraries=places";
+// document.head.appendChild(s);
 
 const main = <Provider store={store}>
   <Router

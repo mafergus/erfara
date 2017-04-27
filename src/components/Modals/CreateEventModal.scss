@@ -38,24 +38,24 @@ h3 {
   color: orange;
 }
 
-/* LABELS */
 .title-label {
-  background: #FFFFFF;
-  color: #424242;
-  font-size: 12px;
-  margin-bottom: 8px;
+  font-weight: normal;
+  margin-bottom: 15px;
 }
 
 /*INPUT FIELD BOXES*/
 .box {
   background: #FFFFFF;
-  border: 1px solid #EEEEEE;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 2px;
   width: 100%;
   height: 50px;
 }
+
 .box-small {
   width: 87px;
 }
+
 .box-big {
   width: 100%;
   height: 96px;
@@ -71,18 +71,3 @@ h3 {
   font-size: 14px;
   text-align: center;
 }
-/*.create-btn:focus {
-  outline:0;
-}
-.create-btn:hover {
-  background: orange;
-}*/
-
-/* TEXTFIELD FIELD POSITIONS */
-.event-date {
-  display: inline-block;
-}
-.start-time, .end-time {
-  display: inline-block;
-}
-

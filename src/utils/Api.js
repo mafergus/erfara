@@ -4,6 +4,7 @@ import { DEFAULT_LOCATION } from "utils/constants";
 const PIXABAY_KEY = "4423887-ab96e540ffbe404d644032133";
 const PLACES_API_KEY = "AIzaSyDcJGLjFf1tCJxOPHYU6mu_oFDDMsd1-zk";
 const PLACEHOLDER_PHOTO = "https://s-media-cache-ak0.pinimg.com/originals/96/bb/de/96bbdef0373c7e8e7899c01ae11aee91.jpg";
+const CATEGORY_PLACEHOLDER = "https://firebasestorage.googleapis.com/v0/b/erfara-2aa21.appspot.com/o/categoryImages%2F1491252804492?alt=media&token=0704b77e-b184-4be9-8ce7-26d4b33434bf";
 
 export function getFacebookInfo(accessToken) {
   return new Promise((resolve, reject) => {
@@ -77,14 +78,16 @@ export function getCategories() {
 }
 
 export function autoAddCategory(name) {
-  return new Promise(() => {
+  return new Promise((resolve) => {
     getPhoto(name)
     .then(blob => uploadFile(blob, "categoryImages/"))
     .then(url => {
       const categoryKey = firebase.database().ref().child("categories").push().key;
-      return updateCategory(categoryKey, name, url);
-    })
-    .catch(error => alert(error));
+      updateCategory(categoryKey, name, url).then(category => resolve(category));
+    }).catch(() => {
+      const categoryKey = firebase.database().ref().child("categories").push().key;
+      updateCategory(categoryKey, name, CATEGORY_PLACEHOLDER).then(category => resolve(category));
+    });
   });
 }
 
@@ -100,11 +103,10 @@ export function updateCategory(key, name, image) {
     const update = {};
     update["categories/" + key + "/image"] = image;
     update["categories/" + key + "/name"] = name;
-    firebase.database().ref().update(update).then(() => {
-      resolve({ id: key, name, image });
-    }).catch(error => {
-      reject(error);
-    });
+
+    firebase.database().ref().update(update)
+    .then(() => resolve({ id: key, name, image }))
+    .catch(error => reject(error));
   });
 }
 
@@ -229,6 +231,16 @@ export function addUserFeedReply(senderId, userId, message, timestamp, parentId)
   return firebase.database().ref().update(updates);
 }
 
+export function addUserSkill(userId, categoryId) {
+  const newUserCategoryKey = firebase.database().ref("/user-categories/").push().key;
+  const updates = {};
+  updates[`/user-categories/${newUserCategoryKey}/userId`] = userId;
+  updates[`/user-categories/${newUserCategoryKey}/categoryId`] = categoryId;
+  updates[`/users/${userId}/skills/${newUserCategoryKey}`] = true;
+
+  return firebase.database().ref().update(updates); 
+}
+
 export function getPhotoUrl(searchTerm, isThumbnail=false) {
   const photoParam = searchTerm ? `&q=${searchTerm}` : "";
   return new Promise((resolve, reject) => {
@@ -244,6 +256,8 @@ export function getPhotoUrl(searchTerm, isThumbnail=false) {
           json.hits[0][urlType] : 
           json.hits[getRandomInt(0, json.hits.length)][urlType];
         resolve(url);
+      } else {
+        reject(new Error("Fuck this shiet"));
       }
     }).catch(error => resolve(error));
   });
@@ -276,11 +290,8 @@ export function getPhoto(searchTerm) {
         return response.blob();
       }
       reject(new Error(response.statusText));
-    }).then(blob => {
-      resolve(blob);
-    }).catch(error => {
-      resolve(error);
-    });
+    }).then(blob => resolve(blob))
+    .catch(error => reject(error));
   });
 }
 
@@ -375,32 +386,29 @@ export function leaveEvent(eventId, userId) {
 }
 
 export function addEvent(title, description, photo, date, startTime, endTime, advices, locationString, userId, geoCoordinates) {
-  return () => {
-    const attendees = {};
-    attendees[userId] = true;
-    const eventData = {
-      title,
-      description,
-      photo,
-      date,
-      startTime,
-      endTime,
-      advices,
-      locationString,
-      userId,
-      geoCoordinates,
-      attendees,
-    };
-
-    const newEventKey = firebase.database().ref().child('events').push().key;
-
-    // Write the new post's data simultaneously in the posts list and the user's post list.
-    const updates = {};
-    updates["/events/" + newEventKey] = eventData;
-    updates["/users/" + userId + "/events/" + newEventKey] = eventData;
-
-    return firebase.database().ref().update(updates);
+  const attendees = {};
+  attendees[userId] = true;
+  const eventData = {
+    title,
+    description,
+    photo,
+    date,
+    startTime,
+    endTime,
+    advices,
+    locationString,
+    userId,
+    geoCoordinates,
+    attendees,
   };
+  const newEventKey = firebase.database().ref().child('events').push().key;
+
+  // Write the new post's data simultaneously in the posts list and the user's post list.
+  const updates = {};
+  updates["/events/" + newEventKey] = eventData;
+  updates["/users/" + userId + "/events/" + newEventKey] = eventData;
+
+  return firebase.database().ref().update(updates);
 }
 
 export function getFeeds() {

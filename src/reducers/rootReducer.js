@@ -3,11 +3,11 @@ import { responsiveStateReducer } from 'redux-responsive';
 import { eventsReducer } from 'reducers/eventsReducer';
 import { authedUserReducer } from "reducers/authedUserReducer";
 import { usersReducer } from "reducers/usersReducer";
-import { locationSearchReducer } from "reducers/locationSearchReducer";
 import { categoriesReducer } from "reducers/categoriesReducer";
 import { imagesReducer } from "reducers/imagesReducer";
 import { conversationsReducer } from "reducers/conversationsReducer";
 import { feedReducer } from "reducers/feedReducer";
+import { onboardingReducer } from "reducers/onboardingReducer";
 
 const appReducer = combineReducers({
   authedUser: authedUserReducer,
@@ -16,7 +16,7 @@ const appReducer = combineReducers({
   events: eventsReducer,
   feeds: feedReducer,
   images: imagesReducer,
-  locationSearch: locationSearchReducer,
+  onboarding: onboardingReducer,
   browser: responsiveStateReducer,
   users: usersReducer,
 });

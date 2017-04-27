@@ -4,9 +4,10 @@ import autoBind from "react-autobind";
 import GoogleMap from 'google-map-react';
 import EventsList from "components/EventList/EventsList";
 import { erfaraBlack } from "utils/colors";
-import { DEFAULT_LOCATION } from "utils/constants";
+import { DEFAULT_LOCATION, GOOGLE_MAPS_API_KEY } from "utils/constants";
 import MapMarker from 'components/MapMarker';
 import EventListItem from "components/EventList/EventListItem";
+import GoogleMapLoader from "react-google-maps-loader";
 
 const SUBTITLE_STYLE = {
   color: erfaraBlack,
@@ -16,7 +17,7 @@ const SUBTITLE_STYLE = {
 
 function mapStateToProps(state) {
   return {
-    events: state.events.valueSeq(),
+    events: state.events.valueSeq().length > 0 ? state.events.length.valueSeq() : [],
   };
 }
 
@@ -24,11 +25,13 @@ export class HomePage extends React.Component {
 
   static propTypes = {
     events: PropTypes.array.isRequired,
+    googleMaps: PropTypes.any,
     zoom: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
     center: DEFAULT_LOCATION,
+    googleMaps: {},
     zoom: 10,
   };
 
@@ -74,7 +77,7 @@ export class HomePage extends React.Component {
   }
 
   renderMap() {
-    const { events } = this.props;
+    const { events, googleMaps } = this.props;
     const markers = events.filter(item => item.geoCoordinates)
                          .map(item => 
                             <MapMarker
@@ -89,10 +92,10 @@ export class HomePage extends React.Component {
     return (
       <div style={{ width: "100%", height: 240 }}>
         <GoogleMap
-          bootstrapURLKeys={{ key: "AIzaSyAlndrl6ZoeFfv0UURwByPWrxPbpYBAXEk" }}
           zoom={this.props.zoom}
           center={this.state.center}
           options={{disableDoubleClickZoom: this.state.isHovered ? true : false}}
+          googleMapLoader={() => new Promise(resolve => resolve(googleMaps))}
         >
           {markers}
           {this.state.isPopupOpen && <EventListItem
@@ -116,4 +119,7 @@ export class HomePage extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(HomePage);
+export default GoogleMapLoader(connect(mapStateToProps)(HomePage), {
+  libraries: ["places"],
+  key: GOOGLE_MAPS_API_KEY,
+});

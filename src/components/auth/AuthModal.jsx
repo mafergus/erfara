@@ -35,6 +35,9 @@ export default class AuthModal extends React.Component {
     .then(url => {
       userData.coverPhoto = url;
       store.dispatch(addUser(userData));
+    })
+    .then(() => {
+      store.dispatch({ type: "SHOW_ONBOARDING_MODAL" });
     });
   }
 
@@ -62,7 +65,6 @@ export default class AuthModal extends React.Component {
   handleSignUpGoogle() {
     this.props.handleClose();
     const provider = new firebase.auth.GoogleAuthProvider();
-    provider.addScope('https://www.googleapis.com/auth/plus.login');
     firebase.auth().signInWithPopup(provider)
     .then(AuthModal.onSuccess)
     .catch(error => {

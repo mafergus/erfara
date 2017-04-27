@@ -2,14 +2,10 @@ import React, { PropTypes } from 'react';
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import RaisedButton from 'material-ui/RaisedButton';
-// import Share from 'material-ui/svg-icons/notification/wc';
-// import Learn from 'material-ui/svg-icons/social/sentiment-very-satisfied';
-// import Experience from 'material-ui/svg-icons/image/brightness-7';
 import withWidth from 'material-ui/utils/withWidth';
 import { orange500, } from 'material-ui/styles/colors';
 import { darkGray } from "utils/colors";
 import AuthModal from 'components/auth/AuthModal';
-import OnboardingModal from 'components/Onboarding/OnboardingModal';
 import EventsList from "components/EventList/EventsList";
 import { Grid, Col } from "react-bootstrap";
 
@@ -54,26 +50,6 @@ export class SplashPage extends React.Component {
     };
   }
 
-  // renderDescriptionItem(image, text) {
-  //   return <div style={{ display: "inline-block", margin: "0px 20px", verticalAlign: "text-top" }}>
-  //     <div style={{ textAlign: "center" }}>{image}</div>
-  //     <h4 style={{ width: "200px", textAlign: "center", fontWeight: "200", fontSize: "0.8em", color: darkBlack }}>{text}</h4>
-  //   </div>;
-  // }
-
-  // renderDescription() {
-  //   const style = {
-  //     color: lightBlack,
-  //     height: "36px",
-  //     width: "36px",
-  //   }
-  //   return <div style={{ width: "100%", backgroundColor: orange50, display: "flex", alignItems: "center", justifyContent: "center" }}>
-  //     {this.renderDescriptionItem(<Learn style={style} />, "Learn interesting skills from thousands of passionate individuals")}
-  //     {this.renderDescriptionItem(<Share style={style} />, "Share a unique skill or ability with others")}
-  //     {this.renderDescriptionItem(<Experience style={style} />, "Build amazing friendships with people in your community")}
-  //   </div>
-  // }
-
   renderHero() {
     return <Col sm={12} md={5} className="hero no-padding">
       <div style={{ width: "100%" }} className="hero-image">
@@ -97,10 +73,6 @@ export class SplashPage extends React.Component {
   render() {
     return <Grid>
       <div style={{ position: "absolute", top: 0, bottom: 0, left: 0, width: "100%" }}>
-        <OnboardingModal
-          isOpen={false}
-          handleClose={() => null}
-        />
         <AuthModal 
           title="Sign Up"
           isOpen={this.state.isJoinOpen}

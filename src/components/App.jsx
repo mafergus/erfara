@@ -10,6 +10,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import withWidth from 'material-ui/utils/withWidth';
 import AppBar from "components/AppBar";
 import CreateEventModal from "components/Modals/CreateEventModal";
+import OnboardingModal from 'components/Onboarding/OnboardingModal';
 
 function mapStateToProps(state) {
   return {
@@ -88,26 +89,23 @@ class App extends React.Component {
       </FloatingActionButton>;
   }
 
-  renderContent() {
-    const { children } = this.props;
-
-    return children;
-  }
-
   render() {
-    const unreadMessages = this.props.unreadMessages && this.props.unreadMessages > 0 ? 
-      `(${this.props.unreadMessages}) Erfara` : 
-      "Erfara";
+    const { children, unreadMessages } = this.props;
+    const unreadMessagesString = unreadMessages && unreadMessages > 0 ? `(${unreadMessages}) Erfara` : "Erfara";
 
     return (
       <div>
-        <Title render={unreadMessages} />
+        <Title render={unreadMessagesString} />
         <AppBar onEventCreate={() => this.setState({ eventModalOpen: true })} />
         <div style={{ position: "absolute", top: 63, bottom: 0, left: 0, width: "100%" }}>
-          {this.renderContent()}
+          {children}
         </div>
         {this.renderFAB()}
-        <CreateEventModal isOpen={this.state.eventModalOpen} onRequestClose={() => this.setState({ eventModalOpen: false })} />
+        <CreateEventModal
+          isOpen={this.state.eventModalOpen}
+          onRequestClose={() => this.setState({ eventModalOpen: false })}
+        />
+        <OnboardingModal />
       </div>
     );
   }
