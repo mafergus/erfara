@@ -81,14 +81,10 @@ exports.sendEventJoinMessage = functions.database.ref('/events/{eventId}/attende
     return;
   }
 
-  console.log("Sending event join message for joiner ", user, " with params ", event.params);
-
   return admin.database().ref("events/" + event.params.eventId).once("value")
   .then(snap => {
     eventObj = snap.val();
     const eventOwner = eventObj.userId;
-    console.log("Fetched event ", eventObj, " and owner ", eventOwner);
-
     const ownerPromise = admin.database().ref("users/" + eventOwner).once("value");
     const joinerPromise = admin.database().ref("users/" + event.params.userId).once("value");
     return Promise.all([ownerPromise, joinerPromise]);
@@ -96,7 +92,6 @@ exports.sendEventJoinMessage = functions.database.ref('/events/{eventId}/attende
   .then(values => {
     const owner = values[0].val();
     const joiner = values[1].val();
-    console.log("Got event owner ", owner,  " and joiner ", joiner);
 
     if (joiner.uid === owner.uid) { return; }
 
@@ -120,19 +115,20 @@ exports.sendEventCreatedEmail = functions.database.ref('/events/{eventId}').onWr
   const creatorId = event.userId;
   const allUsersPromise = admin.database().ref("users").once("value");
 
-  if (event.data.previous.val()) { 
+  if (createdEvent.data.previous.val()) { 
     return;
   }
   
   return allUsersPromise.then(snap => {
-    const users = snap.val();
-    if (users) {
-      allUsers.forEach(user => sendEventEmail(user, event));  
+    if (snap) {
+      snap.forEach(user => {
+        sendEventEmail(user.val(), event, createdEvent.params.eventId);
+      });
     }
   });
 });
 
-function sendEventEmail(recipient, event) {
+function sendEventEmail(recipient, event, eventId) {
   const mailOptions = {
     from: '"Matt" <matt@erfara.com>',
     to: recipient.email
@@ -141,8 +137,8 @@ function sendEventEmail(recipient, event) {
 
   console.log("Sending event created notification email to ", recipient.email, ` for ${event.title}`);
 
-  mailOptions.subject = `New Event, ${event.title}, on Erfara!`;
-  mailOptions.text = `Hey ${firstName}! There's a new event near you, check it out here: https://erfara-web.herokuapp.com/events/${event.uid}`;
+  mailOptions.subject = `New Event - ${event.title} - on Erfara!`;
+  mailOptions.text = `Hey ${firstName}! There's a new event near you, check it out here: https://erfara-web.herokuapp.com/event/${eventId}`;
   return mailTransport.sendMail(mailOptions);
 }
 
