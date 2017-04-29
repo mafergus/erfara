@@ -103,6 +103,7 @@ export class AppBar extends React.Component {
     const badgeStyle = {
       top: 2,
       right: 2,
+      zIndex: 50,
       visibility: this.props.unreadCount === 0 ? 'hidden' : 'visible',
     };
     if (!user) { return null; }

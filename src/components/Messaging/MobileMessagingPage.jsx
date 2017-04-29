@@ -2,7 +2,6 @@ import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import MessagesWindow from "components/Messaging/MessagesWindow";
-import store from "store/store";
 import { addMessage, readMessage } from "utils/Api";
 
 function mapStateToProps(state, props) {
@@ -27,7 +26,7 @@ export class MobileMessagingPage extends React.Component {
 
   sendMessage(text) {
     const { params } = this.props;
-    store.dispatch(addMessage(params.id, this.props.authedUser.uid, text, new Date()));
+    addMessage(params.id, this.props.authedUser.uid, text, new Date());
   }
 
   readMessage(messageId) {

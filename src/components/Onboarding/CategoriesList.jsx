@@ -8,6 +8,11 @@ export default class CategoriesList extends React.Component {
     categories: PropTypes.array.isRequired,
     onCategorySelected: PropTypes.func.isRequired,
     selectedCategories: PropTypes.array.isRequired,
+    style: PropTypes.object,
+  };
+
+  static defaultProps = {
+    style: {},
   };
   
   constructor() {
@@ -16,7 +21,7 @@ export default class CategoriesList extends React.Component {
   }
 
   render() {
-    const { categories, selectedCategories, onCategorySelected } = this.props;
+    const { categories, selectedCategories, onCategorySelected, style } = this.props;
     let items = [];
     const rows = [];
     let combinedCategories = [];
@@ -48,7 +53,7 @@ export default class CategoriesList extends React.Component {
     if (items.length) {
       rows.push(<div key={rows.length}>{items}</div>);
     }
-    return <div style={{ width: "100%", height: 500, overflow: "scroll" }}>
+    return <div style={{ width: "100%", height: 500, overflow: "scroll", ...style }}>
       {rows}
     </div>;
   }

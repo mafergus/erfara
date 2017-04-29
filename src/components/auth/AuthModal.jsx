@@ -27,17 +27,14 @@ export default class AuthModal extends React.Component {
       photo: user.photoURL,
     };
     checkUserExists(user.uid)
-    .then(() => getPhoto(), () => {
-      store.dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user: userData });
-      firebase.onAuthSuccess(userData.uid);
+    .then(() => getPhoto(), user => {
+      store.dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user });
+      firebase.onAuthSuccess(user.uid);
     })
     .then(blob => uploadFile(blob))
     .then(url => {
       userData.coverPhoto = url;
       store.dispatch(addUser(userData));
-    })
-    .then(() => {
-      store.dispatch({ type: "SHOW_ONBOARDING_MODAL" });
     });
   }
 

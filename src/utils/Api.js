@@ -150,7 +150,7 @@ export function checkUserExists(uid) {
     firebase.database().ref(`/users/${uid}`).once('value', snapshot => {
       const user = snapshot.val();
       if (user) {
-        reject(new Error("User exists!"));
+        reject(user);
       } else {
         resolve(user);
       }

@@ -3,7 +3,6 @@ import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import ConversationList from "components/Messaging/ConversationList";
 import MessagesWindow from "components/Messaging/MessagesWindow";
-import store from "store/store";
 import { addMessage, readMessage } from "utils/Api";
 
 function mapStateToProps(state, props) {
@@ -59,7 +58,7 @@ export class MessagingPage extends React.Component {
 
   sendMessage(text) {
     const { params, authedUser } = this.props;
-    store.dispatch(addMessage(params.id, authedUser.uid, text, new Date()));
+    addMessage(params.id, authedUser.uid, text, new Date());
   }
 
   readMessage(messageId) {

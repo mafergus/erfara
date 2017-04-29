@@ -1,3 +1,5 @@
+import { Map } from "immutable";
+
 export function getUnreadMessageCount(state) {
   const { authedUser } = state;
   if (authedUser.hasOwnProperty("uid")) {
@@ -18,4 +20,24 @@ export function getUnreadMessageCountForConversation(authedUserUid, conversation
     return trimmed.reduce((acc, item) => item.from !== authedUserUid ? acc+1 : acc, 0);
   }
   return 0;
+}
+
+/*
+ * This function takes an object of the type returned from firebase, and
+ * flattens it into an array with an id for each entry
+ */
+export function flattenObject(toFlatten) {
+  if (Object.keys(toFlatten).length === 0) { return []; }
+  const flattened = Object.entries(toFlatten).map(entry => {
+    return { id: entry[0], ...entry[1] };
+  });
+  return flattened;
+}
+
+export function flattenImmutableMap(toFlatten) {
+  if (!Map.isMap(toFlatten) || toFlatten.size === 0) { return []; }
+  const flattened = toFlatten.entrySeq().toArray().map(entry => {
+    return { id: entry[0], ...entry[1] };
+  });
+  return flattened;
 }

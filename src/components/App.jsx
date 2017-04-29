@@ -7,7 +7,6 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { orange500, orange700 } from 'material-ui/styles/colors';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import withWidth from 'material-ui/utils/withWidth';
 import AppBar from "components/AppBar";
 import CreateEventModal from "components/Modals/CreateEventModal";
 import OnboardingModal from 'components/Onboarding/OnboardingModal';
@@ -111,4 +110,4 @@ class App extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(withWidth()(App));
+export default connect(mapStateToProps)(App);

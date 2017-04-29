@@ -5,9 +5,11 @@ import GoogleMap from 'google-map-react';
 import EventsList from "components/EventList/EventsList";
 import { erfaraBlack } from "utils/colors";
 import { DEFAULT_LOCATION, GOOGLE_MAPS_API_KEY } from "utils/constants";
-import MapMarker from 'components/MapMarker';
-import EventListItem from "components/EventList/EventListItem";
 import GoogleMapLoader from "react-google-maps-loader";
+import { flattenImmutableMap } from "utils/helpers";
+import MapsPlace from "material-ui/svg-icons/maps/place";
+import shouldPureComponentUpdate from "react-pure-render/function";
+import { orange600 } from "material-ui/styles/colors";
 
 const SUBTITLE_STYLE = {
   color: erfaraBlack,
@@ -17,7 +19,7 @@ const SUBTITLE_STYLE = {
 
 function mapStateToProps(state) {
   return {
-    events: state.events.valueSeq().length > 0 ? state.events.length.valueSeq() : [],
+    events: flattenImmutableMap(state.events),
   };
 }
 
@@ -26,13 +28,10 @@ export class HomePage extends React.Component {
   static propTypes = {
     events: PropTypes.array.isRequired,
     googleMaps: PropTypes.any,
-    zoom: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
-    center: DEFAULT_LOCATION,
     googleMaps: {},
-    zoom: 10,
   };
 
   static renderHeaders() {
@@ -59,10 +58,12 @@ export class HomePage extends React.Component {
 
     this.state = {
       isPopupOpen: false,
-      isHovered: false,
       center: DEFAULT_LOCATION,
+      zoom: 10,
     };
   }
+
+  shouldComponentUpdate = shouldPureComponentUpdate;
 
   clickMarker(event) {
     this.setState({
@@ -72,40 +73,30 @@ export class HomePage extends React.Component {
     });
   }
 
-  getHoverState(value) {
-    this.setState({isHovered: value});
-  }
-
   renderMap() {
     const { events, googleMaps } = this.props;
-    const markers = events.filter(item => item.geoCoordinates)
-                         .map(item => 
-                            <MapMarker
-                              clickMarker={this.clickMarker}
-                              sendHoverState={this.getHoverState}
-                              event={item}
-                              lat={item.geoCoordinates.lat} 
-                              lng={item.geoCoordinates.lng}
-                              key={item.geoCoordinates}
-                            />);
+    const markers = events.map(item => {
+      return <div
+          key={item.id}
+          lat={item.geoCoordinates.latitude}
+          lng={item.geoCoordinates.longitude}
+      >
+        <MapsPlace
+          style={{ height: 35, width: 35, marginTop: -30, marginLeft: -17 }}
+          color={orange600} 
+          hoverColor={orange600}
+        />
+      </div>;
+    });
 
     return (
       <div style={{ width: "100%", height: 240 }}>
         <GoogleMap
-          zoom={this.props.zoom}
-          center={this.state.center}
-          options={{disableDoubleClickZoom: this.state.isHovered ? true : false}}
+          defaultCenter={DEFAULT_LOCATION}
+          defaultZoom={9}
           googleMapLoader={() => new Promise(resolve => resolve(googleMaps))}
         >
           {markers}
-          {this.state.isPopupOpen && <EventListItem
-            event={this.state.selectedEvent}
-            mouseOver={this.mouseEnter}
-            mouseOut={this.mouseLeave}
-            key={this.state.selectedEvent.uid}
-            marginConstant={index}
-            popUp
-          />}
         </GoogleMap>
       </div>
     );

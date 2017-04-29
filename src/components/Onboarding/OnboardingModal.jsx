@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import autoBind from "react-autobind";
 import Dialog from 'material-ui/Dialog';
+import FullscreenDialog from 'material-ui-fullscreen-dialog';
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
 import CategoriesList from "components/Onboarding/CategoriesList";
 import { Search } from "components/Glyphs";
 import { addCategories, addCategorySearchResults } from "actions/categoriesActions";
-import { dismissModal } from "actions/onboardingActions";
 import { autoAddCategory, searchCategories, getPhotoUrl, getCategories, addUserSkill } from "utils/Api";
 
 const REQUIRED_CATEGORIES_COUNT = 2;
@@ -32,14 +32,15 @@ function mapStateToProps(state) {
   const searchResults = state.categories.get("searchResults");
   return {
     authedUser: state.authedUser,
+    browser: state.browser,
     categories: state.categories ? state.categories.valueSeq().toArray() : [],
-    showModal: state.onboarding.showModal,
+    showModal: state.authedUser.hasOwnProperty("uid") && !state.authedUser.hasOwnProperty("skills"),
     searchResults: searchResults ? searchResults.valueSeq().toArray() : [],
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addCategories, addCategorySearchResults, dismissModal }, dispatch);
+  return bindActionCreators({ addCategories, addCategorySearchResults }, dispatch);
 }
 
 export class OnboardingModal extends React.Component {
@@ -48,11 +49,15 @@ export class OnboardingModal extends React.Component {
     addCategories: PropTypes.func.isRequired,
     addCategorySearchResults: PropTypes.func.isRequired,
     authedUser: PropTypes.object.isRequired,
+    browser: PropTypes.object.isRequired,
     categories: PropTypes.array.isRequired,
-    dismissModal: PropTypes.func.isRequired,
     searchResults: PropTypes.array.isRequired,
-    showModal: PropTypes.bool.isRequired,
-  }
+    showModal: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    showModal: false,
+  };
   
   constructor() {
     super();
@@ -115,7 +120,7 @@ export class OnboardingModal extends React.Component {
   }
 
   onSubmit() {
-    const { authedUser, categories, dismissModal } = this.props;
+    const { authedUser, categories } = this.props;
     this.state.selectedCategories.forEach(category => {
       if (!categories.some(item => item.name === category.name)) {
         autoAddCategory(category.name).then(category => {
@@ -127,31 +132,46 @@ export class OnboardingModal extends React.Component {
         addUserSkill(authedUser.uid, category.id);
       }
     });
-    dismissModal();
+  }
+
+  renderSearchBox() {
+    const { browser } = this.props;
+    const SEARCHBOX_STYLE = {
+      height: 42,
+      padding: "0px 15px",
+      border: "1px solid rgba(0, 0, 0, 0.14)",
+      marginBottom: 25,
+      display: "flex",
+      alignItems: "center",
+      marginRight: browser.lessThan.medium ? 26 : 0
+    };
+    return <div className="border" style={SEARCHBOX_STYLE}>
+      <Search style={{ marginRight: 15 }} />
+      <TextField
+        style={{ width: "100%" }}
+        underlineShow={false}
+        hintText="Enter category here"
+        value={this.state.searchTerm}
+        onKeyPress={this.onKeyPress}
+        onChange={this.onSearchChange}
+        autoFocus
+      />
+    </div>;
   }
 
   renderContent() {
-    const { categories } = this.props;
+    const { browser, categories } = this.props;
     let { searchResults } = this.props;
     if (this.state.searchTerm.length === 0) { searchResults = categories; }
     if (this.state.newCategory && searchResults.length === 0) {
       searchResults = [];
       searchResults.push(this.state.newCategory);
     }
-    return <div style={{ padding: "0px 50px", position: "relative" }}>
+    const padding = browser.lessThan.medium ? "0px" : "0px 50px";
+    return <div style={{ padding, position: "relative", display: "flex", flexDirection: "column" }}>
       <h2 style={{ marginBottom: 20 }}>What skills will you teach the community?</h2>
       <h4 style={{ marginBottom: 30 }}>Select {REQUIRED_CATEGORIES_COUNT} or more</h4>
-      <div className="border" style={{ height: 42, padding: "0px 15px", marginBottom: 25, display: "flex", alignItems: "center" }}>
-        <Search style={{ marginRight: 15 }} />
-        <TextField
-          style={{ width: "100%" }}
-          underlineShow={false}
-          hintText="chess, unicycling, surfing…"
-          value={this.state.searchTerm}
-          onKeyPress={this.onKeyPress}
-          onChange={this.onSearchChange}
-        />
-      </div>
+      {this.renderSearchBox()}
       <CategoriesList
         categories={searchResults}
         onCategorySelected={this.onCategorySelected}
@@ -171,14 +191,17 @@ export class OnboardingModal extends React.Component {
   }
 
   render() {
-    const { showModal } = this.props;
-    return <Dialog
-      style={{ padding: 0 }}
+    const { browser, showModal } = this.props;
+    const Component = browser.lessThan.medium ? FullscreenDialog : Dialog;
+
+    return <Component
+      appBarStyle={{ display: "none" }}
       open={showModal}
       modal={false}
+      fullScreen
     >
       {this.renderContent()}
-    </Dialog>;
+    </Component>;
   }
 }
 

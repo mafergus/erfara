@@ -7,7 +7,6 @@ import { categoriesReducer } from "reducers/categoriesReducer";
 import { imagesReducer } from "reducers/imagesReducer";
 import { conversationsReducer } from "reducers/conversationsReducer";
 import { feedReducer } from "reducers/feedReducer";
-import { onboardingReducer } from "reducers/onboardingReducer";
 
 const appReducer = combineReducers({
   authedUser: authedUserReducer,
@@ -16,7 +15,6 @@ const appReducer = combineReducers({
   events: eventsReducer,
   feeds: feedReducer,
   images: imagesReducer,
-  onboarding: onboardingReducer,
   browser: responsiveStateReducer,
   users: usersReducer,
 });
