@@ -343,16 +343,15 @@ export function uploadFile(file, directory="images/") {
     const storageRef = firebase.storage().ref();
     // Create the file metadata
     const metadata = {
-      contentType: 'image/jpeg'
+      contentType: file.hasOwnProperty("type") ? file.type : "image/jpeg",
     };
 
-    // Upload file and metadata to the object 'images/mountains.jpg'
     const uploadTask = storageRef.child(directory + new Date().getTime()).put(file, metadata);
-    // Listen for state changes, errors, and completion of the upload.
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
       null,
-      error => reject(error), 
-      () => resolve(uploadTask.snapshot.downloadURL));
+      error => reject(error),
+      () => resolve(uploadTask.snapshot.downloadURL)
+    );
   });
 }
 
@@ -409,6 +408,13 @@ export function addEvent(title, description, photo, date, startTime, endTime, ad
   updates["/users/" + userId + "/events/" + newEventKey] = eventData;
 
   return firebase.database().ref().update(updates);
+}
+
+export function putEventPhoto(url, eventId) {
+  const update = {};
+  update["/events/" + eventId + "/photo"] = url;
+  
+  return firebase.database().ref().update(update);
 }
 
 export function getFeeds() {

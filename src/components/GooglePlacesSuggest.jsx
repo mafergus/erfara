@@ -8,12 +8,14 @@ export class GooglePlacesSuggest extends React.Component {
   static propTypes = {
     googleMaps: PropTypes.object.isRequired,
     hintStyle: PropTypes.object,
+    fontSize: PropTypes.string,
     onSelectSuggest: PropTypes.func.isRequired,
     suggestRadius: PropTypes.number,
     suggestTypes: PropTypes.array,
   };
 
   static defaultProps = {
+    fontSize: "0.9em",
     hintStyle: {},
     suggestRadius: 100000,
     suggestTypes: [],
@@ -76,15 +78,27 @@ export class GooglePlacesSuggest extends React.Component {
   }
 
   geocodeSuggest(suggestLabel, callback) {
-    const {googleMaps} = this.props;
+    const { googleMaps } = this.props;
     const geocoder = new googleMaps.Geocoder();
 
-    geocoder.geocode({address: suggestLabel}, (results, status) => {
+    geocoder.geocode({ address: suggestLabel }, (results, status) => {
       if (status === googleMaps.GeocoderStatus.OK) {
         const location = results[0].geometry.location;
+        let neighborhood = "";
+        let city = "";
+        const neighborhoodObj = results[0].address_components.filter(component => component.types.includes("neighborhood"));
+        if (neighborhoodObj && neighborhoodObj.length > 0) {
+          neighborhood = neighborhoodObj[0].long_name;
+        }
+        const cityObj = results[0].address_components.filter(component => component.types.includes("locality"));
+        if (cityObj && cityObj.length > 0) {
+          city = cityObj[0].long_name;
+        }
         const coordinate = {
           latitude: location.lat(),
           longitude: location.lng(),
+          neighborhood,
+          city,
           title: suggestLabel,
         };
 
@@ -95,13 +109,13 @@ export class GooglePlacesSuggest extends React.Component {
 
   render() {
     const { suggests } = this.state;
-    const { hintStyle } = this.props;
+    const { hintStyle, fontSize } = this.props;
     const dataSourceConfig = { text: 'description', value: 'id'};
 
     return <AutoComplete
       hintText="Enter a location"
-      hintStyle={{ fontSize: "1em", color: "#BDBDBD", ...hintStyle }}
-      textFieldStyle={{ fontSize: "1em", paddingLeft: 10 }}
+      hintStyle={{ fontSize, color: "#BDBDBD", ...hintStyle }}
+      textFieldStyle={{ fontSize, paddingLeft: 10 }}
       filter={AutoComplete.noFilter}
       dataSource={suggests}
       dataSourceConfig={dataSourceConfig}

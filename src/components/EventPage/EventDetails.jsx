@@ -4,13 +4,6 @@ import Alarm from 'material-ui/svg-icons/action/alarm';
 import Place from 'material-ui/svg-icons/maps/place';
 import { Col, Row } from "react-bootstrap";
 
-// const STYLE = {
-//   color: darkBlack,
-//   fontWeight: "normal",
-//   fontSize: "0.8em",
-//   display: "inline-block",
-// };
-
 export default class EventDetails extends React.Component {
 
   static propTypes = {
@@ -29,15 +22,15 @@ export default class EventDetails extends React.Component {
         <Icon style={{ color: darkGray }} />
       </div>
       <div style={{ flexGrow: "1" }}>
-        <p style={{ color: erfaraBlack, fontSize: "0.9em", marginBottom: "0.4em" }}>{title}</p>
-        {subtitle && <p style={{ color: darkGray, fontSize: "0.8em" }}>{subtitle}</p>}
+        <p style={{ marginBottom: "0.4em" }}>{title}</p>
+        {subtitle && <p style={{ color: darkGray }}>{subtitle}</p>}
       </div>
     </div>;
   }
 
   renderTimeTitle() {
     return <div>
-      <span style={{ color: erfaraBlack, fontSize: "1em" }}>Time and Place</span>
+      <p style={{ fontSize: "1.2em" }}>Time and Place</p>
       <hr style={{ margin: "10px 0px 20px 0px" }} />
     </div>;
   }
@@ -56,14 +49,14 @@ export default class EventDetails extends React.Component {
             <Col xs={12} sm={5} lg={12} style={{ padding: 0 }}>{EventDetails.renderListItem(Place, event.locationString)}</Col>
           </Col>
           <Col xs={12} lg={6} style={{ display: "inline-block", marginBottom: 50, padding: browser.greaterThan.large ? "0px 80px" : "0px 20px" }}>
-            <span style={{ color: erfaraBlack, fontSize: "1em" }}>Details</span>
+            <p style={{ fontSize: "1.2em" }}>Details</p>
             <hr style={{ margin: "10px 0px 20px 0px" }} />
-            <p style={{ fontSize: "0.9em", color: erfaraBlack }}>{event.description}</p>
+            <p style={{ color: erfaraBlack }}>{event.description}</p>
           </Col>
           <Col xs={12} lg={3} style={{ display: "inline-block", marginBottom: 50 }}>
-            <span style={{ color: erfaraBlack, fontSize: "1em" }}>What to bring</span>
+            <p style={{ fontSize: "1.2em" }}>What to bring</p>
             <hr style={{ margin: "10px 0px 20px 0px" }} />
-            <p style={{ fontSize: "0.9em", color: erfaraBlack }}>{event.advices && event.advices.length > 1 ? event.advices : "Just yourself!"}</p>
+            <p>{event.advices && event.advices.length > 1 ? event.advices : "Just yourself!"}</p>
           </Col>
         </Row>
       </div>

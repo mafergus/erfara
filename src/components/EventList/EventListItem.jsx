@@ -8,7 +8,6 @@ import { addUser } from "actions/userActions";
 import Attendees from "components/EventList/Attendees";
 import DateBox from "components/DateBox";
 import { Col } from "react-bootstrap";
-import Moment from "moment";
 
 function mapStateToProps(state, props) {
   const event = state.events.get(props.eventUid);
@@ -37,6 +36,7 @@ export class EventListItem extends React.Component {
     mouseOver: PropTypes.func,
     mouseOut: PropTypes.func,
     marginConstant: PropTypes.number,
+    user: PropTypes.object,
     users: PropTypes.array.isRequired,
   };
 
@@ -47,6 +47,7 @@ export class EventListItem extends React.Component {
     mouseOver: null,
     mouseOut: null,
     marginConstant: 0,
+    user: null,
   };
 
   constructor() {
@@ -65,10 +66,11 @@ export class EventListItem extends React.Component {
   }
 
   renderEventDetails() {
-    const { event, attendees, isFeatured, popUp } = this.props;
+    const { event, attendees, isFeatured, popUp, user } = this.props;
     const timestamp = new Date(event.date);
-    const startTime = new Moment(event.startTime);
-    const date = new Moment(event.date);
+    // const startTime = new Moment(event.startTime);
+    // const date = new Moment(event.date);
+    const locationString = `hosted by ${user ? user.name : "Deleted User"} \xa0\xa0 \u25CF \xa0\xa0 ${event.geoCoordinates.neighborhood}, ${event.geoCoordinates.city}`;
 
     return <div style={{ width: "100%", height: popUp ? 40 : 70, marginTop: -5, position: "relative", display: "flex", alignItems: "center", backgroundColor: "white" }}>
       <DateBox style={{height: popUp ? 40 : 70 }} timestamp={timestamp} />
@@ -76,7 +78,7 @@ export class EventListItem extends React.Component {
         <p style={{ color: "#424242", textAlign: "left" }}>
           <span style={{ fontSize: "1em" }}>{event.title}</span>
           <br />
-          <span style={{ fontSize: "0.8em" }}>{date.format("ddd")} {startTime.format("hA")} &nbsp; &#8226; &nbsp; {event.locationString}</span>
+          <span style={{ fontSize: "0.8em" }}>{locationString}</span>
         </p>
       </div>
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -86,7 +88,7 @@ export class EventListItem extends React.Component {
   }
 
   render() {
-    const { event, eventUid, isFeatured, itemStyle, popUp, mouseOver, mouseOut, marginConstant } = this.props;
+    const { event, eventUid, isFeatured, itemStyle, popUp, mouseOver, mouseOut, marginConstant, user } = this.props;
     const STYLE = {
       marginTop: popUp ? -50 : 0,
       marginLeft: popUp ? 50 + -380 * marginConstant : 0,
@@ -97,6 +99,23 @@ export class EventListItem extends React.Component {
       height: popUp ? 70 : 250,
       ...itemStyle,
     };
+    const EVENT_CREATOR_IMG = {
+      position: "absolute",
+      width: 55,
+      height: 55,
+      top: 8,
+      right: 9,
+      borderRadius: "50%",
+      border: "2px solid white",
+    };
+    const IMG_STYLE = {
+      width: "100%",
+      position: "relative",
+      height: popUp ? 120 : 181,
+      backgroundImage: `url(${event.photo})`,
+      backgroundPosition: "50% 50%",
+      backgroundSize: "cover",
+    };
     return <Col
         md={12}
         lg={isFeatured ? 12 : 6}
@@ -106,7 +125,14 @@ export class EventListItem extends React.Component {
       >
       <Link to={`/event/${eventUid}`} style={{ textDecoration: "none" }} className="no-padding">
         <div className="hoverable shadow">
-          <img src={event.photo} alt="Event" style={{ width: "100%", height: popUp ? 120 : 181, objectFit: "cover" }} />       
+          <div style={IMG_STYLE}>
+            <div className="image-overlay" />
+            <img
+              src={user && user.photo}
+              alt="Event creator"
+              style={EVENT_CREATOR_IMG}
+            />
+          </div>
           {this.renderEventDetails()}
         </div>
       </Link>

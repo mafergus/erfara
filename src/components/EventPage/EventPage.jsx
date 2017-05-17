@@ -40,6 +40,7 @@ function mapStateToProps(state, props) {
     authedUser: state.authedUser,
     browser: state.browser,
     event,
+    host: event ? state.users.get(event.userId) : {},
     attendees: leUsers,
     isRSVPD: isRSVPD,
   };
@@ -56,12 +57,14 @@ export class EventPage extends React.Component {
   static defaultProps = {
     isRSVPD: false,
     event: null,
+    host: {},
   };
 
   static propTypes = {
     authedUser: PropTypes.object.isRequired,
     browser: PropTypes.object.isRequired,
     event: PropTypes.object,
+    host: PropTypes.object,
     getEvent: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
     isRSVPD: PropTypes.bool.isRequired,
@@ -90,12 +93,13 @@ export class EventPage extends React.Component {
 
   render() {
     // if (!this.event) { return <div></div> };
-    const { event, authedUser, attendees, isRSVPD, browser, params } = this.props;
+    const { event, host, authedUser, attendees, isRSVPD, browser, params } = this.props;
     if (!event) { return null; }
     return <div style={{ width: "100%", position: "relative" }}>
       <EventHero
         authedUser={authedUser}
-        event={event}
+        event={{ ...event, id: params.id }}
+        host={host}
         onRSVPClick={this.onRSVP}
         isRSVPD={isRSVPD}
         isExtraSmall={browser.is.extraSmall}

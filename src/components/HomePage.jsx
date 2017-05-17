@@ -11,12 +11,6 @@ import MapsPlace from "material-ui/svg-icons/maps/place";
 import shouldPureComponentUpdate from "react-pure-render/function";
 import { orange600 } from "material-ui/styles/colors";
 
-const SUBTITLE_STYLE = {
-  color: erfaraBlack,
-  fontSize: "0.9em",
-  fontFamily: "Roboto-Light",
-};
-
 function mapStateToProps(state) {
   return {
     events: flattenImmutableMap(state.events),
@@ -36,10 +30,9 @@ export class HomePage extends React.Component {
 
   static renderHeaders() {
     return <div style={{ width: "100%", marginBottom: 35 }}>
-      <h1 style={{ color: erfaraBlack, fontSize: "1.2em", fontFamily: "Roboto-Light" }}>Upcoming events recommended for you</h1>
       <div style={{ width: "100%", marginTop: 10 }}>
-        <span style={{ ...SUBTITLE_STYLE, margin: 0, marginTop: 15 }}>Based on <span style={{ textDecoration: "underline" }}>Chess, Astronomy, Sports, +2 </span>&nbsp;&nbsp;|&nbsp;&nbsp;Around <span style={{ textDecoration: "underline" }}>Santa Clara, CA</span></span>
-        <span style={{ ...SUBTITLE_STYLE, float: "right" }}>Category&nbsp;&nbsp;&nbsp;&nbsp;Filters</span>
+        <h3 style={{ color: erfaraBlack, margin: 0, display: "inline-block" }}>Upcoming events near you</h3>
+        <h4 style={{ margin: 0, float: "right" }}>Events&nbsp;&nbsp;&nbsp;&nbsp;People</h4>
       </div>
     </div>;
   }

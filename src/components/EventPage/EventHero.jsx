@@ -3,7 +3,8 @@ import autoBind from "react-autobind";
 import DateBox from "components/DateBox";
 import RaisedButton from 'material-ui/RaisedButton';
 import AuthModal from "components/auth/AuthModal";
-import { erfaraBlack } from "utils/colors";
+import { erfaraBlack, lightTwo } from "utils/colors";
+import PhotoPickerModal from "components/Modals/PhotoPickerModal";
 
 const HERO_STYLE = {
   position: "relative",
@@ -19,6 +20,7 @@ export default class EventHero extends React.Component {
   static propTypes = {
     authedUser: PropTypes.object.isRequired,
     event: PropTypes.object.isRequired,
+    host: PropTypes.object.isRequired,
     isExtraSmall: PropTypes.bool.isRequired,
     isRSVPD: PropTypes.bool.isRequired,
     onRSVPClick: PropTypes.func.isRequired,
@@ -30,6 +32,7 @@ export default class EventHero extends React.Component {
 
     this.state = {
       signUpModalOpen: false,
+      showPhotoPicker: false,
     };
   }
 
@@ -41,32 +44,49 @@ export default class EventHero extends React.Component {
     };
   }
 
-  renderDetails() {
-    const { event, onRSVPClick, authedUser, isRSVPD } = this.props;
-    const timestamp = new Date(event.date);
+  isHost() {
+    const { authedUser, host } = this.props;
+    return authedUser.uid === host.uid;
+  }
+
+  renderJoinButton() {
+    const { authedUser, onRSVPClick, isRSVPD } = this.props;
     const joinLabel = isRSVPD ? "Leave" : "Join";
 
+    return this.isHost() ? <RaisedButton
+        label="Change photo"
+        onTouchTap={() => this.setState({ showPhotoPicker: true })} 
+        primary
+      /> :
+      <RaisedButton
+        label={joinLabel}
+        onTouchTap={Object.keys(authedUser).length > 0 ? onRSVPClick : () => this.setState({ signUpModalOpen: true })} 
+        primary
+      />;
+  }
+
+  renderDetails() {
+    const { event, host } = this.props;
+    const timestamp = new Date(event.date);
+    
     return <div style={{ width: "75%", height: "100%", display: "flex", alignItems: "flex-end", margin: "0 auto" }}>
       <DateBox timestamp={timestamp} style={{ height: 70, overflow: "hidden" }} />
-      <div style={{ display: "inline-block", height: 70, paddingLeft: 35, overflow: "hidden", flexGrow: "1" }}>
-        <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
-          <span style={{ fontSize: "1.7em", verticalAlign: "middle" }}>{event.title}</span>
+      <div style={{ display: "inline-block", height: 70, paddingLeft: 25, overflow: "hidden", flexGrow: "1" }}>
+        <div>
+          <h2 style={{ fontSize: "1.8em", color: "white", fontWeight: "normal", marginTop: 0, verticalAlign: "middle" }}>{event.title}</h2>
+          <img src={host.photo} style={{ height: 30, width: 30, borderRadius: "50%", border: "2px solid white" }} />
+          <span style={{ color: lightTwo, marginLeft: 9 }}>hosted by {host.name}</span>
         </div>
       </div>
       <div style={{ height: "100%", display: "flex", alignItems: "flex-end", paddingBottom: 5 }}>
-        <RaisedButton
-          label={joinLabel}
-          onTouchTap={Object.keys(authedUser).length > 0 ? onRSVPClick : () => this.setState({ signUpModalOpen: true })} 
-          primary
-        />
+        {this.renderJoinButton()}
       </div>
     </div>;
   }
 
   renderExtraSmallDetails() {
-    const { event, onRSVPClick, isRSVPD, authedUser } = this.props;
+    const { event } = this.props;
     const timestamp = new Date(event.date);
-    const joinLabel = isRSVPD ? "Leave" : "Join";
     const SPAN_STYLE = {
       fontSize: "1.1em",
       alignSelf: "center",
@@ -78,12 +98,7 @@ export default class EventHero extends React.Component {
 
     return <div>
       <div style={this.getHeroStyle(event)} >
-        <RaisedButton
-          style={{ position: "absolute", bottom: 5, right: 5, width: 50 }}
-          label={joinLabel}
-          onTouchTap={Object.keys(authedUser).length > 0 ? onRSVPClick : () => this.setState({ signUpModalOpen: true })}
-          primary
-        />
+        {this.renderJoinButton()}
         <AuthModal 
           title="Sign Up"
           isOpen={this.state.signUpModalOpen}
@@ -107,6 +122,12 @@ export default class EventHero extends React.Component {
         title="Sign Up"
         isOpen={this.state.signUpModalOpen}
         handleClose={() => this.setState({ signUpModalOpen: false })} 
+      />
+      <PhotoPickerModal
+        eventId={event.id}
+        isOpen={this.state.showPhotoPicker}
+        onRequestClose={() => this.setState({ showPhotoPicker: false })}
+        onPhotoSelected={() => alert("got photo")}
       />
       {this.renderDetails()}
     </div>;

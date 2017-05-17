@@ -1,6 +1,5 @@
-import Immutable from "immutable";
 
-export function imagesReducer(state = Immutable.Map(), action) {
+export function imagesReducer(state = [], action) {
   switch (action.type) {
     case "GET_IMAGES_SUCCESS": return action.images;
     default:

@@ -2,24 +2,25 @@ import React, { PropTypes } from 'react';
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import RaisedButton from 'material-ui/RaisedButton';
-import withWidth from 'material-ui/utils/withWidth';
-import { orange500, } from 'material-ui/styles/colors';
-import { darkGray } from "utils/colors";
+import { orange50, orange500 } from 'material-ui/styles/colors';
+import { darkGray, erfaraBlack } from "utils/colors";
 import AuthModal from 'components/auth/AuthModal';
 import EventsList from "components/EventList/EventsList";
 import { Grid, Col } from "react-bootstrap";
+import HappyEmoji from "material-ui/svg-icons/social/sentiment-very-satisfied";
+import ShareIcon from "material-ui/svg-icons/maps/transfer-within-a-station";
+import BuildFriendshipIcon from "material-ui/svg-icons/image/brightness-5";
 
 function mapStateToProps(state) {
   return {
-    authedUser: state.authedUser,
+    browser: state.browser,
   };
 }
 
 export class SplashPage extends React.Component {
 
   static propTypes = {
-    authedUser: PropTypes.object.isRequired,
-    width: PropTypes.number.isRequired,
+    browser: PropTypes.object.isRequired,
   };
 
   static contextTypes = {
@@ -50,8 +51,25 @@ export class SplashPage extends React.Component {
     };
   }
 
+  renderInstructionItem(Image, text) {
+    const { browser } = this.props;
+    const INNER_CONTAINER = {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: browser.lessThan.medium ? "25px 5px 10px 5px" : 25,
+      flexDirection: "column",
+    };
+    return <div style={{ width: "33%", display: "inline-block" }}>
+      <div style={INNER_CONTAINER}>
+        <Image color={erfaraBlack} style={{ height: 30, width: 30, marginBottom: 15 }} />
+        <p style={{ textAlign: "center" }}>{text}</p>
+      </div>
+    </div>;
+  }
+
   renderHero() {
-    return <Col sm={12} md={5} className="hero no-padding">
+    return <Col sm={12} md={5} className="hero no-padding" style={{ display: "flex", flexDirection: "column" }}>
       <div style={{ width: "100%" }} className="hero-image">
         <div>
           <span style={{ fontSize: "2.6em", fontFamily: "Roboto-Light", color: "white" }}>
@@ -66,6 +84,11 @@ export class SplashPage extends React.Component {
           backgroundColor="#07ADB0"
         />
         <div style={{ marginTop: 40, fontSize: "0.9em", fontColor: "white", textDecoration: "underline" }}>Learn how it works</div>
+      </div>
+      <div style={{ backgroundColor: orange50 }}>
+        {this.renderInstructionItem(HappyEmoji, "Learn interesting skills from thousands of passionate individuals.")}
+        {this.renderInstructionItem(ShareIcon, "Share a unique skill or ability with others.")}
+        {this.renderInstructionItem(BuildFriendshipIcon, "Build amazing friendships with people in your community!")}
       </div>
     </Col>;
   }
@@ -85,4 +108,4 @@ export class SplashPage extends React.Component {
   }
 }
 
-export default connect(mapStateToProps)(withWidth()(SplashPage));
+export default connect(mapStateToProps)(SplashPage);
