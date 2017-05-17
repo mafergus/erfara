@@ -16,14 +16,16 @@ import GooglePlacesSuggest from "components/GooglePlacesSuggest";
 
 const PLACEHOLDER_PHOTO = "http://files.parsetfss.com/a5e80e30-a275-49f2-989e-e218e12017db/tfss-02ed6157-7aa6-4ffa-b530-16f711fb8f59-muir-woods.jpg";
 
+const FONT_SIZE = "0.9em";
+
 const TEXTFIELD_STYLE = {
   paddingLeft: 10,
   width: "inherit",
-  fontSize: "1em",
+  fontSize: FONT_SIZE,
 };
 
 const HINT_STYLE = {
-  fontSize: "1em",
+  fontSize: FONT_SIZE,
 };
 
 const items = [];
@@ -167,6 +169,7 @@ export class CreateEventModal extends React.Component {
       <h4 className="title-label">Location</h4>
       <div className="box">
         <GooglePlacesSuggest
+          fontSize={FONT_SIZE}
           hintStyle={{ HINT_STYLE, color: this.state.hintColor }}
           onSelectSuggest={(location, geoCoords) => this.setState({ location, geoCoords })}
         />
@@ -225,7 +228,7 @@ export class CreateEventModal extends React.Component {
       <div className="box box-small">
         <DropDownMenu
           style={{ width: "100%", marginTop: -4 }}
-          labelStyle={{ paddingLeft: 10, paddingRight: 5, fontSize: "1em" }}
+          labelStyle={{ paddingLeft: 10, paddingRight: 5, fontSize: FONT_SIZE }}
           iconStyle={{ right: 0, paddingRight: 0, paddingLeft: 0, width: 24 }}
           maxHeight={300}
           value={this.state.durationItem}
@@ -271,6 +274,7 @@ export class CreateEventModal extends React.Component {
               href="#"
               onTouchTap={() => { this.props.onRequestClose(); this.setState({ isLoading: false }); }}
               className="close-btn"
+              style={{ textDecoration: "none" }}
             >
               &times;
             </a>

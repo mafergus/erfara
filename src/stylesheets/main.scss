@@ -1,4 +1,4 @@
-$erfara-black: #424242;
+@import "colors.scss";
 
 @font-face {
     font-family: 'LobsterTwo-Regular'; /*a name to be used later*/
@@ -57,7 +57,7 @@ html {
 
 body {
   color: #424242;
-  background-color: #f1efea;
+  background-color: rgba(241, 239, 234, 0.55);
   font-family: Roboto-Regular;
   font-weight: normal;
   color: white;
@@ -76,16 +76,19 @@ img {
   object-fit: cover;
 }
 
-p, h1 {
-  margin: 0px;
-}
-
 .text {
   color: $erfara-black;
 }
 
+p {
+  @extend .text;
+  margin: 0px;
+  font-size: 1em;
+}
+
 h1 {
   @extend .text;
+  margin: 0px;
   font-size: 2.6em;
 }
 
@@ -96,6 +99,7 @@ h2 {
 
 h3 {
   @extend .text;
+  font-size: 1.3em;
 }
 
 h4 {
@@ -138,21 +142,42 @@ h5 {
 
 .hero {
   height: 100%;
+
   @media only screen and (max-width: 990px) {
-    /* only size 'xs' and below */
-    height: 400px;
+    height: initial;
   }
 }
 
 .hero-image {
-  height: 100%;
   padding: 80px;
   background-image: url("../images/sun_hero.png");
   background-size: cover;
+  flex-grow: 1;
+
+  @media only screen and (max-width: 990px) {
+    height: 325px;
+    flex-grow: 0;
+  }
 
   @media only screen and (max-width: 768px) {
     padding: 30px;
   }
+}
+
+$gradient-start: rgba(0, 0, 0, 0.35);
+$gradient-end: rgba(0, 0, 0, 0);
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: red; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient($gradient-start, $gradient-end); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient($gradient-start, $gradient-end); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient($gradient-start, $gradient-end); /* For Firefox 3.6 to 15 */
+  background: linear-gradient($gradient-start, $gradient-end); /* Standard syntax */
 }
 
 .events-panel {
