@@ -138,7 +138,7 @@ function sendEventEmail(recipient, event, eventId) {
   console.log("Sending event created notification email to ", recipient.email, ` for ${event.title}`);
 
   mailOptions.subject = `New Event - ${event.title} - on Erfara!`;
-  mailOptions.text = `Hey ${firstName}! There's a new event near you, check it out here: https://erfara-web.herokuapp.com/event/${eventId}`;
+  mailOptions.text = `Hey ${firstName}! There's a new event near you, check it out here: www.erfara.com/event/${eventId}`;
   return mailTransport.sendMail(mailOptions);
 }
 
@@ -206,7 +206,7 @@ exports.sendEmailOnMessage = functions.database.ref('/conversations/users/{userI
       to: `"${toUser.name}" <${toUser.email}>`,
     };
     mailOptions.subject = `New Message from ${fromUser.name} on Erfara`;
-    mailOptions.text = `${fromUser.name} says: "${message.message}"\n\n\nReply here: https://erfara-web.herokuapp.com/messages/${message.from}`;
+    mailOptions.text = `${fromUser.name} says: "${message.message}"\n\n\nReply here: www.herokuapp.com/messages/${message.from}`;
     return mailTransport.sendMail(mailOptions).then(() => {
       console.log("Email for new message " + " sent to: ", toUser.email + " from: ", fromUser.name);
     });
