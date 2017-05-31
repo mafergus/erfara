@@ -125,11 +125,11 @@ export class OnboardingModal extends React.Component {
       if (!categories.some(item => item.name === category.name)) {
         autoAddCategory(category.name).then(category => {
           if (category) {
-            addUserSkill(authedUser.uid, category.id);
+            addUserSkill(authedUser.uid, category.id, category.name);
           }
         });
       } else {
-        addUserSkill(authedUser.uid, category.id);
+        addUserSkill(authedUser.uid, category.id, category.name);
       }
     });
   }

@@ -19,7 +19,12 @@ export default class EventList extends React.Component {
     title: "events",
   };
 
-  static renderItem(eventId, event) {
+  constructor() {
+    super();
+    autoBind(this);
+  }
+
+  renderItem(eventId, event) {
     const { photo } = event;
     const STYLE = {
       display: "flex",
@@ -41,11 +46,6 @@ export default class EventList extends React.Component {
     </Link>;
   }
 
-  constructor() {
-    super();
-    autoBind(this);
-  }
-
   render() {
     const { events, title, className, style } = this.props;
     if (!events) { return null; }
@@ -58,7 +58,7 @@ export default class EventList extends React.Component {
       </span>
       <hr style={{ margin: "0.8em 1em" }} />
       <div style={{ margin: "0em 1em" }}>
-        {events.map(event => EventList.renderItem(event.id, event))}
+        {events.map(event => renderItem(event.id, event))}
       </div>
     </div>;
   }

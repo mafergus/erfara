@@ -32,6 +32,20 @@ firebase.database().ref('feeds').on('value', snapshot => {
   }
 });
 
+firebase.database().ref("categories").on("value", snapshot => {
+  const categories = snapshot.val();
+  if (categories) {
+    store.dispatch({ type: "GET_CATEGORIES_SUCCESS", categories });
+  }
+});
+
+firebase.database().ref("user-categories").on("value", snapshot => {
+  const userCategories = snapshot.val();
+  if (userCategories) {
+    store.dispatch({ type: "GET_USER_CATEGORIES_SUCCESS", userCategories });
+  }
+});
+
 firebase.onAuthSuccess = (userId) => {
   if (!userId) { return; }
   firebase.database().ref("/users/" + userId).on('value', snapshot => {

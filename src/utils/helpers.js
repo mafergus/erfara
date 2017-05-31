@@ -41,3 +41,7 @@ export function flattenImmutableMap(toFlatten) {
   });
   return flattened;
 }
+
+export function orderByDate(arr) {
+  return arr.slice().sort((a, b) => a[1]["date"] < b[1]["date"] ? -1 : 1);
+}

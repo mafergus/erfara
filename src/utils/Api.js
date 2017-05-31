@@ -27,6 +27,20 @@ export function fetchUsers() {
   return firebase.database().ref("/users").once("value");
 }
 
+export function fetchWikipediaDescription(searchTerm) {
+  return new Promise((resolve, reject) => {
+    const baseUrl = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&explaintext=1&origin=*";
+    const term = encodeURIComponent(searchTerm);
+    fetch(`${baseUrl}&titles=${term}`).then(response => {
+      if (response && response.ok) {
+        return response.json();
+      }
+    })
+    .then(json => resolve(Object.values(json.query.pages)[0].extract.split("\n")[0]))
+    .catch(error => reject(new Error(error)));
+  });
+}
+
 export function addMessage(recipientId, senderId, message, date) {
   const messageData = {
     message,
@@ -67,10 +81,10 @@ export function searchCategories(searchTerm) {
 export function getCategories() {
   return new Promise((resolve, reject) => {
     firebase.database().ref("/categories").orderByChild("name").once("value", snap => {
-      const categories = [];
+      const categories = {};
       snap.forEach(child => {
         const value = child.val();
-        categories.push({ ...value, id: child.key });
+        categories[child.key] = { ...value, id: child.key };
       });
       resolve(categories);
     }).catch(error => reject(error));
@@ -231,14 +245,30 @@ export function addUserFeedReply(senderId, userId, message, timestamp, parentId)
   return firebase.database().ref().update(updates);
 }
 
-export function addUserSkill(userId, categoryId) {
+export function addUserSkill(userId, categoryId, categoryName) {
   const newUserCategoryKey = firebase.database().ref("/user-categories/").push().key;
   const updates = {};
   updates[`/user-categories/${newUserCategoryKey}/userId`] = userId;
   updates[`/user-categories/${newUserCategoryKey}/categoryId`] = categoryId;
   updates[`/users/${userId}/skills/${newUserCategoryKey}`] = true;
 
-  return firebase.database().ref().update(updates); 
+  const strArray = categoryName.split(" ");
+  let title = "";
+  strArray.forEach((str, index) => {
+    if (index === 0) {
+      title = str.charAt(0).toUpperCase() + str.slice(1) + " ";
+      return;
+    }
+    title = title.concat(str.toLowerCase() + " ");
+  });
+
+  return fetchWikipediaDescription(title).then(description => {
+    updates[`/user-categories/${newUserCategoryKey}/description`] = description;
+    return firebase.database().ref().update(updates);
+  }).catch(() => {
+    updates[`/user-categories/${newUserCategoryKey}/description`] = "Update me!";
+    return firebase.database().ref().update(updates);
+  });
 }
 
 export function getPhotoUrl(searchTerm, isThumbnail=false) {
