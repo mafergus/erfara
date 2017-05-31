@@ -5,7 +5,6 @@ import { lightBlack } from 'material-ui/styles/colors';
 import autoBind from 'react-autobind';
 import { addUser, getPhoto, uploadFile, checkUserExists } from "utils/Api";
 import store from "store/store";
-import { Col, Row } from "react-bootstrap";
 
 /**
  * A modal dialog can only be closed by selecting one of the actions.
@@ -59,45 +58,34 @@ export default class AuthModal extends React.Component {
     });
   }
 
-  handleSignUpGoogle() {
-    this.props.handleClose();
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithPopup(provider)
-    .then(AuthModal.onSuccess)
-    .catch(error => {
-      if (error.code === "auth/account-exists-with-different-credential") {
-        alert(error.message);
-      }
-    });
-  }
+  // handleSignUpGoogle() {
+  //   this.props.handleClose();
+  //   const provider = new firebase.auth.GoogleAuthProvider();
+  //   firebase.auth().signInWithPopup(provider)
+  //   .then(AuthModal.onSuccess)
+  //   .catch(error => {
+  //     if (error.code === "auth/account-exists-with-different-credential") {
+  //       alert(error.message);
+  //     }
+  //   });
+  // }
 
   render() {
     const { title, isOpen, handleClose } = this.props;
 
     return (
       <Dialog
-        contentStyle={{ textAlign: "center", width: "60%" }}
+        contentStyle={{ width: "30%" }}
         title={title}
         titleStyle={{ fontSize: "1.1em", textAlign: "left", padding: "12px 0px 12px 25px", color: lightBlack }}
         modal={false}
         onRequestClose={handleClose}
         open={isOpen}>
-        <Row style={{ height: 225 }}>
-          <Col sm={6} xs={12} style={{ height: "100%" }}>
-            <div style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <button
-                className="googleSignUpButton"
-                onTouchTap={this.handleSignUpGoogle}></button>
-            </div>
-          </Col>
-          <Col sm={6} xs={12} style={{ height: "100%" }}>
-            <div style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <button
-                className="facebookSignUpButton"
-                onTouchTap={this.handleSignUpFacebook}></button>
-            </div>
-          </Col>
-        </Row>
+        <div style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center", marginTop: 40, marginBottom: 40 }}>
+          <button
+            className="facebookSignUpButton"
+            onTouchTap={this.handleSignUpFacebook}></button>
+        </div>
       </Dialog>
     );
   }
