@@ -10,10 +10,12 @@ import { Grid, Col } from "react-bootstrap";
 import HappyEmoji from "material-ui/svg-icons/social/sentiment-very-satisfied";
 import ShareIcon from "material-ui/svg-icons/maps/transfer-within-a-station";
 import BuildFriendshipIcon from "material-ui/svg-icons/image/brightness-5";
+import { orderByDate } from "utils/helpers";
 
 function mapStateToProps(state) {
   return {
     browser: state.browser,
+    sortedEvents: orderByDate(Object.entries(state.events.toJS())) || [],
   };
 }
 
@@ -21,25 +23,12 @@ export class SplashPage extends React.Component {
 
   static propTypes = {
     browser: PropTypes.object.isRequired,
+    sortedEvents: PropTypes.array.isRequired,
   };
 
   static contextTypes = {
     router: PropTypes.object,
   };
-
-  static renderEvents() {
-    return <Col sm={12} md={7} className="events-panel no-padding">
-      <div style={{ height: "100%", overflowX: "hidden" }}>
-        <EventsList
-          style={{ width: "100%" }}
-          header={<div style={{ width: "100%", margin: "25px auto 15px auto" }}>
-            <h1 style={{ color: orange500, fontSize: "1.6em", fontFamily: "Roboto-Light" }}>Upcoming Events</h1>
-            <h3 style={{ color: darkGray, fontSize: "0.8em", marginBottom: 0 }}>Around the San Francisco Bay Area</h3>
-          </div>}
-        />
-      </div>
-    </Col>;
-  }
 
   constructor() {
     super();
@@ -66,6 +55,23 @@ export class SplashPage extends React.Component {
         <p style={{ textAlign: "center" }}>{text}</p>
       </div>
     </div>;
+  }
+
+  renderEvents() {
+    const { sortedEvents } = this.props;
+
+    return <Col sm={12} md={7} className="events-panel no-padding">
+      <div style={{ height: "100%", overflowX: "hidden" }}>
+        <EventsList
+          style={{ width: "100%" }}
+          events={sortedEvents}
+          header={<div style={{ width: "100%", margin: "25px auto 15px auto" }}>
+            <h1 style={{ color: orange500, fontSize: "1.6em", fontFamily: "Roboto-Light" }}>Upcoming Events</h1>
+            <h3 style={{ color: darkGray, fontSize: "0.8em", marginBottom: 0 }}>Around the San Francisco Bay Area</h3>
+          </div>}
+        />
+      </div>
+    </Col>;
   }
 
   renderHero() {
@@ -102,7 +108,7 @@ export class SplashPage extends React.Component {
           handleClose={() => this.setState({ isJoinOpen: false })} 
         />
         {this.renderHero()}
-        {SplashPage.renderEvents()}
+        {this.renderEvents()}
       </div>
     </Grid>;
   }

@@ -2,18 +2,20 @@ import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import GoogleMap from 'google-map-react';
+import List from "components/EventList/List";
 import EventsList from "components/EventList/EventsList";
+import UserCategoryList from "components/UserCategoryList/UserCategoryList";
 import { erfaraBlack } from "utils/colors";
 import { DEFAULT_LOCATION, GOOGLE_MAPS_API_KEY } from "utils/constants";
 import GoogleMapLoader from "react-google-maps-loader";
-import { flattenImmutableMap } from "utils/helpers";
+import { orderByDate } from "utils/helpers";
 import MapsPlace from "material-ui/svg-icons/maps/place";
 import shouldPureComponentUpdate from "react-pure-render/function";
 import { orange600 } from "material-ui/styles/colors";
 
 function mapStateToProps(state) {
   return {
-    events: flattenImmutableMap(state.events),
+    events: orderByDate(Object.entries(state.events.toJS())) || [],
   };
 }
 
@@ -28,23 +30,6 @@ export class HomePage extends React.Component {
     googleMaps: {},
   };
 
-  static renderHeaders() {
-    return <div style={{ width: "100%", marginBottom: 35 }}>
-      <div style={{ width: "100%", marginTop: 10 }}>
-        <h3 style={{ color: erfaraBlack, margin: 0, display: "inline-block" }}>Upcoming events near you</h3>
-        <h4 style={{ margin: 0, float: "right" }}>Events&nbsp;&nbsp;&nbsp;&nbsp;People</h4>
-      </div>
-    </div>;
-  }
-
-  static renderList() {
-    return <EventsList 
-      header={HomePage.renderHeaders()}
-      style={{ width: "100%", marginTop: 30 }}
-      hasFeatured={false}
-    />;
-  }
-
   constructor() {
     super();
     autoBind(this);
@@ -53,6 +38,7 @@ export class HomePage extends React.Component {
       isPopupOpen: false,
       center: DEFAULT_LOCATION,
       zoom: 10,
+      selectedTab: 0,
     };
   }
 
@@ -70,9 +56,9 @@ export class HomePage extends React.Component {
     const { events, googleMaps } = this.props;
     const markers = events.map(item => {
       return <div
-          key={item.id}
-          lat={item.geoCoordinates.latitude}
-          lng={item.geoCoordinates.longitude}
+          key={item[0]}
+          lat={item[1].geoCoordinates.latitude}
+          lng={item[1].geoCoordinates.longitude}
       >
         <MapsPlace
           style={{ height: 35, width: 35, marginTop: -30, marginLeft: -17 }}
@@ -95,10 +81,50 @@ export class HomePage extends React.Component {
     );
   }
 
+  renderHeaders() {
+    return <div style={{ width: "100%", marginBottom: 35 }}>
+      <div style={{ width: "100%", marginTop: 10 }}>
+        <h3 style={{ color: erfaraBlack, margin: 0, display: "inline-block" }}>Upcoming events near you</h3>
+        {this.renderTabs()}
+      </div>
+    </div>;
+  }
+
+  renderList() {
+    const { events } = this.props;
+
+    return <List 
+      header={this.renderHeaders()}
+      style={{ width: "100%", marginTop: 30 }}
+    >
+      {this.state.selectedTab === 0 ? <EventsList events={events} hasFeatured={false} /> : <UserCategoryList />}
+    </List>;
+  }
+
+  renderTabs() {
+    return <span>
+      <div style={{ margin: 0, float: "right" }}>
+        <h4
+          className={this.state.selectedTab === 0 ? "tab-text-selected" : "tab-text-unselected"}
+          style={{ marginRight: 30 }}
+          onClick={() => this.setState({ selectedTab: 0 })}
+        >
+          Events
+        </h4>
+        <h4
+        className={this.state.selectedTab === 1 ? "tab-text-selected" : "tab-text-unselected"}
+          onClick={() => this.setState({ selectedTab: 1 })}
+        >
+          People
+        </h4>
+      </div>
+    </span>;
+  }
+
   render() {
     return <div>
       {this.renderMap()}
-      {HomePage.renderList()}
+      {this.renderList()}
     </div>;
   }
 }
