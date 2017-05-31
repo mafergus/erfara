@@ -94,17 +94,25 @@ export class EventPage extends React.Component {
   render() {
     // if (!this.event) { return <div></div> };
     const { event, host, authedUser, attendees, isRSVPD, browser, params } = this.props;
+    let width = "95%";
+    if (browser.greaterThan.medium) {
+      width = "75%";
+    } else if (browser.greaterThan.small) {
+      width = "85%";
+    }
     if (!event) { return null; }
+
     return <div style={{ width: "100%", position: "relative" }}>
       <EventHero
         authedUser={authedUser}
+        browser={browser}
         event={{ ...event, id: params.id }}
         host={host}
         onRSVPClick={this.onRSVP}
         isRSVPD={isRSVPD}
-        isExtraSmall={browser.is.extraSmall}
+        width={width}
       />
-      <div style={{ width: browser.is.extraSmall ? "95%" : "75%", margin: `${browser.is.extraSmall ? "5px" : "15px"} auto 0px auto` }}>
+      <div style={{ width, margin: `${browser.is.extraSmall ? "5px" : "15px"} auto 0px auto` }}>
         <EventDetails style={{ marginBottom: 14 }} event={event} browser={browser} />
         <Row>
           <Col lg={3} sm={12} style={{ paddingRight: browser.greaterThan.large ? 0 : 15 }}>
