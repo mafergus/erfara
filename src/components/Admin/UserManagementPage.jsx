@@ -3,10 +3,10 @@ import ImmutablePropTypes from "react-immutable-proptypes";
 import autoBind from "react-autobind";
 import { connect } from "react-redux";
 import { addUsers } from "actions/userActions";
-import { fetchUsers, deleteUser } from "utils/Api";
+import { fetchUsers } from "utils/Api";
 import { bindActionCreators } from "redux";
 import Dialog from "material-ui/Dialog";
-import RaisedButton from "material-ui/RaisedButton";
+import UserDetails from "components/Admin/UserDetails";
 
 function mapStateToProps(state) {
   return {
@@ -56,7 +56,8 @@ export class UserManagementPage extends React.Component {
       backgroundColor: "rgba(0,0,0,0.35)",
       margin: 15,
     };
-    return <div style={STYLE} className="hoverable" onClick={() => this.setState({ dialogOpen: true, selectedUser: user.uid })}>
+
+    return <div style={STYLE} className="hoverable" onClick={() => this.setState({ dialogOpen: true, selectedUser: user })}>
       <div style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <span>{user.name}</span>
       </div>
@@ -65,16 +66,14 @@ export class UserManagementPage extends React.Component {
 
   render() {
     const { users } = this.props;
+    const { selectedUser } = this.state;
+
     return <div>
       <Dialog
         modal={false}
         onRequestClose={() => this.setState({ dialogOpen: false, })}
         open={this.state.dialogOpen}>
-        <RaisedButton
-          label="Delete User"
-          onClick={deleteUser.bind(null, this.state.selectedUser)}
-          primary
-        />
+        <UserDetails user={selectedUser} onClose={() => this.setState({ dialogOpen: false })} />
       </Dialog>;
       {users.map(user => this.renderUser(user))}
     </div>;
