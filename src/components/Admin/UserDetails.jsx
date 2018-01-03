@@ -30,8 +30,12 @@ export class UserDetails extends React.Component {
 
   deleteUser() {
     const { onClose, userCategories, userEvents, user } = this.props;
-
-    userCategories.forEach(userCategory => firebase.database().ref("/user-categories/" + userCategory[0]).remove());
+    debugger;
+    userCategories.forEach(userCategory => {
+      debugger;
+      console.log("userCategory " + userCategory[0]);
+      firebase.database().ref("/user-categories/" + userCategory[0]).remove() 
+    });
     userEvents.forEach(eventEntry => {
       const attendeePromises = [];
       Object.keys(eventEntry[1].attendees).forEach(attendee => {

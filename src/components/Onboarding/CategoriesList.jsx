@@ -1,5 +1,6 @@
 import React, { PropTypes } from "react";
 import autoBind from "react-autobind";
+import Measure from 'react-measure';
 import CategoryListItem from "components/Onboarding/CategoryListItem";
 
 export default class CategoriesList extends React.Component {
@@ -18,10 +19,19 @@ export default class CategoriesList extends React.Component {
   constructor() {
     super();
     autoBind(this);
+
+    this.state = {
+      dimensions: {
+        width: -1,
+        height: -1,
+      },
+    };
   }
 
   render() {
     const { categories, selectedCategories, onCategorySelected, style } = this.props;
+    const { width, height } = this.state.dimensions;
+    const numItems = Math.floor((width + 22) / 160);
     let items = [];
     const rows = [];
     let combinedCategories = [];
@@ -30,12 +40,11 @@ export default class CategoriesList extends React.Component {
       // This is pretty ugly, but basically we wanted to filter selected categories
       // but ignore any new categories
       filteredCategories = filteredCategories.filter(item => !selectedCategories.some(selectedCat => selectedCat.id === item.id));
-      combinedCategories = [...combinedCategories, ...selectedCategories]; 
     }
     combinedCategories = [...combinedCategories, ...filteredCategories];
     if (combinedCategories) {
      combinedCategories.forEach(category => {
-        if (items.length === 4) {
+        if (items.length === numItems) {
           rows.push(<div key={rows.length}>{items}</div>);
           items = [];
         }
@@ -45,7 +54,7 @@ export default class CategoriesList extends React.Component {
             category={category}
             isSelected={selectedCategories ? selectedCategories.some(item => item.hasOwnProperty("id") && item.id === category.id) : false}
             onClick={onCategorySelected}
-            style={items.length === 3 ? { "marginRight": 0 } : {}}
+            style={items.length === numItems-1 ? { "marginRight": 0 } : {}}
           />
         );
       });
@@ -53,8 +62,18 @@ export default class CategoriesList extends React.Component {
     if (items.length) {
       rows.push(<div key={rows.length}>{items}</div>);
     }
-    return <div style={{ width: "100%", height: 500, overflow: "scroll", ...style }}>
-      {rows}
-    </div>;
+    return <Measure
+        bounds
+        onResize={(contentRect) => {
+          this.setState({ dimensions: contentRect.bounds });
+        }}
+      >
+        {({ measureRef }) => {
+            return <div ref={measureRef} style={{ width: "100%", height: 500, overflow: "scroll", ...style }}>
+              {rows}
+            </div>;
+          }
+        }
+      </Measure>;
   }
 }

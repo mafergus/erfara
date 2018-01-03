@@ -2,14 +2,14 @@ import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import autoBind from "react-autobind";
-import Dialog from 'material-ui/Dialog';
-import FullscreenDialog from 'material-ui-fullscreen-dialog';
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
 import CategoriesList from "components/Onboarding/CategoriesList";
 import { Search } from "components/Glyphs";
 import { addCategories, addCategorySearchResults } from "actions/categoriesActions";
 import { autoAddCategory, searchCategories, getPhotoUrl, getCategories, addUserSkill } from "utils/Api";
+import FullscreenDialog from "components/Dialog/FullscreenDialog";
+import CategoryListItem from "components/Onboarding/CategoryListItem";
 
 const REQUIRED_CATEGORIES_COUNT = 2;
 
@@ -19,13 +19,18 @@ const BUTTON_CONTAINER_STYLE = {
   backgroundColor: "white",
   boxShadow: "0px -2px 8px rgba(0, 0, 0, 0.08)",
   marginTop: 8,
-  position: "fixed",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  bottom: 0,
-  left: 0,
-  right: 0
+};
+
+const MODAL_CONTENT_STYLE = {
+  height: "100%",
+  backgroundColor: "white",
+  position: "relative",
+  display: "flex",
+  flexDirection: "column",
+  borderRadius: 3,
 };
 
 function mapStateToProps(state) {
@@ -112,10 +117,14 @@ export class OnboardingModal extends React.Component {
         updatedCategory.id = category.name;
       }
       newSelectedCategories = [...this.state.selectedCategories, updatedCategory];
-      this.setState({ selectedCategories: newSelectedCategories });
-      if (category === this.state.newCategory) {
-        this.setState({ searchTerm: "", newCategory: null });
-      }
+      this.setState({ selectedCategories: newSelectedCategories }, () => {
+        if (category === this.state.newCategory) {
+          this.setState({ searchTerm: "", newCategory: null });
+        }
+        if (newSelectedCategories.length === 3) {
+          this.onSubmit();
+        }
+      });
     }
   }
 
@@ -138,6 +147,7 @@ export class OnboardingModal extends React.Component {
     const { browser } = this.props;
     const SEARCHBOX_STYLE = {
       height: 42,
+      minHeight: 42,
       padding: "0px 15px",
       border: "1px solid rgba(0, 0, 0, 0.14)",
       marginBottom: 25,
@@ -150,12 +160,28 @@ export class OnboardingModal extends React.Component {
       <TextField
         style={{ width: "100%" }}
         underlineShow={false}
+        hintStyle={{ fontSize: "0.9em" }}
         hintText="Enter category here"
         value={this.state.searchTerm}
         onKeyPress={this.onKeyPress}
         onChange={this.onSearchChange}
         autoFocus
       />
+    </div>;
+  }
+
+  renderSelectedCategories() {
+    return <div>
+      <h4>Selected Categories</h4>
+      <div style={{ width: "100%", height: 200 }}>
+        {this.state.selectedCategories.map(category => {
+          return <CategoryListItem
+            key={category.id || category.name}
+            category={category}
+            isSelected={false}
+          />;
+        })}
+      </div>
     </div>;
   }
 
@@ -167,11 +193,13 @@ export class OnboardingModal extends React.Component {
       searchResults = [];
       searchResults.push(this.state.newCategory);
     }
-    const padding = browser.lessThan.medium ? "0px" : "0px 50px";
-    return <div style={{ padding, position: "relative", display: "flex", flexDirection: "column" }}>
-      <h2 style={{ marginBottom: 20 }}>What skills will you teach the community?</h2>
-      <h4 style={{ marginBottom: 30 }}>Select {REQUIRED_CATEGORIES_COUNT} or more</h4>
+    const padding = browser.lessThan.medium ? "0px 25px" : "0px 50px";
+    const width = browser.lessThan.medium ? "100%" : "52%";
+    return <div style={{ ...MODAL_CONTENT_STYLE, padding, width }}>
+      <h2 style={{ marginBottom: 17 }}>What skills will you teach the community?</h2>
+      <h4 style={{ marginBottom: 20 }}>Select {REQUIRED_CATEGORIES_COUNT} or more</h4>
       {this.renderSearchBox()}
+      {this.state.selectedCategories.length ? this.renderSelectedCategories() : ""}
       <CategoriesList
         categories={searchResults}
         onCategorySelected={this.onCategorySelected}
@@ -191,17 +219,10 @@ export class OnboardingModal extends React.Component {
   }
 
   render() {
-    const { browser, showModal } = this.props;
-    const Component = browser.lessThan.medium ? FullscreenDialog : Dialog;
-
-    return <Component
-      appBarStyle={{ display: "none" }}
-      open={showModal}
-      modal={false}
-      fullScreen
-    >
+    const { showModal } = this.props;
+    return <FullscreenDialog open={showModal}>
       {this.renderContent()}
-    </Component>;
+    </FullscreenDialog>;
   }
 }
 

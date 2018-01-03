@@ -48,10 +48,11 @@ export default function CategoryListItem({ style, category, onClick, isSelected 
 CategoryListItem.propTypes = {
   category: PropTypes.object.isRequired,
   isSelected: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   style: PropTypes.object,
 };
 
 CategoryListItem.defaultProps = {
   style: {},
+  onClick: function() {},
 };
