@@ -9,6 +9,7 @@ export default class EventsList extends React.Component {
     style: PropTypes.object,
     itemStyle: PropTypes.object,
     events: PropTypes.array.isRequired,
+    header: PropTypes.node,
     hasFeatured: PropTypes.bool,
     cols: PropTypes.number,
   };
@@ -44,7 +45,7 @@ export default class EventsList extends React.Component {
   }
 
   render() {
-    const { cols, events, style, hasFeatured, itemStyle } = this.props;
+    const { cols, events, style, hasFeatured, itemStyle, header } = this.props;
     const STYLE = {
       padding: "0px 15px",
       position: "relative",
@@ -75,6 +76,7 @@ export default class EventsList extends React.Component {
     });
     if (items.length !== 0) { rows.push(this.renderRow(rows, items)); }
     return <div style={STYLE}>
+      <div style={{ width: "100%", margin: "0px auto 20px auto" }}>{header}</div>
       {rows}
     </div>;
   }
