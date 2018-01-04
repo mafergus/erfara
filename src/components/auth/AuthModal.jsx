@@ -18,7 +18,7 @@ export default class AuthModal extends React.Component {
   };
 
   static onSuccess(result) {
-    const { user, credential } = result;
+    const { user } = result;
     let userData = {
       name: user.displayName,
       uid: user.uid,
@@ -30,7 +30,7 @@ export default class AuthModal extends React.Component {
       '/me',
       'GET',
       { "fields": "id,name,email" },
-      function(response) {
+      (response) => {
         if (!response || response.error) {
           alert("Couldn't get FB info");
         } else {
@@ -59,11 +59,11 @@ export default class AuthModal extends React.Component {
   componentDidMount() {
     window.fbAsyncInit = function() {
       window.FB.init({
-        appId      : "1686372394915080",
-        cookie     : true,  // enable cookies to allow the server to access
+        appId: "1686372394915080",
+        cookie: true,  // enable cookies to allow the server to access
                           // the session
-        xfbml      : true,  // parse social plugins on this page
-        version    : "v2.1" // use version 2.1
+        xfbml: true,  // parse social plugins on this page
+        version: "v2.1" // use version 2.1
       });
   
       // Now that we've initialized the JavaScript SDK, we call
@@ -77,15 +77,15 @@ export default class AuthModal extends React.Component {
       //    your app or not.
       //
       // These three cases are handled in the callback function.
-      window.FB.getLoginStatus(function(response) {
+      window.FB.getLoginStatus((response) => {
         this.statusChangeCallback(response);
-      }.bind(this));
+      });
     }.bind(this);
     
     // Load the SDK asynchronously
     (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
+      let js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
       js = d.createElement(s); js.id = id;
       js.src = "//connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
@@ -110,9 +110,9 @@ export default class AuthModal extends React.Component {
   }
   
   checkLoginState() {
-    window.FB.getLoginStatus(function(response) {
+    window.FB.getLoginStatus((response) => {
       this.statusChangeCallback(response);
-    }.bind(this));
+    });
   }
 
   // testAPI() {

@@ -1,11 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import IconButton from 'material-ui/IconButton'
-import NavigationCloseIcon from 'material-ui/svg-icons/navigation/close'
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import FullscreenDialogFrame from './FullscreenDialogFrame'
+import FullscreenDialogFrame from './FullscreenDialogFrame';
 
-const getStyles = (props, theme) => ({
+const getStyles = () => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -14,16 +12,12 @@ const getStyles = (props, theme) => ({
 });
 
 export default function FullscreenDialog (props, { muiTheme }) {
-  const styles = getStyles(props, muiTheme)
+  const styles = getStyles(props, muiTheme);
 
   const {
     children,
-    closeIcon,
-    onRequestClose,
     open,
     style,
-    title,
-    titleStyle,
   } = props;
 
   return (
@@ -38,16 +32,14 @@ export default function FullscreenDialog (props, { muiTheme }) {
 
 FullscreenDialog.propTypes = {
   children: PropTypes.node,
-  closeIcon: PropTypes.node,
-  onRequestClose: PropTypes.func,
   open: PropTypes.bool,
   style: PropTypes.object,
-  title: PropTypes.string,
-  titleStyle: PropTypes.object,
 };
 
 FullscreenDialog.defaultProps = {
+  children: null,
   open: false,
+  style: {},
 };
 
 FullscreenDialog.contextTypes = {

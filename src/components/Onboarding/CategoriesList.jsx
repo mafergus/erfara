@@ -30,7 +30,7 @@ export default class CategoriesList extends React.Component {
 
   render() {
     const { categories, selectedCategories, onCategorySelected, style } = this.props;
-    const { width, height } = this.state.dimensions;
+    const { width } = this.state.dimensions;
     const numItems = Math.floor((width + 22) / 160);
     let items = [];
     const rows = [];

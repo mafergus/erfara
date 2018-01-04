@@ -54,5 +54,5 @@ CategoryListItem.propTypes = {
 
 CategoryListItem.defaultProps = {
   style: {},
-  onClick: function() {},
+  onClick: () => null,
 };
