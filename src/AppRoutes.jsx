@@ -4,16 +4,16 @@ import {
   IndexRoute,
 } from 'react-router';
 
-import App from "components/App";
-import MainPage from "components/MainPage";
-import EventPage from "components/EventPage/EventPage";
-import MessagingPage from "components/Messaging/MessagingPage";
-import UserPage from "components/UserPage/UserPage";
-import AdminPage from "components/Admin/AdminPage";
-import CategoriesPage from "components/Admin/CategoriesPage";
-import UserManagementPage from "components/Admin/UserManagementPage";
-import MobileConversationList from "components/Messaging/MobileConversationList";
-import MobileMessagingPage from "components/Messaging/MobileMessagingPage";
+import App from "./components/App";
+import MainPage from "./components/MainPage";
+import EventPage from "./components/EventPage/EventPage";
+import MessagingPage from "./components/Messaging/MessagingPage";
+import UserPage from "./components/UserPage/UserPage";
+import AdminPage from "./components/Admin/AdminPage";
+import CategoriesPage from "./components/Admin/CategoriesPage";
+import UserManagementPage from "./components/Admin/UserManagementPage";
+import MobileConversationList from "./components/Messaging/MobileConversationList";
+import MobileMessagingPage from "./components/Messaging/MobileMessagingPage";
 import store from "store/store";
 
 /**

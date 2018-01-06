@@ -1,7 +1,8 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import Title from 'react-title-component';
+import DocumentTitle from 'react-document-title';
 import 'babel-polyfill';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -9,7 +10,7 @@ import { orange500, orange700 } from 'material-ui/styles/colors';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import AppBar from "components/AppBar";
 import CreateEventModal from "components/Modals/CreateEventModal";
-import OnboardingModal from 'components/Onboarding/OnboardingModal';
+import OnboardingModal from "components/Onboarding/OnboardingModal";
 
 function mapStateToProps(state) {
   return {
@@ -94,17 +95,18 @@ class App extends React.Component {
 
     return (
       <div>
-        <Title render={unreadMessagesString} />
-        <AppBar onEventCreate={() => this.setState({ eventModalOpen: true })} />
-        <div style={{ position: "absolute", top: 63, bottom: 0, left: 0, width: "100%" }}>
-          {children}
-        </div>
-        {this.renderFAB()}
-        <CreateEventModal
-          isOpen={this.state.eventModalOpen}
-          onRequestClose={() => this.setState({ eventModalOpen: false })}
-        />
-        <OnboardingModal />
+        <DocumentTitle title={unreadMessagesString}>
+          <AppBar onEventCreate={() => this.setState({ eventModalOpen: true })} />
+          <div style={{ position: "absolute", top: 63, bottom: 0, left: 0, width: "100%" }}>
+            {children}
+          </div>
+          {this.renderFAB()}
+          <CreateEventModal
+            isOpen={this.state.eventModalOpen}
+            onRequestClose={() => this.setState({ eventModalOpen: false })}
+          />
+          <OnboardingModal />
+        </DocumentTitle>
       </div>
     );
   }

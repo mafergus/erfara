@@ -1,5 +1,5 @@
 import thunk from 'redux-thunk';
-import createLogger from "redux-logger";
+import { createLogger } from "redux-logger";
 import { responsiveStoreEnhancer } from 'redux-responsive'; 
 import rootReducer from '../reducers/rootReducer';
 import { createStore, applyMiddleware, compose } from 'redux';

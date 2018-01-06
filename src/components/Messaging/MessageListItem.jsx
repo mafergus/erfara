@@ -1,4 +1,5 @@
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from 'prop-types';
 import autoBind from "react-autobind";
 import { minBlack, darkBlack, orange100 } from "material-ui/styles/colors";
 import Moment from "moment";

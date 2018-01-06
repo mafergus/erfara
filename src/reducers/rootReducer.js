@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { responsiveStateReducer } from 'redux-responsive';
-import { eventsReducer } from 'reducers/eventsReducer';
+import { eventsReducer } from "reducers/eventsReducer";
 import { authedUserReducer } from "reducers/authedUserReducer";
 import { usersReducer } from "reducers/usersReducer";
 import { categoriesReducer } from "reducers/categoriesReducer";

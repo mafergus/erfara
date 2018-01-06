@@ -1,4 +1,5 @@
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import GoogleMap from 'google-map-react';
@@ -12,6 +13,8 @@ import { orderByDate } from "utils/helpers";
 import MapsPlace from "material-ui/svg-icons/maps/place";
 import shouldPureComponentUpdate from "react-pure-render/function";
 import { orange600 } from "material-ui/styles/colors";
+import MainMapBlock from "components/Map/MainMapBlock";
+import ReactGoogleMaps from "components/Map/ReactGoogleMaps";
 
 function mapStateToProps(state) {
   return {
@@ -69,14 +72,8 @@ export class HomePage extends React.Component {
     });
 
     return (
-      <div style={{ width: "100%", height: 240 }}>
-        <GoogleMap
-          defaultCenter={DEFAULT_LOCATION}
-          defaultZoom={9}
-          googleMapLoader={() => new Promise(resolve => resolve(googleMaps))}
-        >
-          {markers}
-        </GoogleMap>
+      <div style={{ width: "100%", height: 240, backgroundColor: "#999" }}>
+      <ReactGoogleMaps />
       </div>
     );
   }
@@ -129,7 +126,4 @@ export class HomePage extends React.Component {
   }
 }
 
-export default GoogleMapLoader(connect(mapStateToProps)(HomePage), {
-  libraries: ["places"],
-  key: GOOGLE_MAPS_API_KEY,
-});
+export default connect(mapStateToProps)(HomePage);

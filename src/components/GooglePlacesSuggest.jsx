@@ -1,9 +1,10 @@
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from 'prop-types';
 import AutoComplete from 'material-ui/AutoComplete';
 import GoogleMapLoader from "react-google-maps-loader";
 import { GOOGLE_MAPS_API_KEY } from "utils/constants";
 
-export class GooglePlacesSuggest extends React.Component {
+export default class GooglePlacesSuggest extends React.Component {
 
   static propTypes = {
     googleMaps: PropTypes.object.isRequired,
@@ -112,22 +113,44 @@ export class GooglePlacesSuggest extends React.Component {
     const { hintStyle, fontSize } = this.props;
     const dataSourceConfig = { text: 'description', value: 'id'};
 
-    return <AutoComplete
-      hintText="Enter a location"
-      hintStyle={{ fontSize, color: "#BDBDBD", ...hintStyle }}
-      textFieldStyle={{ fontSize, paddingLeft: 10 }}
-      filter={AutoComplete.noFilter}
-      dataSource={suggests}
-      dataSourceConfig={dataSourceConfig}
-      listStyle={{ width: "100%", marginLeft: -8 }}
-      underlineShow={false}
-      onUpdateInput={(value, dataSource, params) => { this.gotText(value, suggests, params); }}
-      onNewRequest={(chosenItem) => { this.handleSelectSuggest(chosenItem); }}
+    return <ReactGoogleMapLoader
+        params={{
+            key: GOOGLE_MAPS_API_KEY,
+            libraries: "places",
+        }}
+        render={googleMaps =>
+            googleMaps && (
+              <AutoComplete
+                hintText="Enter a location"
+                hintStyle={{ fontSize, color: "#BDBDBD", ...hintStyle }}
+                textFieldStyle={{ fontSize, paddingLeft: 10 }}
+                filter={AutoComplete.noFilter}
+                dataSource={suggests}
+                dataSourceConfig={dataSourceConfig}
+                listStyle={{ width: "100%", marginLeft: -8 }}
+                underlineShow={false}
+                onUpdateInput={(value, dataSource, params) => { this.gotText(value, suggests, params); }}
+                onNewRequest={(chosenItem) => { this.handleSelectSuggest(chosenItem); }}
+              />
+            )}
     />;
+
+    // return <AutoComplete
+    //   hintText="Enter a location"
+    //   hintStyle={{ fontSize, color: "#BDBDBD", ...hintStyle }}
+    //   textFieldStyle={{ fontSize, paddingLeft: 10 }}
+    //   filter={AutoComplete.noFilter}
+    //   dataSource={suggests}
+    //   dataSourceConfig={dataSourceConfig}
+    //   listStyle={{ width: "100%", marginLeft: -8 }}
+    //   underlineShow={false}
+    //   onUpdateInput={(value, dataSource, params) => { this.gotText(value, suggests, params); }}
+    //   onNewRequest={(chosenItem) => { this.handleSelectSuggest(chosenItem); }}
+    // />;
   }
 }
 
-export default GoogleMapLoader(GooglePlacesSuggest, {
-  libraries: ["places"],
-  key: GOOGLE_MAPS_API_KEY,
-});
+// export default GoogleMapLoader(GooglePlacesSuggest, {
+//   libraries: ["places"],
+//   key: GOOGLE_MAPS_API_KEY,
+// });

@@ -1,4 +1,5 @@
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from 'prop-types';
 import { erfaraBlack } from "utils/colors";
 import { minBlack } from "material-ui/styles/colors";
 import Moment from "moment";

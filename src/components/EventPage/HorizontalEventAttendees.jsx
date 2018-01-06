@@ -1,4 +1,5 @@
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from 'prop-types';
 import { erfaraBlack } from "utils/colors";
 
 const IMG_STYLE = {
@@ -16,7 +17,8 @@ export default function HorizontalEventAttendees({ attendees }) {
       <hr style={{ margin: "17px 0px" }} />
     </div>
     <div>
-      {attendees.map(user => user && <img alt="Attendee"
+      {attendees.map(user => user && <img 
+        alt="Attendee"
         key={user.uid}
         style={IMG_STYLE}
         src={user.photo} />)

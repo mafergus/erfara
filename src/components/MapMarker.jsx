@@ -1,4 +1,5 @@
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from 'prop-types';
 import autoBind from "react-autobind";
 import MapsPlace from "material-ui/svg-icons/maps/place";
 import { orange600 } from "material-ui/styles/colors";
