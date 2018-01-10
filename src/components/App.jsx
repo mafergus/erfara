@@ -96,16 +96,18 @@ class App extends React.Component {
     return (
       <div>
         <DocumentTitle title={unreadMessagesString}>
-          <AppBar onEventCreate={() => this.setState({ eventModalOpen: true })} />
-          <div style={{ position: "absolute", top: 63, bottom: 0, left: 0, width: "100%" }}>
-            {children}
+          <div>
+            <AppBar onEventCreate={() => this.setState({ eventModalOpen: true })} />
+            <div style={{ position: "absolute", top: 63, bottom: 0, left: 0, width: "100%" }}>
+              {children}
+            </div>
+            {this.renderFAB()}
+            <CreateEventModal
+              isOpen={this.state.eventModalOpen}
+              onRequestClose={() => this.setState({ eventModalOpen: false })}
+            />
+            <OnboardingModal />
           </div>
-          {this.renderFAB()}
-          <CreateEventModal
-            isOpen={this.state.eventModalOpen}
-            onRequestClose={() => this.setState({ eventModalOpen: false })}
-          />
-          <OnboardingModal />
         </DocumentTitle>
       </div>
     );
