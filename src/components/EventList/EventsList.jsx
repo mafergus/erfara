@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import autoBind from "react-autobind";
 import EventListItem from "components/EventList/EventListItem";
-import { Row } from "react-bootstrap";
+import { Row } from 'fluid-react';
 
 export default class EventsList extends React.Component {
 

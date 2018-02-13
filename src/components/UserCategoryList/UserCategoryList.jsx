@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { getUserCategories } from "actions/userCategoriesActions";
 import UserCategoryItem from "components/UserCategoryList/UserCategoryItem";
-import { Row } from "react-bootstrap";
+import { Container, Row, Col } from 'fluid-react';
 
 function mapStateToProps(state) {
   return {
@@ -30,19 +30,28 @@ export class UserCategoryList extends React.Component {
 
   render() {
     const { style, userCategories } = this.props;
+    let rowItems = [];
+    const rows = [];
 
-    return <Row style={style}>
-      {userCategories.map(userCategory => {
-        return <UserCategoryItem
+    userCategories.forEach((userCategory, key) => {
+      console.log("catergories.forEach" + " rowItems.length " + rowItems.length);
+      if (rowItems.length === 4) {
+        console.log("categories.forEach " + " adding category");
+        rows.push(<Row key={rows.length} style={{ marginBottom: 15 }}>{rowItems}</Row>);
+        rowItems = [];
+      }
+      rowItems.push(<UserCategoryItem
           key={userCategory.id}
           categoryImage={userCategory.category.image}
           categoryName={userCategory.category.name}
           onClick={() => alert("click")}
           userImage={userCategory.user.photo}
           username={userCategory.user.name}
-        />;
-      })}
-    </Row>;
+        />);
+    });
+    rows.push(<Row key={rows.length}>{rowItems}</Row>);
+
+    return <Container>{rows}</Container>;
   }
 }
 

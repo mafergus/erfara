@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { erfaraBlack, darkGray } from "utils/colors";
 import Alarm from 'material-ui/svg-icons/action/alarm';
 import Place from 'material-ui/svg-icons/maps/place';
-import { Col, Row } from "react-bootstrap";
+import { Col, Row } from 'fluid-react';
 
 export default class EventDetails extends React.Component {
 

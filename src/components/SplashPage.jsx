@@ -7,7 +7,7 @@ import { orange50, orange500 } from 'material-ui/styles/colors';
 import { darkGray, erfaraBlack } from "utils/colors";
 import AuthModal from 'components/auth/AuthModal';
 import EventsList from "components/EventList/EventsList";
-import { Grid, Col } from "react-bootstrap";
+import { Container, Col } from 'fluid-react';
 import HappyEmoji from "material-ui/svg-icons/social/sentiment-very-satisfied";
 import ShareIcon from "material-ui/svg-icons/maps/transfer-within-a-station";
 import BuildFriendshipIcon from "material-ui/svg-icons/image/brightness-5";
@@ -101,7 +101,7 @@ export class SplashPage extends React.Component {
   }
 
   render() {
-    return <Grid>
+    return <Container>
       <div style={{ position: "absolute", top: 0, bottom: 0, left: 0, width: "100%" }}>
         <AuthModal 
           title="Sign Up"
@@ -111,7 +111,7 @@ export class SplashPage extends React.Component {
         {this.renderHero()}
         {this.renderEvents()}
       </div>
-    </Grid>;
+    </Container>;
   }
 }
 

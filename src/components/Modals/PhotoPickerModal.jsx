@@ -7,7 +7,7 @@ import Dialog from "material-ui/Dialog";
 import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
 import CircularProgress from 'material-ui/CircularProgress';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'fluid-react';
 import { erfaraBlack } from "utils/colors";
 import { getPhotos, uploadFile, putEventPhoto } from "utils/Api";
 import store from "store/store";

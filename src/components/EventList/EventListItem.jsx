@@ -8,7 +8,7 @@ import { fetchUser } from "utils/Api";
 import { addUser } from "actions/userActions";
 import Attendees from "components/EventList/Attendees";
 import DateBox from "components/DateBox";
-import { Col } from "react-bootstrap";
+import { Col } from 'fluid-react';
 
 function mapStateToProps(state, props) {
   const event = state.events.get(props.eventUid);

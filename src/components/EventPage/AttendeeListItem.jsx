@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from "react-router";
 import { darkBlack, lightBlack } from "material-ui/styles/colors";
 import { USER_PLACEHOLDER } from "utils/constants";
-import { Col } from "react-bootstrap";
+import { Col } from 'fluid-react';
 
 const IMG_STYLE = {
   height: "2.5em",

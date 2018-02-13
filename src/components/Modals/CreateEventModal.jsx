@@ -12,7 +12,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
 import { addEvent, getPhoto, uploadFile } from "utils/Api";
 import "components/Modals/CreateEventModal.scss";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col } from 'fluid-react';
 import GooglePlacesSuggest from "components/GooglePlacesSuggest";
 
 const PLACEHOLDER_PHOTO = "http://files.parsetfss.com/a5e80e30-a275-49f2-989e-e218e12017db/tfss-02ed6157-7aa6-4ffa-b530-16f711fb8f59-muir-woods.jpg";

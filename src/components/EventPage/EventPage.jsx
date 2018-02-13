@@ -10,7 +10,7 @@ import EventHero from "components/EventPage/EventHero";
 import FeedContainer from "components/Feed/FeedContainer";
 import { erfaraBlack } from "utils/colors";
 import HorizontalEventAttendees from "components/EventPage/HorizontalEventAttendees";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row } from 'fluid-react';
 
 const USER_LIST_STYLE = {
   height: "100%",

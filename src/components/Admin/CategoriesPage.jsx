@@ -1,4 +1,3 @@
-require('bootstrap/dist/css/bootstrap.css');
 import React from "react";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
@@ -9,7 +8,7 @@ import TextField from "material-ui/TextField";
 import Dialog from "material-ui/Dialog";
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'fluid-react';
 import { autoAddCategory, updateCategory, getPhotos, uploadFile, deleteCategory } from "utils/Api";
 
 const CATEGORY_ITEM_STYLE = {
@@ -186,6 +185,7 @@ export class CategoriesPage extends React.Component {
     if (!categories) { return null; }
     let rowItems = [];
     const rows = [];
+
     categories.forEach((category, key) => {
       if (rowItems.length === 4) {
         rows.push(<Row key={rows.length} style={{ marginBottom: 15 }}>{rowItems}</Row>);
@@ -196,7 +196,7 @@ export class CategoriesPage extends React.Component {
       </Col>);
     });
     rows.push(<Row key={rows.length}>{rowItems}</Row>);
-    return <Grid>
+    return <Container>
       {this.renderPhotosModal()}
       {this.renderCategoryModal()}
       <div style={{ margin: "50px 0px" }}>
@@ -210,7 +210,7 @@ export class CategoriesPage extends React.Component {
         />
       </div>
       {rows}
-    </Grid>;
+    </Container>;
   }
 }
 
