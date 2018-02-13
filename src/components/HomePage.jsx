@@ -13,7 +13,6 @@ import { orderByDate } from "utils/helpers";
 import MapsPlace from "material-ui/svg-icons/maps/place";
 import shouldPureComponentUpdate from "react-pure-render/function";
 import { orange600 } from "material-ui/styles/colors";
-import MainMapBlock from "components/Map/MainMapBlock";
 import ReactGoogleMaps from "components/Map/ReactGoogleMaps";
 
 function mapStateToProps(state) {
@@ -73,7 +72,7 @@ export class HomePage extends React.Component {
 
     return (
       <div style={{ width: "100%", height: 240, backgroundColor: "#999" }}>
-      <ReactGoogleMaps />
+        <ReactGoogleMaps />
       </div>
     );
   }
@@ -101,19 +100,19 @@ export class HomePage extends React.Component {
   renderTabs() {
     return <span>
       <div style={{ margin: 0, float: "right" }}>
-        <h4
+        <span
           className={this.state.selectedTab === 0 ? "tab-text-selected" : "tab-text-unselected"}
           style={{ marginRight: 30 }}
           onClick={() => this.setState({ selectedTab: 0 })}
         >
           Events
-        </h4>
-        <h4
+        </span>
+        <span
         className={this.state.selectedTab === 1 ? "tab-text-selected" : "tab-text-unselected"}
           onClick={() => this.setState({ selectedTab: 1 })}
         >
           People
-        </h4>
+        </span>
       </div>
     </span>;
   }
