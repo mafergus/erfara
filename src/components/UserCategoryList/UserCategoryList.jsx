@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import autoBind from "react-autobind";
 import { getUserCategories } from "actions/userCategoriesActions";
 import UserCategoryItem from "components/UserCategoryList/UserCategoryItem";
-import { Container, Row, Col } from 'fluid-react';
+import { Container, Row } from 'fluid-react';
 
 function mapStateToProps(state) {
   return {
@@ -15,12 +15,7 @@ function mapStateToProps(state) {
 export class UserCategoryList extends React.Component {
 
   static propTypes = {
-    style: PropTypes.object,
     userCategories: PropTypes.array.isRequired,
-  };
-
-  static defaultProps = {
-    style: {},
   };
   
   constructor() {
@@ -29,14 +24,12 @@ export class UserCategoryList extends React.Component {
   }
 
   render() {
-    const { style, userCategories } = this.props;
+    const { userCategories } = this.props;
     let rowItems = [];
     const rows = [];
 
-    userCategories.forEach((userCategory, key) => {
-      console.log("catergories.forEach" + " rowItems.length " + rowItems.length);
+    userCategories.forEach(userCategory => {
       if (rowItems.length === 4) {
-        console.log("categories.forEach " + " adding category");
         rows.push(<Row key={rows.length} style={{ marginBottom: 15 }}>{rowItems}</Row>);
         rowItems = [];
       }

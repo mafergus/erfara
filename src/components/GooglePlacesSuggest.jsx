@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import AutoComplete from 'material-ui/AutoComplete';
-import GoogleMapLoader from "react-google-maps-loader";
+import ReactGoogleMapLoader from "react-google-maps-loader";
 import { GOOGLE_MAPS_API_KEY } from "utils/constants";
 
 export default class GooglePlacesSuggest extends React.Component {
@@ -119,7 +119,7 @@ export default class GooglePlacesSuggest extends React.Component {
             libraries: "places",
         }}
         render={googleMaps =>
-            googleMaps && (
+            googleMaps &&
               <AutoComplete
                 hintText="Enter a location"
                 hintStyle={{ fontSize, color: "#BDBDBD", ...hintStyle }}
@@ -132,7 +132,7 @@ export default class GooglePlacesSuggest extends React.Component {
                 onUpdateInput={(value, dataSource, params) => { this.gotText(value, suggests, params); }}
                 onNewRequest={(chosenItem) => { this.handleSelectSuggest(chosenItem); }}
               />
-            )}
+            }
     />;
 
     // return <AutoComplete

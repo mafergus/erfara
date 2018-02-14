@@ -61,9 +61,9 @@ export default class AuthModal extends React.Component {
     window.fbAsyncInit = function() {
       window.FB.init({
         appId: "1686372394915080",
-        cookie: true,  // enable cookies to allow the server to access
+        cookie: true, // enable cookies to allow the server to access
                           // the session
-        xfbml: true,  // parse social plugins on this page
+        xfbml: true, // parse social plugins on this page
         version: "v2.1" // use version 2.1
       });
   
@@ -85,7 +85,9 @@ export default class AuthModal extends React.Component {
     
     // Load the SDK asynchronously
     (function(d, s, id) {
-      let js, fjs = d.getElementsByTagName(s)[0];
+      // eslint-disable-next-line prefer-const
+      let js; // eslint-disable-line prefer-const
+      const fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) { return; }
       js = d.createElement(s); js.id = id;
       js.src = "//connect.facebook.net/en_US/sdk.js";

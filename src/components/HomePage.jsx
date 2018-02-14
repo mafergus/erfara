@@ -2,13 +2,11 @@ import React from "react";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import autoBind from "react-autobind";
-import GoogleMap from 'google-map-react';
 import List from "components/EventList/List";
 import EventsList from "components/EventList/EventsList";
 import UserCategoryList from "components/UserCategoryList/UserCategoryList";
 import { erfaraBlack } from "utils/colors";
-import { DEFAULT_LOCATION, GOOGLE_MAPS_API_KEY } from "utils/constants";
-import GoogleMapLoader from "react-google-maps-loader";
+import { DEFAULT_LOCATION } from "utils/constants";
 import { orderByDate } from "utils/helpers";
 import MapsPlace from "material-ui/svg-icons/maps/place";
 import shouldPureComponentUpdate from "react-pure-render/function";
@@ -25,11 +23,6 @@ export class HomePage extends React.Component {
 
   static propTypes = {
     events: PropTypes.array.isRequired,
-    googleMaps: PropTypes.any,
-  };
-
-  static defaultProps = {
-    googleMaps: {},
   };
 
   constructor() {
@@ -55,7 +48,7 @@ export class HomePage extends React.Component {
   }
 
   renderMap() {
-    const { events, googleMaps } = this.props;
+    const { events } = this.props;
     const markers = events.map(item => {
       return <div
           key={item[0]}
@@ -72,7 +65,7 @@ export class HomePage extends React.Component {
 
     return (
       <div style={{ width: "100%", height: 240, backgroundColor: "#999" }}>
-        <ReactGoogleMaps />
+        <ReactGoogleMaps markers={markers} />
       </div>
     );
   }

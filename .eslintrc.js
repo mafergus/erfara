@@ -99,7 +99,7 @@ module.exports = {
     "no-useless-constructor": 1,
     "no-var": 1,
     "prefer-arrow-callback": 1,
-    "prefer-const": 1,
+    // "prefer-const": 1, // Can't ignore lines so pulling this out for now
     // "prefer-destructuring": 1, //Figure this out!
     "prefer-spread": 1,
     "require-yield": 1,

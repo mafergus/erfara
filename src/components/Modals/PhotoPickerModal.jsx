@@ -86,12 +86,12 @@ export class PhotoPickerModal extends React.Component {
 
   requestClose() {
     const { onRequestClose } = this.props;
-    this.state = {
+    this.setState({
       dropzoneActive: false,
       files: [],
       selectedPhoto: null,
       image: [],
-    };
+    });
 
     onRequestClose();
   }

@@ -1,7 +1,6 @@
 require('./stylesheets/main.scss');
 import React from 'react';
 import ReactDOM from 'react-dom';
-import RootElement from 'components/RootElement';
 import store from './store/store';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Router, browserHistory } from 'react-router';
@@ -14,9 +13,8 @@ injectTapEventPlugin();
 const mountNode = document.createElement('div');
 mountNode.setAttribute("id", "mountNode");
 document.body.appendChild(mountNode);
-const rootElement = document.getElementById("mountNode");
 
 ReactDOM.render(
   <Provider store={store}><Router history={browserHistory} onUpdate={() => window.scrollTo(0, 0)}>{routes(store)}</Router></Provider>,
-  rootElement
+  document.getElementById("mountNode")
   );
