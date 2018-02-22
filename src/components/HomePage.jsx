@@ -12,6 +12,8 @@ import MapsPlace from "material-ui/svg-icons/maps/place";
 import shouldPureComponentUpdate from "react-pure-render/function";
 import { orange600 } from "material-ui/styles/colors";
 import ReactGoogleMaps from "components/Map/ReactGoogleMaps";
+import SimpleMap from "components/Map/SimpleMap";
+import { Marker } from "react-google-maps";
 
 function mapStateToProps(state) {
   return {
@@ -65,7 +67,7 @@ export class HomePage extends React.Component {
 
     return (
       <div style={{ width: "100%", height: 240, backgroundColor: "#999" }}>
-        <ReactGoogleMaps markers={markers} />
+        <SimpleMap />
       </div>
     );
   }

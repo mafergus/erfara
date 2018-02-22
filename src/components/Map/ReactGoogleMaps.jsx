@@ -1,5 +1,6 @@
 import _ from "lodash";
 import React from "react";
+import PropTypes from 'prop-types';
 import { compose, withProps } from "recompose";
 import {
   withScriptjs,
@@ -7,7 +8,14 @@ import {
   GoogleMap,
   Marker
 } from "react-google-maps";
-import { GOOGLE_MAPS_API_KEY } from "utils/constants";
+import { GOOGLE_MAPS_API_KEY, DEFAULT_LOCATION } from "utils/constants";
+
+const LeMap = ({ markers }) => 
+  <GoogleMap defaultOptions={{ mapTypeControl: false }}
+          defaultZoom={8}
+          defaultCenter={{ lat: DEFAULT_LOCATION[0], lng: DEFAULT_LOCATION[1] }} >
+    {markers}
+  </GoogleMap>;
 
 const MyMapComponent = compose(
   withProps({
@@ -19,15 +27,14 @@ const MyMapComponent = compose(
   }),
   withScriptjs,
   withGoogleMap
-)(() => <GoogleMap defaultZoom={8} defaultCenter={{ lat: -34.397, lng: 150.644 }}>
-    <Marker position={{ lat: -34.397, lng: 150.644 }} />
-  </GoogleMap>
-);
+)(LeMap);
 
 const enhance = _.identity;
 
-const ReactGoogleMaps = () => [
-  <MyMapComponent key="map" />
-];
+const ReactGoogleMaps = ({ markers }) => {
+  return [
+  <MyMapComponent key="map" markers={markers} />
+  ];
+};
 
 export default enhance(ReactGoogleMaps);
