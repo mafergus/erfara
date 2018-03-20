@@ -2,12 +2,18 @@ import React from "react";
 import PropTypes from 'prop-types';
 import AutoComplete from 'material-ui/AutoComplete';
 import ReactGoogleMapLoader from "react-google-maps-loader";
-import { GOOGLE_MAPS_API_KEY } from "utils/constants";
+import {
+  withScriptjs,
+  withGoogleMap,
+  GoogleMap,
+  Marker
+} from "react-google-maps";
+import { GOOGLE_MAPS_API_KEY, DEFAULT_LOCATION } from "utils/constants";
+import scriptLoader from 'react-async-script-loader';
 
-export default class GooglePlacesSuggest extends React.Component {
+export class GooglePlacesSuggest extends React.Component {
 
   static propTypes = {
-    googleMaps: PropTypes.object.isRequired,
     hintStyle: PropTypes.object,
     fontSize: PropTypes.string,
     onSelectSuggest: PropTypes.func.isRequired,
@@ -36,6 +42,12 @@ export default class GooglePlacesSuggest extends React.Component {
     // this.handleKeyDown = this.handleKeyDown.bind(this)
   }
 
+  componentWillReceiveProps({ isScriptLoadSucceed }) {
+    if (isScriptLoadSucceed) {
+        this.setState({ googleMaps: window.google.maps });
+    }
+  }
+
   handleSelectSuggest(suggest) {
     const { onSelectSuggest } = this.props;
 
@@ -52,7 +64,8 @@ export default class GooglePlacesSuggest extends React.Component {
   }
 
   updateSuggests(search) {
-    const { googleMaps, suggestRadius, suggestTypes } = this.props;
+    const { suggestRadius, suggestTypes } = this.props;
+    const { googleMaps } = this.state;
     const autocompleteService = new googleMaps.places.AutocompleteService();
 
     if (!search) {
@@ -79,7 +92,7 @@ export default class GooglePlacesSuggest extends React.Component {
   }
 
   geocodeSuggest(suggestLabel, callback) {
-    const { googleMaps } = this.props;
+    const { googleMaps } = this.state;
     const geocoder = new googleMaps.Geocoder();
 
     geocoder.geocode({ address: suggestLabel }, (results, status) => {
@@ -113,44 +126,19 @@ export default class GooglePlacesSuggest extends React.Component {
     const { hintStyle, fontSize } = this.props;
     const dataSourceConfig = { text: 'description', value: 'id'};
 
-    return <ReactGoogleMapLoader
-        params={{
-            key: GOOGLE_MAPS_API_KEY,
-            libraries: "places",
-        }}
-        render={googleMaps =>
-            googleMaps &&
-              <AutoComplete
-                hintText="Enter a location"
-                hintStyle={{ fontSize, color: "#BDBDBD", ...hintStyle }}
-                textFieldStyle={{ fontSize, paddingLeft: 10 }}
-                filter={AutoComplete.noFilter}
-                dataSource={suggests}
-                dataSourceConfig={dataSourceConfig}
-                listStyle={{ width: "100%", marginLeft: -8 }}
-                underlineShow={false}
-                onUpdateInput={(value, dataSource, params) => { this.gotText(value, suggests, params); }}
-                onNewRequest={(chosenItem) => { this.handleSelectSuggest(chosenItem); }}
-              />
-            }
+    return <AutoComplete
+      hintText="Enter a location"
+      hintStyle={{ fontSize, color: "#BDBDBD", ...hintStyle }}
+      textFieldStyle={{ fontSize, paddingLeft: 10 }}
+      filter={AutoComplete.noFilter}
+      dataSource={suggests}
+      dataSourceConfig={dataSourceConfig}
+      listStyle={{ width: "100%", marginLeft: -8 }}
+      underlineShow={false}
+      onUpdateInput={(value, dataSource, params) => { this.gotText(value, suggests, params); }}
+      onNewRequest={(chosenItem) => { this.handleSelectSuggest(chosenItem); }}
     />;
-
-    // return <AutoComplete
-    //   hintText="Enter a location"
-    //   hintStyle={{ fontSize, color: "#BDBDBD", ...hintStyle }}
-    //   textFieldStyle={{ fontSize, paddingLeft: 10 }}
-    //   filter={AutoComplete.noFilter}
-    //   dataSource={suggests}
-    //   dataSourceConfig={dataSourceConfig}
-    //   listStyle={{ width: "100%", marginLeft: -8 }}
-    //   underlineShow={false}
-    //   onUpdateInput={(value, dataSource, params) => { this.gotText(value, suggests, params); }}
-    //   onNewRequest={(chosenItem) => { this.handleSelectSuggest(chosenItem); }}
-    // />;
   }
 }
 
-// export default GoogleMapLoader(GooglePlacesSuggest, {
-//   libraries: ["places"],
-//   key: GOOGLE_MAPS_API_KEY,
-// });
+export default scriptLoader([`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`])(GooglePlacesSuggest);

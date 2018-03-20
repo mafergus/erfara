@@ -73,7 +73,7 @@ export default class SimpleMap extends Component {
         key={item[0]}
         lat={item[1].geoCoordinates.latitude}
         lng={item[1].geoCoordinates.longitude}
-        event={item}
+        event={{ ...item[1], id: item[0] }}
         hovered={item[0] === this.state.hoveredMarker.uid}
         onMouseOver={this.onMarkerEnter}
         onMouseExit={this.onMarkerExit}

@@ -93,10 +93,6 @@ export default function FullscreenDialogFrame ({ children, open, style }) {
   return (
     <TransitionGroup
       component='div'
-      transitionAppear
-      transitionAppearTimeout={225}
-      transitionEnter
-      transitionEnterTimeout={225}
     >
       {open && <TransitionItem style={{
           ...styles.root,

@@ -11,7 +11,6 @@ import { orderByDate } from "utils/helpers";
 import MapsPlace from "material-ui/svg-icons/maps/place";
 import shouldPureComponentUpdate from "react-pure-render/function";
 import { orange600 } from "material-ui/styles/colors";
-import ReactGoogleMaps from "components/Map/ReactGoogleMaps";
 import SimpleMap from "components/Map/SimpleMap";
 import { Marker } from "react-google-maps";
 import MapMarker from "components/Map/MapMarker";

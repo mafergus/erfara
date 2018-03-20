@@ -65,7 +65,6 @@ export default class MapMarker extends React.Component {
         onMouseOver={this.onMouseEnter}
         onMouseOut={this.onMouseExit}
         color={orange600} 
-        hoverColor={orange600}
       />;
   }
 }
