@@ -150,7 +150,7 @@ export class AppBar extends React.Component {
       className="appBar"
       title="Erfara"
       titleStyle={{ fontFamily: "LobsterTwo-Regular", color: orange500 }}
-      onTitleTouchTap={this.onTitleTouchTap}
+      onTitleClick={this.onTitleTouchTap}
       iconElementLeft={
         <ErfaraIcon
           color={orange500}
