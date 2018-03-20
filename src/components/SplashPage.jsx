@@ -7,7 +7,7 @@ import { orange50, orange500 } from 'material-ui/styles/colors';
 import { darkGray, erfaraBlack } from "utils/colors";
 import AuthModal from 'components/auth/AuthModal';
 import EventsList from "components/EventList/EventsList";
-import { Container, Col } from 'fluid-react';
+import { Container, Row, Col } from 'fluid-react';
 import HappyEmoji from "material-ui/svg-icons/social/sentiment-very-satisfied";
 import ShareIcon from "material-ui/svg-icons/maps/transfer-within-a-station";
 import BuildFriendshipIcon from "material-ui/svg-icons/image/brightness-5";
@@ -61,22 +61,30 @@ export class SplashPage extends React.Component {
   renderEvents() {
     const { sortedEvents } = this.props;
 
-    return <Col sm={12} md={7} className="events-panel no-padding">
-      <div style={{ height: "100%", overflowX: "hidden" }}>
-        <EventsList
-          style={{ width: "100%" }}
-          events={sortedEvents}
-          header={<div style={{ width: "100%", margin: "25px auto 15px auto" }}>
-            <h1 style={{ color: orange500, fontSize: "1.6em", fontFamily: "Roboto-Light" }}>Upcoming Events</h1>
-            <h3 style={{ color: darkGray, fontSize: "0.8em", marginBottom: 0 }}>Around the San Francisco Bay Area</h3>
-          </div>}
-        />
-      </div>
+    return <Col
+      sm={12}
+      md={7}
+      style={{ height: "100%", overflowX: "hidden" }}
+      className="events-panel no-padding"
+    >
+      <EventsList
+        style={{ width: "100%" }}
+        events={sortedEvents}
+        header={<div style={{ width: "100%", margin: "25px auto 15px auto" }}>
+          <h1 style={{ color: orange500, fontSize: "1.6em", fontFamily: "Roboto-Light" }}>Upcoming Events</h1>
+          <h3 style={{ color: darkGray, fontSize: "0.8em", marginBottom: 0 }}>Around the San Francisco Bay Area</h3>
+        </div>}
+      />
     </Col>;
   }
 
   renderHero() {
-    return <Col sm={12} md={5} className="hero no-padding" style={{ display: "flex", flexDirection: "column" }}>
+    return <Col
+      sm={12}
+      md={5}
+      className="hero no-padding"
+      style={{ display: "flex", flexDirection: "column" }}
+    >
       <div style={{ width: "100%" }} className="hero-image">
         <div>
           <span style={{ fontSize: "2.6em", fontFamily: "Roboto-Light", color: "white" }}>
@@ -101,16 +109,16 @@ export class SplashPage extends React.Component {
   }
 
   render() {
-    return <Container>
-      <div style={{ position: "absolute", top: 0, bottom: 0, left: 0, width: "100%" }}>
-        <AuthModal 
-          title="Sign Up"
-          isOpen={this.state.isJoinOpen}
-          handleClose={() => this.setState({ isJoinOpen: false })} 
-        />
+    return <Container style={{ position: "absolute", top: 0, bottom: 0, left: 0, width: "100%" }}>
+      <AuthModal 
+        title="Sign Up"
+        isOpen={this.state.isJoinOpen}
+        handleClose={() => this.setState({ isJoinOpen: false })} 
+      />
+      <Row style={{ height: "100%" }}>
         {this.renderHero()}
         {this.renderEvents()}
-      </div>
+      </Row>
     </Container>;
   }
 }
