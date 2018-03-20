@@ -52,9 +52,9 @@ export default class LoggedInUserComponent extends React.Component {
 
   onSignOut() {
     this.context.router.push('/');
-    firebase.auth().signOut().then(() => {
-      store.dispatch({ type: "SIGN_OUT_USER" });
-    }, () => alert("oops"));
+    firebase.auth().signOut().then(() => store.dispatch({ type: "SIGN_OUT_USER" }))
+    .then(() => store.dispatch({ type: "CLEAR_CONVERSATIONS" }))
+    .catch(err => alert("oops"));
     const emptyUser = {};
     localStorage.setItem("authedUser", JSON.stringify(emptyUser));
   }

@@ -13,6 +13,7 @@ export function conversationsReducer(state = INITIAL_STATE, action) {
     }
     case "SET_UNREAD_MESSAGE_COUNT": return state.set("unreadMessages", action.count);
     case "SET_SELECTED_CONVERSATION": return state.set("selectedConversation", action.index);
+    case "CLEAR_CONVERSATIONS": return INITIAL_STATE;
     default:
       return state;
   }

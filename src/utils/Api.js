@@ -381,9 +381,7 @@ export function addEventMessage(eventId, userId, message, timestamp) {
 }
 
 export function uploadFile(file, directory="images/") {
-  debugger;
   return new Promise((resolve, reject) => {
-    debugger;
     const storageRef = firebase.storage().ref();
     // Create the file metadata
     const metadata = {

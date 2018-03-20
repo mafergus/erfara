@@ -39,15 +39,11 @@ export default class AuthModal extends React.Component {
 
           checkUserExists(user.uid)
           .catch(user => {
-            debugger;
             store.dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user });
             firebase.onAuthSuccess(user.uid);
             throw new Error("User exists, logging in");
           })
-          .then(() => {
-            debugger;
-            return getPhoto();
-          })
+          .then(() => getPhoto())
           .then(blob => uploadFile(blob))
           .then(url => {
             userData.coverPhoto = url;
