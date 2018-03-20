@@ -4,7 +4,7 @@
   "dependencies": {
     "@google-cloud/debug-agent": "^1.0.0",
     "firebase-admin": "^4.1.2",
-    "firebase-functions": "^0.5",
+    "firebase-functions": "^0.8.2",
     "nodemailer": "^2.4.1"
   },
   "private": true
