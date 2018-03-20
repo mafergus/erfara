@@ -159,6 +159,18 @@ export function autoCompletePlaces(searchTerm) {
   });
 }
 
+export function getUser(uid) {
+  return new Promise((resolve, reject) => {
+    firebase.database().ref(`/users/${uid}`).once('value', snapshot => {
+      if (!user) {
+        throw new Error("No user");
+      } else {
+        resolve(snapshot.val());  
+      }
+    });
+  });
+}
+
 export function checkUserExists(uid) {
   return new Promise((resolve, reject) => {
     firebase.database().ref(`/users/${uid}`).once('value', snapshot => {
@@ -369,7 +381,9 @@ export function addEventMessage(eventId, userId, message, timestamp) {
 }
 
 export function uploadFile(file, directory="images/") {
+  debugger;
   return new Promise((resolve, reject) => {
+    debugger;
     const storageRef = firebase.storage().ref();
     // Create the file metadata
     const metadata = {
