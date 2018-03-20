@@ -9,7 +9,7 @@ import { Place } from "components/Icons/Glyphs";
 const HEIGHT = 30;
 const WIDTH = 21;
 
-const greatPlaceStyle = {
+const STYLE = {
   fill: orange600,
   position: 'absolute',
   width: WIDTH,
@@ -22,6 +22,9 @@ export default class MapMarker extends React.Component {
 
   static propTypes = {
     event: PropTypes.object.isRequired,
+    hovered: PropTypes.bool.isRequired,
+    onMouseOver: PropTypes.func.isRequired,
+    onMouseExit: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -33,14 +36,16 @@ export default class MapMarker extends React.Component {
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
-  mouseEnter() {
-    this.setState({ isHovered: true });
-    // this.props.sendHoverState(true);
+  onMouseEnter() {
+    const { event, onMouseOver } = this.props;
+    // this.setState({ isHovered: true });
+    onMouseOver({ uid: event[0], ...event[1] });
   }
 
-  mouseLeave() {
-    this.setState({ isHovered: false });
-    // this.props.sendHoverState(false);
+  onMouseExit() {
+    const { event, onMouseExit } = this.props;
+    // this.setState({ isHovered: false });
+    onMouseExit({ uid: event[0], ...event[1] });
   }
 
   onMarkerClick () {  // For overlapping (not-clickable) markers
@@ -48,11 +53,17 @@ export default class MapMarker extends React.Component {
     onClickMarker(event);
   }
 
+  getStyle(scale) {
+    return { ...STYLE, top: -HEIGHT*scale };
+  }
+
   render() {
-    const scale = this.state.isHovered ? 1 : 0.65;
+    const scale = this.props.hovered ? 1 : 0.65;
 
     return <Place
-        style={{ ...greatPlaceStyle, transform: `scale(${scale} , ${scale})`, WebkitTransform: `scale(${scale} , ${scale})` }}
+        style={{ ...this.getStyle(scale), transform: `scale(${scale} , ${scale})`, WebkitTransform: `scale(${scale} , ${scale})` }}
+        onMouseOver={this.onMouseEnter}
+        onMouseOut={this.onMouseExit}
         color={orange600} 
         hoverColor={orange600}
       />;

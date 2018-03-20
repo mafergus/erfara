@@ -1,15 +1,32 @@
 import React, { Component } from 'react';
+import autoBind from 'react-autobind';
+import PropTypes from 'prop-types';
 import GoogleMapReact from 'google-map-react';
 import { GOOGLE_MAPS_API_KEY, DEFAULT_LOCATION } from 'utils/constants';
 import MapMarker from 'components/Map/MapMarker';
-
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+import EventListItem from 'components/EventList/EventListItem';
 
 export default class SimpleMap extends Component {
+
+  static propTypes = {
+    children: PropTypes.node,
+    events: PropTypes.array,
+  };
   
   static defaultProps = {
+    children: null,
     center: { lat: DEFAULT_LOCATION[0], lng: DEFAULT_LOCATION[1] },
+    event: null,
     zoom: 8,
+  };
+
+  constructor() {
+    super();
+    autoBind(this);
+
+    this.state = {
+      hoveredMarker: -1,
+    };
   }
 
   _onChildMouseEnter = (key, childProps) => {
@@ -26,7 +43,43 @@ export default class SimpleMap extends Component {
     // }
   }
 
+  onMarkerEnter(event) {
+    this.setState({ hoveredMarker: event });
+  }
+
+  onMarkerExit(event) {
+    this.setState({ hoveredMarker: -1 });
+  }
+
+  renderEventCard() {
+    const { hoveredMarker } = this.state;
+    
+    if (this.state.hoveredMarker !== -1) {
+      debugger;
+      return <EventListItem 
+        key={hoveredMarker.uid}
+        lat={hoveredMarker.geoCoordinates.latitude}
+        lat={hoveredMarker.geoCoordinates.longitude}
+        event={hoveredMarker}
+        eventUid={hoveredMarker.uid}
+      />;
+    }
+  }
+
   render() {
+    const { events } = this.props;
+    const markers = events.map(item => {
+      return item[1].geoCoordinates && <MapMarker
+        key={item[0]}
+        lat={item[1].geoCoordinates.latitude}
+        lng={item[1].geoCoordinates.longitude}
+        event={item}
+        hovered={item[0] === this.state.hoveredMarker.uid}
+        onMouseOver={this.onMarkerEnter}
+        onMouseExit={this.onMarkerExit}
+      />;
+    });
+
     return (
       <GoogleMapReact
         bootstrapURLKeys={{ key: [GOOGLE_MAPS_API_KEY] }}
@@ -35,10 +88,8 @@ export default class SimpleMap extends Component {
         onChildMouseEnter={this._onChildMouseEnter}
         onChildMouseLeave={this._onChildMouseLeave}
       >
-        <MapMarker
-          lat={ DEFAULT_LOCATION[0] }
-          lng={ DEFAULT_LOCATION[1] }
-        />
+        {markers}
+        {this.renderEventCard()}
       </GoogleMapReact>
     );
   }

@@ -14,6 +14,7 @@ import { orange600 } from "material-ui/styles/colors";
 import ReactGoogleMaps from "components/Map/ReactGoogleMaps";
 import SimpleMap from "components/Map/SimpleMap";
 import { Marker } from "react-google-maps";
+import MapMarker from "components/Map/MapMarker";
 
 function mapStateToProps(state) {
   return {
@@ -51,23 +52,10 @@ export class HomePage extends React.Component {
 
   renderMap() {
     const { events } = this.props;
-    const markers = events.map(item => {
-      return <div
-          key={item[0]}
-          lat={item[1].geoCoordinates.latitude}
-          lng={item[1].geoCoordinates.longitude}
-      >
-        <MapsPlace
-          style={{ height: 35, width: 35, marginTop: -30, marginLeft: -17 }}
-          color={orange600} 
-          hoverColor={orange600}
-        />
-      </div>;
-    });
 
     return (
       <div style={{ width: "100%", height: 240, backgroundColor: "#999" }}>
-        <SimpleMap />
+        <SimpleMap events={events} />
       </div>
     );
   }
