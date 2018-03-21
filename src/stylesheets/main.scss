@@ -78,38 +78,58 @@ img {
 
 .text {
   color: $erfara-black;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: normal;
 }
 
-p {
+.xs {
   @extend .text;
-  margin: 0px;
+  font-size: 0.9em;
+}
+
+.sm {
+  @extend .text;
   font-size: 1em;
 }
 
-h1 {
-  @extend .text;
-  margin: 0px;
-  font-size: 2.6em;
-}
-
-h2 {
-  @extend .text;
-  font-size: 1.6em;
-}
-
-h3 {
+.md {
   @extend .text;
   font-size: 1.3em;
 }
 
-h4 {
+.lg {
   @extend .text;
-  font-size: 1em;
+  font-size: 1.6em;
+}
+
+.xl {
+  @extend .text;
+  font-size: 2.6em;
+}
+
+p {
+  @extend .xs;
+}
+
+h1 {
+  @extend .xl;
+}
+
+h2 {
+  @extend .lg;
+}
+
+h3 {
+  @extend .md;
+}
+
+h4 {
+  @extend .sm;
 }
 
 h5 {
-  @extend .text;
-  font-size: 0.8em;
+  @extend .xs;
 }
 
 .app {

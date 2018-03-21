@@ -17,7 +17,6 @@ const USER_LIST_STYLE = {
   width: "100%",
   display: "inline-block",
   verticalAlign: "top",
-  marginBottom: 14,
 };
 
 const USER_FEED_STYLE = {
@@ -114,9 +113,17 @@ export class EventPage extends React.Component {
         width={width}
       />
       <div style={{ width, margin: `${browser.is.extraSmall ? "5px" : "15px"} auto 0px auto` }}>
-        <EventDetails style={{ marginBottom: 14 }} event={event} browser={browser} />
+        <EventDetails
+          style={{ marginBottom: 14 }}
+          event={event}
+          browser={browser}
+        />
         <Row>
-          <Col lg={3} sm={12} style={{ paddingRight: browser.greaterThan.large ? 0 : 15 }}>
+          <Col
+            lg={3}
+            sm={12}
+            style={{ paddingRight: browser.lessThan.large ? 0 : 15, marginBottom: browser.lessThan.large ? 14 : 0 }}
+          >
             {browser.is.extraSmall ? 
               <HorizontalEventAttendees
                 attendees={attendees}

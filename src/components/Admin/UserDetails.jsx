@@ -31,17 +31,29 @@ export class UserDetails extends React.Component {
 
   deleteUser() {
     const { onClose, userCategories, userEvents, user } = this.props;
-    userCategories.forEach(userCategory => {
-      firebase.database().ref("/user-categories/" + userCategory[0]).remove();
+    const opts = { phoneNumber, time };
+
+    fetch('https://https://erfara-2aa21.firebaseapp.com/api/deleteUser/', {
+      method: 'post',
+      body: JSON.stringify(opts),
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert(data.status);
+      console.log("RECEIVED: ", data.status);
     });
-    userEvents.forEach(eventEntry => {
-      const attendeePromises = [];
-      Object.keys(eventEntry[1].attendees).forEach(attendee => {
-        attendeePromises.push(firebase.database().ref("/users/" + attendee + "/attending/" + eventEntry[0]).remove());
-      });
-      Promise.all(attendeePromises).then(() => firebase.database().ref("/events/" + eventEntry[0]).remove());
-    });
-    firebase.database().ref("/users/" + user.uid).remove().then(() => onClose());
+
+    // userCategories.forEach(userCategory => {
+    //   firebase.database().ref("/user-categories/" + userCategory[0]).remove();
+    // });
+    // userEvents.forEach(eventEntry => {
+    //   const attendeePromises = [];
+    //   Object.keys(eventEntry[1].attendees).forEach(attendee => {
+    //     attendeePromises.push(firebase.database().ref("/users/" + attendee + "/attending/" + eventEntry[0]).remove());
+    //   });
+    //   Promise.all(attendeePromises).then(() => firebase.database().ref("/events/" + eventEntry[0]).remove());
+    // });
+    // firebase.database().ref("/users/" + user.uid).remove().then(() => onClose());
   }
 
   render() {

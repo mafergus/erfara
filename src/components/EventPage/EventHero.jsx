@@ -92,9 +92,11 @@ export default class EventHero extends React.Component {
       <DateBox timestamp={timestamp} style={{ height: 70, overflow: "hidden" }} />
       <div style={{ display: "inline-block", paddingLeft: 25, overflow: "hidden", flexGrow: "1" }}>
         <div>
-          <h2 style={{ fontSize: "1.8em", color: "white", fontWeight: "normal", marginTop: 0, verticalAlign: "middle" }}>{event.title}</h2>
-          <img src={host.photo} style={{ height: 30, width: 30, borderRadius: "50%", border: "2px solid white" }} />
-          <span style={{ color: lightTwo, marginLeft: 9 }}>hosted by {host.name}</span>
+          <h2 style={{ color: "white", fontWeight: "normal", marginTop: 0, marginBottom: 10, verticalAlign: "middle" }}>{event.title}</h2>
+          <div style={{ display: "flex", alignItems: "center", marginBottom: 5 }}>
+            <img src={host.photo} style={{ height: 30, width: 30, borderRadius: "50%", border: "2px solid white" }} />
+            <span style={{ color: lightTwo, marginLeft: 9 }} className="xs">hosted by {host.name}</span>
+          </div>
         </div>
       </div>
     </div>;

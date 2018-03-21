@@ -3,9 +3,12 @@
   "description": "Cloud Functions for Firebase",
   "dependencies": {
     "@google-cloud/debug-agent": "^1.0.0",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
     "firebase-admin": "^4.1.2",
     "firebase-functions": "^0.8.2",
-    "nodemailer": "^2.4.1"
+    "nodemailer": "^2.4.1",
+    "npm": "^5.7.1"
   },
   "private": true
 }

@@ -31,7 +31,7 @@ export default class EventDetails extends React.Component {
 
   renderTimeTitle() {
     return <div>
-      <p style={{ fontSize: "1.2em" }}>Time and Place</p>
+      <h4>Time and Place</h4>
       <hr style={{ margin: "10px 0px 20px 0px" }} />
     </div>;
   }
@@ -49,13 +49,13 @@ export default class EventDetails extends React.Component {
             <Col xs={12} sm={5} lg={12} style={{ padding: 0 }}>{EventDetails.renderListItem(Alarm, dateStr, startTimeStr + "-" + endTimeStr)}</Col>
             <Col xs={12} sm={5} lg={12} style={{ padding: 0 }}>{EventDetails.renderListItem(Place, event.locationString)}</Col>
           </Col>
-          <Col xs={12} lg={6} style={{ display: "inline-block", marginBottom: 50, padding: browser.greaterThan.large ? "0px 80px" : "0px 20px" }}>
-            <p style={{ fontSize: "1.2em" }}>Details</p>
+          <Col xs={12} lg={6} style={{ display: "inline-block", marginBottom: 50, padding: browser.greaterThan.large ? "0px 80px" : "0px 0px" }}>
+            <h4>Details</h4>
             <hr style={{ margin: "10px 0px 20px 0px" }} />
             <p style={{ color: erfaraBlack }}>{event.description}</p>
           </Col>
           <Col xs={12} lg={3} style={{ display: "inline-block", marginBottom: 50 }}>
-            <p style={{ fontSize: "1.2em" }}>What to bring</p>
+            <h4>What to bring</h4>
             <hr style={{ margin: "10px 0px 20px 0px" }} />
             <p>{event.advices && event.advices.length > 1 ? event.advices : "Just yourself!"}</p>
           </Col>

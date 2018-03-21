@@ -18,9 +18,20 @@
 const functions = require('firebase-functions');
 // Import and initialize the Firebase Admin SDK.
 const admin = require('firebase-admin');
+const cors = require('cors')
+const express = require('express');
 admin.initializeApp(functions.config().firebase);
 const nodemailer = require('nodemailer');
 require('@google-cloud/debug-agent').start({ allowExpressions: true });
+
+const app = express();
+app.use(cors({ origin: true }));
+app.post('/deleteUser/', (req, res) => { doDeleteUser(req, res) });
+// app.put('/:id', (req, res) => {//...});
+// app.delete('/:id', (req, res) => {//...});
+
+exports.api = functions.https.onRequest(app);
+
 // Configure the email transport using the default SMTP transport and a GMail account.
 // For other types of transports such as Sendgrid see https://nodemailer.com/transports/
 // TODO: Configure the `gmail.email` and `gmail.password` Google Cloud environment variables.
@@ -34,6 +45,10 @@ const mailTransport = nodemailer.createTransport(
 // TODO: Change this to your app or company name to customize the email sent.
 const APP_NAME = 'Erfara';
 const MATT_UID = "AzY3yIip3UaBPicyqgnin7WdHwD2";
+
+function doDeleteUser(req, res) {
+  res.send({ status: "placeholder response" });
+}
 
 // Take the text parameter passed to this HTTP endpoint and insert it into the
 // Realtime Database under the path /messages/:pushId/original
