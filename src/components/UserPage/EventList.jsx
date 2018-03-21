@@ -59,7 +59,7 @@ export default class EventList extends React.Component {
       </span>
       <hr style={{ margin: "0.8em 1em" }} />
       <div style={{ margin: "0em 1em" }}>
-        {events.map(event => renderItem(event.id, event))}
+        {events.map(event => this.renderItem(event.id, event))}
       </div>
     </div>;
   }
