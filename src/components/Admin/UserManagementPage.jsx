@@ -58,7 +58,11 @@ export class UserManagementPage extends React.Component {
       margin: 15,
     };
 
-    return <div style={STYLE} className="hoverable" onClick={() => this.setState({ dialogOpen: true, selectedUser: user })}>
+    return <div
+      style={STYLE}
+      className="hoverable"
+      onClick={() => this.setState({ dialogOpen: true, selectedUser: user })}
+    >
       <div style={{ height: "100%", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <span>{user.name}</span>
       </div>
@@ -68,15 +72,22 @@ export class UserManagementPage extends React.Component {
   render() {
     const { users } = this.props;
     const { selectedUser } = this.state;
+    const userComponents = users.valueSeq().map(entry => {
+      return this.renderUser(entry);
+    });
 
     return <div>
       <Dialog
         modal={false}
         onRequestClose={() => this.setState({ dialogOpen: false, })}
         open={this.state.dialogOpen}>
-        <UserDetails user={selectedUser} onClose={() => this.setState({ dialogOpen: false })} />
+
+        <UserDetails
+          user={selectedUser}
+          onClose={() => this.setState({ dialogOpen: false })}
+        />
       </Dialog>;
-      {users.map(user => this.renderUser(user))}
+      {userComponents}
     </div>;
   }
 }
