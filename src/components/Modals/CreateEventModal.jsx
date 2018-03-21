@@ -213,6 +213,7 @@ export class CreateEventModal extends React.Component {
           value={this.state.time}
           hintStyle={{ HINT_STYLE, color: this.state.hintColor }}
           textFieldStyle={TEXTFIELD_STYLE}
+          minutesStep={15}
           underlineShow={false}  
           onChange={(event, time) => this.setState({ time })} />
       </div>
