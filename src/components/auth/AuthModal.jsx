@@ -27,6 +27,8 @@ export default class AuthModal extends React.Component {
       photo: user.photoURL,
     };
 
+    // debugger;
+
     FB.api(
       '/me',
       'GET',
@@ -35,10 +37,16 @@ export default class AuthModal extends React.Component {
         if (!response || response.error) {
           alert("Couldn't get FB info");
         } else {
-          userData = { ...userData, email: response.email};
+          // debugger;
+          userData = { 
+            ...userData,
+            email: response.email,
+            fbUid: response.id
+          };
 
           checkUserExists(user.uid)
           .catch(user => {
+            // debugger;
             store.dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user });
             firebase.onAuthSuccess(user.uid);
             throw new Error("User exists, logging in");
@@ -46,6 +54,7 @@ export default class AuthModal extends React.Component {
           .then(() => getPhoto())
           .then(blob => uploadFile(blob))
           .then(url => {
+            // debugger;
             userData.coverPhoto = url;
             store.dispatch(addUser(userData));
           })
@@ -131,20 +140,21 @@ export default class AuthModal extends React.Component {
   // }
 
   handleSignUpFacebook() {
+    // debugger;
+
     this.props.handleClose();
     const provider = new firebase.auth.FacebookAuthProvider();
-    provider.addScope("user_birthday");
-    provider.addScope("user_hometown");
     provider.addScope("user_location");
-    provider.addScope("user_about_me");
     provider.addScope("email");
     provider.addScope("public_profile");
-    provider.setCustomParameters({
-      'display': 'popup'
-    });
     firebase.auth().signInWithPopup(provider)
-    .then(result => AuthModal.onSuccess(result))
+    .then(result => { 
+      // debugger;
+      return AuthModal.onSuccess(result);
+    })
     .catch(error => {
+      // debugger;
+      console.log(error);
       if (error.code === "auth/account-exists-with-different-credential") {
         alert(error.message);
       }

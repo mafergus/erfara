@@ -188,11 +188,14 @@ export function addUser(user) {
   return dispatch => {
     if (Object.keys(user).length === 0) { return dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user }); }
 
+    // debugger;
+    
     const updates = {};
     updates["users/" + user.uid + "/name"] = user.name;
     updates["users/" + user.uid + "/uid"] = user.uid;
     updates["users/" + user.uid + "/email"] = user.email;
     updates["users/" + user.uid + "/photo"] = user.photo;
+    updates["users/" + user.uid + "/fbUid"] = user.fbUid;
     updates["users/" + user.uid + "/birthday"] = user.birthday || "";
     updates["users/" + user.uid + "/hometown"] = user.hometown || "";
     updates["users/" + user.uid + "/location"] = user.location || "";

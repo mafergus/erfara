@@ -37,14 +37,13 @@ exports.api = functions.https.onRequest(app);
 // TODO: Configure the `gmail.email` and `gmail.password` Google Cloud environment variables.
 const gmailEmail = encodeURIComponent(functions.config().gmail.email);
 const gmailPassword = encodeURIComponent(functions.config().gmail.password);
-const pass = encodeURIComponent("tempgmailpassword");
-const mailTransport = nodemailer.createTransport(
-    `smtps://${gmailEmail}:${pass}@smtp.gmail.com`);
+const testPass = encodeURIComponent("m8n15f86!!??");
+const mailTransport = nodemailer.createTransport(`smtps://${gmailEmail}:${testPass}@smtp.gmail.com`);
 
 // Your company name to include in the emails
 // TODO: Change this to your app or company name to customize the email sent.
 const APP_NAME = 'Erfara';
-const MATT_UID = "AzY3yIip3UaBPicyqgnin7WdHwD2";
+const MATT_UID = "matt";
 
 function doDeleteUser(req, res) {
   res.send({ status: "placeholder response" });
@@ -62,59 +61,43 @@ exports.addMessage = functions.https.onRequest((req, res) => {
   });
 });
 
-// Listens for new messages added to /messages/:pushId/original and creates an
-// uppercase version of the message to /messages/:pushId/uppercase
-exports.makeUppercase = functions.database.ref('/messages/{pushId}/original').onWrite(event => {
-  // Grab the current value of what was written to the Realtime Database.
-  const original = event.data.val();
-  console.log('Uppercasing', event.params.pushId, original);
-  const uppercase = original.toUpperCase();
-  // You must return a Promise when performing asynchronous tasks inside a Functions such as
-  // writing to the Firebase Realtime Database.
-  // Setting an "uppercase" sibling in the Realtime Database returns a Promise.
-  return event.data.ref.parent.child('uppercase').set(uppercase);
-});
-
 /**
  * Sends a welcome email to new user.
  */
-exports.sendWelcomeEmail = functions.auth.user().onCreate(event => {
-  console.log("Event: ", event);
+// exports.sendWelcomeEmail = functions.auth.user().onCreate(event => {
+//   console.log("Event: ", event);
 
-  functions.auth.user().equalTo
+//   functions.auth.user().equalTo
 
-  const user = event.data;
-  const email = user.email;
-  const displayName = user.displayName;
+//   const user = event.data;
+//   const email = user.email;
+//   const displayName = user.displayName;
 
-  return sendWelcomeEmail(email, displayName);
-});
+//   return sendWelcomeEmail(email, displayName);
+// });
 
 exports.sendWelcomeMessage = functions.auth.user().onCreate(event => {
   const user = event.data;
-  const email = user.email;
-  const displayName = user.displayName;
+  console.log("Sending welcome message to user: ", user);
 
-  sendWelcomeEmail(email, displayName);
+  const messageData = {
+    message: "Welcome to Erfara! Enjoy!",
+    date: new Date(),
+    from: MATT_UID,
+  };
+  const url = `/conversations/users/${user.uid}/${MATT_UID}/messages/`;
+  const newMessageKey = admin.database().ref().child(url).push().key;
+  var updates = {};
+  updates[`/conversations/users/${user.uid}/${MATT_UID}/messages/` + newMessageKey] = messageData;
+  updates[`/conversations/users/${MATT_UID}/${user.uid}/messages/` + newMessageKey] = messageData;
 
-  console.log("Sending welcome message to ", user.email);
+  return admin.database().ref().update(updates);
 
-  return admin.database().ref("users").orderByChild("email").equalTo("matt@erfara.com").once("value")
-  .then(snap => {
-    const mattUser = snap.val();
-    const messageData = {
-      message: "Welcome to Erfara! Enjoy!",
-      date: new Date(),
-      from: MATT_UID,
-    };
-    const url = `/conversations/users/${user.uid}/${MATT_UID}/messages/`;
-    const newMessageKey = admin.database().ref().child(url).push().key;
-    var updates = {};
-    updates[`/conversations/users/${user.uid}/${MATT_UID}/messages/` + newMessageKey] = messageData;
-    updates[`/conversations/users/${MATT_UID}/${user.uid}/messages/` + newMessageKey] = messageData;
-
-    return admin.database().ref().update(updates);
-  });
+  // return admin.database().ref("users").orderByChild("email").equalTo("matt@erfara.com").once("value")
+  // .then(snap => {
+  //   const mattUser = snap.val();
+    
+  // });
 });
 
 exports.sendEventJoinMessage = functions.database.ref('/events/{eventId}/attendees/{userId}').onWrite(event => {
@@ -198,22 +181,22 @@ exports.sendByeEmail = functions.auth.user().onDelete(event => {
   return sendGoodbyEmail(email, displayName);
 });
 
-// Sends a welcome email to the given user.
-function sendWelcomeEmail(email, displayName) {
-  const mailOptions = {
-    from: '"Matt" <matt@erfara.com>',
-    to: email
-  };
+// // Sends a welcome email to the given user.
+// function sendWelcomeEmail(email, displayName) {
+//   const mailOptions = {
+//     from: '"Matt" <matt@erfara.com>',
+//     to: email
+//   };
 
-  console.log("Should send welcome email to ", email);
+//   console.log("Should send welcome email to ", email);
 
-  // The user unsubscribed to the newsletter.
-  mailOptions.subject = "Welcome to Erfara!";
-  mailOptions.text = `Hey ${displayName}! Welcome to ${APP_NAME}, have fun! If you have any questions, problems or feedback don't hesitate to email me!\n\n-Matt, Founder of Erfara`;
-  return mailTransport.sendMail(mailOptions).then(() => {
-    console.log('New welcome email sent to:', email);
-  });
-}
+//   // The user unsubscribed to the newsletter.
+//   mailOptions.subject = "Welcome to Erfara!";
+//   mailOptions.text = `Hey ${displayName}! Welcome to ${APP_NAME}, have fun! If you have any questions, problems or feedback don't hesitate to email me!\n\n-Matt, Founder of Erfara`;
+//   return mailTransport.sendMail(mailOptions).then(() => {
+//     console.log('New welcome email sent to:', email);
+//   });
+// }
 
 // Sends a goodbye email to the given user.
 function sendGoodbyEmail(email, displayName) {
@@ -235,14 +218,17 @@ exports.sendEmailOnMessage = functions.database.ref('/conversations/users/{userI
   const message = event.data.val();
   console.log("Got new message: ", message.message, " from ", message.from);
   if (snapshot.previous.val()) {
-    return;
+    return new Error("Oops!");
   }
 
   const userId = event.params.userId;
-  if (userId === message.from) { return; }
+  if (userId === message.from) {
+    return new Error("Oops!");
+  }
   const fromUserPromise = admin.database().ref("/users/" + message.from).once("value");
   const toUserPromise = admin.database().ref("/users/" + userId).once("value");
-  Promise.all([fromUserPromise, toUserPromise]).then(values => {
+
+  return Promise.all([fromUserPromise, toUserPromise]).then(values => {
     const fromUser = values[0].val();
     const toUser = values[1].val();
     const mailOptions = {
