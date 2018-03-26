@@ -11,6 +11,8 @@ import { addCategories, addCategorySearchResults } from "actions/categoriesActio
 import { autoAddCategory, searchCategories, getPhotoUrl, getCategories, addUserSkill } from "utils/Api";
 import FullscreenDialog from "components/Dialog/FullscreenDialog";
 import CategoryListItem from "components/Onboarding/CategoryListItem";
+import Dialog from "material-ui/Dialog";
+import { darkThree } from "utils/colors";
 
 const REQUIRED_CATEGORIES_COUNT = 2;
 
@@ -32,6 +34,19 @@ const MODAL_CONTENT_STYLE = {
   display: "flex",
   flexDirection: "column",
   borderRadius: 3,
+};
+
+const DIALOG_STYLE = {
+  width: '100vw',
+  height: '100vh',
+  position: 'fixed',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  top: 0,
+  left: 0,
+  zIndex: 1500,
+  background: darkThree,
 };
 
 function mapStateToProps(state) {
@@ -221,9 +236,24 @@ export class OnboardingModal extends React.Component {
 
   render() {
     const { showModal } = this.props;
-    return <FullscreenDialog open={showModal}>
+
+    // return <Dialog
+    //     title="Some Title"
+    //     titleStyle={{ fontSize: "1.1em", textAlign: "left", padding: "12px 0px 12px 25px", color: "black" }}
+    //     modal={true}
+    //     open={true}>
+    //     <div style={DIALOG_STYLE}>
+    //       {this.renderContent()}
+    //     </div>
+    //   </Dialog>;
+
+    return <div style={{ ...DIALOG_STYLE, display: showModal ? "flex" : "none" }}>
       {this.renderContent()}
-    </FullscreenDialog>;
+    </div>;
+
+    // return <FullscreenDialog open={true}>
+    //   {this.renderContent()}
+    // </FullscreenDialog>;
   }
 }
 
