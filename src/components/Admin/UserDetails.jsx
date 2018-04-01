@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import EventsList from "components/EventList/EventsList";
-import firebase from 'firebase';
 import RaisedButton from "material-ui/RaisedButton";
 
 function mapStateToProps(state, props) {
@@ -23,14 +22,11 @@ export class UserDetails extends React.Component {
 
   static propTypes = {
     categories: PropTypes.array.isRequired,
-    onClose: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
-    userCategories: PropTypes.array.isRequired,
     userEvents: PropTypes.array.isRequired,
   };
 
   deleteUser() {
-    const { onClose, userCategories, userEvents, user } = this.props;
     const opts = { phoneNumber, time };
 
     fetch('https://https://erfara-2aa21.firebaseapp.com/api/deleteUser/', {
@@ -40,7 +36,6 @@ export class UserDetails extends React.Component {
     .then(response => response.json())
     .then(data => {
       alert(data.status);
-      console.log("RECEIVED: ", data.status);
     });
 
     // userCategories.forEach(userCategory => {

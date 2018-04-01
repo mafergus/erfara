@@ -163,7 +163,7 @@ export function getUser(uid) {
   return new Promise((resolve, reject) => {
     firebase.database().ref(`/users/${uid}`).once('value', snapshot => {
       if (!user) {
-        throw new Error("No user");
+        reject(new Error("No user"));
       } else {
         resolve(snapshot.val());  
       }

@@ -35,11 +35,8 @@ export default function routes() {
 
   return <Route path="/" component={App}>
     <IndexRoute component={MainPage} />
-    <Route path='privacy-policy' component={() => window.location = URL}/>
-    <Route path="handleAuth" render={(props) => {
-      debugger;
-      <App {...props} />
-    }} />
+    <Route path='privacy-policy' component={() => window.location = URL} />
+    <Route path="handleAuth" render={(props) => <App {...props} />} />
     <Route path="messages">
       <IndexRoute component={isMobile ? MobileConversationList : MessagingPage} />
       <Route path="(:id)" component={isMobile ? MobileMessagingPage : MessagingPage} />

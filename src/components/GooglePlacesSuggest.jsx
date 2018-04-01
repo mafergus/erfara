@@ -1,14 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import AutoComplete from 'material-ui/AutoComplete';
-import ReactGoogleMapLoader from "react-google-maps-loader";
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker
-} from "react-google-maps";
-import { GOOGLE_MAPS_API_KEY, DEFAULT_LOCATION } from "utils/constants";
+import { GOOGLE_MAPS_API_KEY } from "utils/constants";
 import scriptLoader from 'react-async-script-loader';
 
 export class GooglePlacesSuggest extends React.Component {

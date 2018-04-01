@@ -9,9 +9,7 @@ import CategoriesList from "components/Onboarding/CategoriesList";
 import { Search } from "components/Glyphs";
 import { addCategories, addCategorySearchResults } from "actions/categoriesActions";
 import { autoAddCategory, searchCategories, getPhotoUrl, getCategories, addUserSkill } from "utils/Api";
-import FullscreenDialog from "components/Dialog/FullscreenDialog";
 import CategoryListItem from "components/Onboarding/CategoryListItem";
-import Dialog from "material-ui/Dialog";
 import { darkThree } from "utils/colors";
 
 const REQUIRED_CATEGORIES_COUNT = 2;
@@ -250,10 +248,6 @@ export class OnboardingModal extends React.Component {
     return <div style={{ ...DIALOG_STYLE, display: showModal ? "flex" : "none" }}>
       {this.renderContent()}
     </div>;
-
-    // return <FullscreenDialog open={true}>
-    //   {this.renderContent()}
-    // </FullscreenDialog>;
   }
 }
 

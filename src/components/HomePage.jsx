@@ -8,12 +8,8 @@ import UserCategoryList from "components/UserCategoryList/UserCategoryList";
 import { erfaraBlack } from "utils/colors";
 import { DEFAULT_LOCATION } from "utils/constants";
 import { orderByDate } from "utils/helpers";
-import MapsPlace from "material-ui/svg-icons/maps/place";
 import shouldPureComponentUpdate from "react-pure-render/function";
-import { orange600 } from "material-ui/styles/colors";
 import SimpleMap from "components/Map/SimpleMap";
-import { Marker } from "react-google-maps";
-import MapMarker from "components/Map/MapMarker";
 
 function mapStateToProps(state) {
   return {

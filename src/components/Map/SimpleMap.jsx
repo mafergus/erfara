@@ -9,14 +9,14 @@ import EventListItem from 'components/EventList/EventListItem';
 export default class SimpleMap extends Component {
 
   static propTypes = {
-    children: PropTypes.node,
+    center: PropTypes.object,
     events: PropTypes.array,
+    zoom: PropTypes.number,
   };
   
   static defaultProps = {
-    children: null,
     center: { lat: DEFAULT_LOCATION[0], lng: DEFAULT_LOCATION[1] },
-    event: null,
+    events: null,
     zoom: 8,
   };
 
@@ -29,13 +29,13 @@ export default class SimpleMap extends Component {
     };
   }
 
-  _onChildMouseEnter = (key, childProps) => {
+  // _onChildMouseEnter = (key, childProps) => {
     // const markerId = childProps.marker.get('id');
     // const index = this.props.markers.findIndex(m => m.get('id') === markerId);
     // if (this.props.onMarkerHover) {
     //   this.props.onMarkerHover(index);
     // }
-  }
+  // }
 
   _onChildMouseLeave = (/* key, childProps */) => {
     // if (this.props.onMarkerHover) {
@@ -47,7 +47,7 @@ export default class SimpleMap extends Component {
     this.setState({ hoveredMarker: event });
   }
 
-  onMarkerExit(event) {
+  onMarkerExit() {
     this.setState({ hoveredMarker: -1 });
   }
 
@@ -55,11 +55,10 @@ export default class SimpleMap extends Component {
     const { hoveredMarker } = this.state;
     
     if (this.state.hoveredMarker !== -1) {
-      debugger;
       return <EventListItem 
         key={hoveredMarker.uid}
         lat={hoveredMarker.geoCoordinates.latitude}
-        lat={hoveredMarker.geoCoordinates.longitude}
+        long={hoveredMarker.geoCoordinates.longitude}
         event={hoveredMarker}
         eventUid={hoveredMarker.uid}
       />;

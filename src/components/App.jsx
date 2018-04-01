@@ -11,7 +11,6 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import AppBar from "components/AppBar";
 import CreateEventModal from "components/Modals/CreateEventModal";
 import OnboardingModal from "components/Onboarding/OnboardingModal";
-import { FB_APP_ID } from "utils/constants";
 
 function mapStateToProps(state) {
   return {
@@ -54,30 +53,24 @@ class App extends React.Component {
     };
   }
 
-  doSignUp() {
-    const { query } = this.props.location;
-    const code = query.code;
-    const baseUrl = "https://graph.facebook.com/v2.12/oauth/access_token";
-    const redirectUrl = "http://localhost:3000/handleAuth";
-    const APP_SECRET = "3edd7b2e18d82e13d6956de95f7f27d5";
+  // doSignUp() {
+  //   const { query } = this.props.location;
+  //   const code = query.code;
+  //   const baseUrl = "https://graph.facebook.com/v2.12/oauth/access_token";
+  //   const redirectUrl = "http://localhost:3000/handleAuth";
+  //   const APP_SECRET = "3edd7b2e18d82e13d6956de95f7f27d5";
 
-    const request = async () => {
-      const response = await fetch(`${baseUrl}?client_id=${FB_APP_ID}&redirect_uri=${redirectUrl}&client_secret=${APP_SECRET}&code=${code}`);
-      const json = await response.json();
-      console.log(json);
-      const accessToken = json.access_token;
-    }
+  //   const request = async () => {
+  //     const response = await fetch(`${baseUrl}?client_id=${FB_APP_ID}&redirect_uri=${redirectUrl}&client_secret=${APP_SECRET}&code=${code}`);
+  //     const json = await response.json();
+  //     console.log(json);
+  //     const accessToken = json.access_token;
+  //   }
 
-    request();
-  }
+  //   request();
+  // }
 
   componentWillMount() {
-    const props = this.props;
-
-    if (this.props.location) {
-      this.doSignUp();
-    }
-
     this.setState({
       muiTheme: getMuiTheme({
         palette: {

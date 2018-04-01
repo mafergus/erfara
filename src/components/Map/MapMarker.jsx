@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import autoBind from "react-autobind";
-import MapsPlace from "material-ui/svg-icons/maps/place";
 import { orange600 } from "material-ui/styles/colors";
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import { Place } from "components/Icons/Glyphs";
@@ -23,8 +22,13 @@ export default class MapMarker extends React.Component {
   static propTypes = {
     event: PropTypes.object.isRequired,
     hovered: PropTypes.bool.isRequired,
+    onClickMarker: PropTypes.func,
     onMouseOver: PropTypes.func.isRequired,
     onMouseExit: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    onClickMarker: null,
   };
 
   constructor() {
@@ -48,7 +52,7 @@ export default class MapMarker extends React.Component {
     onMouseExit({ uid: event[0], ...event[1] });
   }
 
-  onMarkerClick () {  // For overlapping (not-clickable) markers
+  onMarkerClick() { // For overlapping (not-clickable) markers
     const { event, onClickMarker } = this.props;
     onClickMarker(event);
   }
