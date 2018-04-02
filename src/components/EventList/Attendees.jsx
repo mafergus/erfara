@@ -42,6 +42,7 @@ export default class Attendees extends React.Component {
     attendees: PropTypes.array.isRequired,
     className: PropTypes.string,
     extended: PropTypes.bool,
+    imageStyle: PropTypes.object,
     style: PropTypes.object,
     title: PropTypes.node,
   };
@@ -49,6 +50,7 @@ export default class Attendees extends React.Component {
   static defaultProps = {
     className: "",
     extended: false,
+    imageStyle: {},
     style: {},
     title: "",
   };
@@ -59,7 +61,7 @@ export default class Attendees extends React.Component {
   }
 
   render() {
-    const { extended, attendees, className, style, title } = this.props;
+    const { extended, attendees, className, style, imageStyle, title } = this.props;
     const STYLE = {
       ...DIV_STYLE,
       ...style,
@@ -74,11 +76,11 @@ export default class Attendees extends React.Component {
       children.push(attendees[0] && <img
           alt="Attendee"
           key={attendees[0].uid}
-          style={IMG_STYLE}
+          style={{ ...IMG_STYLE, ...imageStyle }}
           src={attendees[0] && attendees[0].photo}
         />);
       if (attendees.length > 1) {
-        children.push(<div key="123" style={CHILD_STYLE}>
+        children.push(<div key="123" style={{ ...CHILD_STYLE, ...imageStyle }}>
           <div style={CHILD_CONTAINER_STYLE}>
             <span style={{ color: lightBlack, verticalAlign: "middle", fontSize: "0.8em" }}>{`+${attendees.length-1}`}</span>
           </div>

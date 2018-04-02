@@ -114,6 +114,7 @@
     "react-measure": "^2.0.2",
     "react-pure-render": "^1.0.2",
     "react-redux": "^5.0.1",
+    "react-resizable": "^1.7.5",
     "react-router": "^3.2.0",
     "react-tap-event-plugin": "^3.0.2",
     "react-title-component": "^1.0.1",

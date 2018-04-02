@@ -53,14 +53,14 @@ export class ConversationListItem extends React.Component {
         </div>
         <div style={{ width: "50%", display: "inline-block", flexGrow: "1", paddingRight: 15 }}>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <span className="title ellipsis" style={{ color: darkBlack, fontSize: "1.2em", fontWeight: "500", flexGrow: "1" }}>
+            <span className="title ellipsis sm" style={{ color: darkBlack, fontWeight: "500", flexGrow: "1" }}>
               {user.name}
             </span>
             <span style={{ color: minBlack, fontSize: "0.8em" }}>
               {moment.fromNow()}
             </span>
           </div>
-          <p className="subtitle ellipsis" style={{ color: lightBlack, fontSize: "0.95em", marginTop: "0.3em" }}>{message.message}</p>
+          <p className="subtitle ellipsis xs" style={{ color: lightBlack, marginTop: "0.3em" }}>{message.message}</p>
         </div>
         {getUnreadMessageCountForConversation(authedUser, conversation) > 0 && <Badge
           style={{ padding: 0 }}

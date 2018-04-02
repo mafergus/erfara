@@ -5,7 +5,7 @@ export function categoriesReducer(state = Immutable.Map(), action) {
     case "GET_CATEGORIES_SUCCESS": {
       let newState = state;
       Object.entries(action.categories).forEach(entry => {
-        newState = newState.set(entry[0], entry[1]);
+        newState = newState.set(entry[0], { id: entry[0], ...entry[1] });
       });
       return newState;
     }

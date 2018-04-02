@@ -43,13 +43,13 @@ export default class MapMarker extends React.Component {
   onMouseEnter() {
     const { event, onMouseOver } = this.props;
     // this.setState({ isHovered: true });
-    onMouseOver({ uid: event[0], ...event[1] });
+    onMouseOver(event);
   }
 
   onMouseExit() {
     const { event, onMouseExit } = this.props;
     // this.setState({ isHovered: false });
-    onMouseExit({ uid: event[0], ...event[1] });
+    onMouseExit(event);
   }
 
   onMarkerClick() { // For overlapping (not-clickable) markers

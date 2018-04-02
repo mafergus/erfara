@@ -202,7 +202,9 @@ export class OnboardingModal extends React.Component {
   renderContent() {
     const { browser, categories } = this.props;
     let { searchResults } = this.props;
-    if (this.state.searchTerm.length === 0) { searchResults = categories; }
+    if (this.state.searchTerm.length === 0) { 
+      searchResults = categories;
+    }
     if (this.state.newCategory && searchResults.length === 0) {
       searchResults = [];
       searchResults.push(this.state.newCategory);

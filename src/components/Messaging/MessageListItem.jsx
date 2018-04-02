@@ -28,7 +28,6 @@ const THEIR_ITEM_STYLE = {
 
 const MESSAGE_STYLE = {
   color: darkBlack,
-  fontSize: "1em",
   margin: "15px 11px 15px 15px",
 };
 
@@ -36,7 +35,7 @@ const TIMESTAMP_STYLE = {
   color: minBlack,
   fontSize: "0.8em",
   alignSelf: "flex-end",
-  margin: "0px 10px 5px 0px",
+  margin: "0px 10px 6px 0px",
   whiteSpace: "nowrap",
 };
 
@@ -63,7 +62,7 @@ export default class MessageListItem extends React.Component {
     };
     return <div style={{ overflow: "auto", display: "flex" }}>
       <div style={STYLE}>
-        <span style={MESSAGE_STYLE}>{message.message}</span>
+        <span style={MESSAGE_STYLE} className="xs">{message.message}</span>
         <span style={TIMESTAMP_STYLE}>{moment.fromNow()}</span>
       </div>
     </div>;

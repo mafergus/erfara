@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import GoogleMapReact from 'google-map-react';
 import { GOOGLE_MAPS_API_KEY, DEFAULT_LOCATION } from 'utils/constants';
 import MapMarker from 'components/Map/MapMarker';
-import EventListItem from 'components/EventList/EventListItem';
+import MapCard from 'components/Map/MapCard';
 
 export default class SimpleMap extends Component {
 
@@ -29,20 +29,6 @@ export default class SimpleMap extends Component {
     };
   }
 
-  // _onChildMouseEnter = (key, childProps) => {
-    // const markerId = childProps.marker.get('id');
-    // const index = this.props.markers.findIndex(m => m.get('id') === markerId);
-    // if (this.props.onMarkerHover) {
-    //   this.props.onMarkerHover(index);
-    // }
-  // }
-
-  _onChildMouseLeave = (/* key, childProps */) => {
-    // if (this.props.onMarkerHover) {
-    //   this.props.onMarkerHover(-1);
-    // }
-  }
-
   onMarkerEnter(event) {
     this.setState({ hoveredMarker: event });
   }
@@ -53,14 +39,14 @@ export default class SimpleMap extends Component {
 
   renderEventCard() {
     const { hoveredMarker } = this.state;
-    
+
     if (this.state.hoveredMarker !== -1) {
-      return <EventListItem 
-        key={hoveredMarker.uid}
+      return <MapCard 
+        key={hoveredMarker.id}
         lat={hoveredMarker.geoCoordinates.latitude}
-        long={hoveredMarker.geoCoordinates.longitude}
+        lng={hoveredMarker.geoCoordinates.longitude}
         event={hoveredMarker}
-        eventUid={hoveredMarker.uid}
+        eventUid={hoveredMarker.id}
       />;
     }
   }
