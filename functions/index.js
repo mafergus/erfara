@@ -43,7 +43,7 @@ const mailTransport = nodemailer.createTransport(`smtps://${gmailEmail}:${testPa
 // Your company name to include in the emails
 // TODO: Change this to your app or company name to customize the email sent.
 const APP_NAME = 'Erfara';
-const MATT_UID = "matt";
+const MATT_UID = "sm8aILIhkJh46OPnzM3ilLGU3mA2";
 
 function doDeleteUser(req, res) {
   res.send({ status: "placeholder response" });
@@ -54,7 +54,6 @@ function doDeleteUser(req, res) {
 exports.addMessage = functions.https.onRequest((req, res) => {
   // Grab the text parameter.
   const original = req.query.text;
-  // Push the new message into the Realtime Database using the Firebase Admin SDK.
   admin.database().ref('/messages').push({original: original}).then(snapshot => {
     // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
     res.redirect(303, snapshot.ref);
@@ -236,7 +235,7 @@ exports.sendEmailOnMessage = functions.database.ref('/conversations/users/{userI
       to: `"${toUser.name}" <${toUser.email}>`,
     };
     mailOptions.subject = `New Message from ${fromUser.name} on Erfara`;
-    mailOptions.text = `${fromUser.name} says: "${message.message}"\n\n\nReply here: www.herokuapp.com/messages/${message.from}`;
+    mailOptions.text = `${fromUser.name} says: "${message.message}"\n\n\nReply here: www.erfara.com/messages/${message.from}`;
     return mailTransport.sendMail(mailOptions).then(() => {
       console.log("Email for new message " + " sent to: ", toUser.email + " from: ", fromUser.name);
     });

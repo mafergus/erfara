@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import ConversationList from "components/Messaging/ConversationList";
 import MessagesWindow from "components/Messaging/MessagesWindow";
 import { addMessage, readMessage } from "utils/Api";
+import Resizable from "react-resizable-box";
 
 function mapStateToProps(state, props) {
   const conversations = [];
@@ -72,10 +73,19 @@ export class MessagingPage extends React.Component {
     const messages = conversation.hasOwnProperty("messages") ? 
       Object.entries(conversation.messages).map(entry => { return { id: entry[0], ...entry[1] }; }) : [];
     return <div style={{ width: "100%", height: "100%", position: "fixed", maxWidth: 1440, top: 64, left: 0, display: "flex" }}>
-      <ConversationList 
-        conversations={conversations}
-        style={{ display: "inline-block", height: "100%", width: "30%", marginTop: "0px" }}
-      />
+      <Resizable
+        customClass="item"
+        width="30%"
+        minWidth={250}
+        maxWidth={600}
+        isResizable={{ top:false, right:true, bottom:false, left:false, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
+        height="100%"
+      >
+        <ConversationList 
+          conversations={conversations}
+          style={{ display: "inline-block", height: "100%", width: "100%", marginTop: "0px" }}
+        />
+      </Resizable>
       <MessagesWindow
         conversation={conversation}
         messages={messages}
