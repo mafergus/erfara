@@ -71,7 +71,8 @@ export class EventListItem extends React.Component {
     const timestamp = new Date(event.date);
     // const startTime = new Moment(event.startTime);
     // const date = new Moment(event.date);
-    const locationString = `hosted by ${user ? user.name : "Deleted User"} \xa0\xa0 \u25CF \xa0\xa0 ${event.geoCoordinates.neighborhood}, ${event.geoCoordinates.city}`;
+    const neighborhoodStr = event.geoCoordinates.neighborhood ? `${event.geoCoordinates.neighborhood}, ` : "";
+    const locationString = `hosted by ${user ? user.name : "Deleted User"} \xa0\xa0 \u25CF \xa0\xa0 ${neighborhoodStr}${event.geoCoordinates.city}`;
 
     return <div style={{ width: "100%", height: popUp ? 40 : 70, marginTop: -5, position: "relative", display: "flex", alignItems: "center", backgroundColor: "white" }}>
       <DateBox style={{height: popUp ? 40 : 70 }} timestamp={timestamp} />

@@ -172,7 +172,10 @@ export class CreateEventModal extends React.Component {
         <GooglePlacesSuggest
           fontSize={FONT_SIZE}
           hintStyle={{ HINT_STYLE, color: this.state.hintColor }}
-          onSelectSuggest={(location, geoCoords) => this.setState({ location, geoCoords })}
+          onSelectSuggest={(location, geoCoords) => { 
+            debugger;
+            this.setState({ location, geoCoords });
+          }}
         />
       </div>
     </div>;
