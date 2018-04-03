@@ -30,12 +30,8 @@ export default function routes() {
   const state = store.getState();
   const isMobile = state.browser.is.extraSmall;
 
-  const redirectUrl = "http://localhost:3000/handleAuth";
-  const URL = `https://www.facebook.com/v2.12/dialog/oauth?client_id=${FB_APP_ID}&redirect_uri=${redirectUrl}&state={"{st=state123abc,ds=123456789}"}`;
-
   return <Route path="/" component={App}>
     <IndexRoute component={MainPage} />
-    <Route path='privacy-policy' component={() => window.location = URL} />
     <Route path="handleAuth" render={(props) => <App {...props} />} />
     <Route path="messages">
       <IndexRoute component={isMobile ? MobileConversationList : MessagingPage} />

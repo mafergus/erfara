@@ -39,6 +39,7 @@ const gmailEmail = encodeURIComponent(functions.config().gmail.email);
 const gmailPassword = encodeURIComponent(functions.config().gmail.password);
 const testPass = encodeURIComponent("m8n15f86!!??");
 const mailTransport = nodemailer.createTransport(`smtps://${gmailEmail}:${testPass}@smtp.gmail.com`);
+const urlBase = 'https://erfara.com';
 
 // Your company name to include in the emails
 // TODO: Change this to your app or company name to customize the email sent.
@@ -164,7 +165,7 @@ function sendEventEmail(recipient, event, eventId) {
   console.log("Sending event created notification email to ", recipient.email, ` for ${event.title}`);
 
   mailOptions.subject = `New Event - ${event.title} - on Erfara!`;
-  mailOptions.text = `Hey ${firstName}! There's a new event near you, check it out here: www.erfara.com/event/${eventId}`;
+  mailOptions.text = `Hey ${firstName}! There's a new event near you, check it out here: ${urlBase}/event/${eventId}`;
   return mailTransport.sendMail(mailOptions);
 }
 
@@ -235,7 +236,7 @@ exports.sendEmailOnMessage = functions.database.ref('/conversations/users/{userI
       to: `"${toUser.name}" <${toUser.email}>`,
     };
     mailOptions.subject = `New Message from ${fromUser.name} on Erfara`;
-    mailOptions.text = `${fromUser.name} says: "${message.message}"\n\n\nReply here: www.erfara.com/messages/${message.from}`;
+    mailOptions.text = `${fromUser.name} says: "${message.message}"\n\n\nReply here: ${urlBase}/messages/${message.from}`;
     return mailTransport.sendMail(mailOptions).then(() => {
       console.log("Email for new message " + " sent to: ", toUser.email + " from: ", fromUser.name);
     });
