@@ -11,6 +11,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import AppBar from "components/AppBar";
 import CreateEventModal from "components/Modals/CreateEventModal";
 import OnboardingModal from "components/Onboarding/OnboardingModal";
+import { Helmet } from 'react-helmet';
 
 function mapStateToProps(state) {
   return {
@@ -112,6 +113,9 @@ class App extends React.Component {
 
     return (
       <div>
+        <Helmet>
+          <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+        </Helmet>
         <DocumentTitle title={unreadMessagesString}>
           <div>
             <AppBar onEventCreate={() => this.setState({ eventModalOpen: true })} />

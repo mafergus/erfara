@@ -186,6 +186,7 @@ export function checkUserExists(uid) {
 
 export function addUser(user) {
   return dispatch => {
+    debugger;
     if (Object.keys(user).length === 0) { return dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user }); }
 
     // debugger;
@@ -202,6 +203,7 @@ export function addUser(user) {
     updates["users/" + user.uid + "/coverPhoto"] = user.coverPhoto || PLACEHOLDER_PHOTO;
 
     firebase.database().ref().update(updates).then(() => {
+      debugger;
       dispatch({ type: "ADD_AUTHED_USER_SUCCESS", user });
       firebase.onAuthSuccess(user.uid);
     });
@@ -302,7 +304,7 @@ export function getPhotoUrl(searchTerm, isThumbnail=false) {
           json.hits[getRandomInt(0, json.hits.length)][urlType];
         resolve(url);
       } else {
-        reject(new Error("Fuck this shiet"));
+        reject(new Error("Oops"));
       }
     }).catch(error => resolve(error));
   });
