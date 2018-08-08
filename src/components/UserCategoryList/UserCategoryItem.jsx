@@ -26,7 +26,8 @@ export default function UserCategoryItem({ categoryImage, categoryName, onClick,
     onClick={() => onClick()}
     className="hover-opacity"
     style={{ ...ITEM_STYLE, ...style }}
-    xs={5}
+    xs={12}
+    sm={6}
     md={4}
     lg={3}
   >
