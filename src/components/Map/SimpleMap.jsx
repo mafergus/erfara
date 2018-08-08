@@ -34,7 +34,7 @@ export default class SimpleMap extends Component {
   }
 
   onMarkerExit() {
-    this.setState({ hoveredMarker: -1 });
+    // this.setState({ hoveredMarker: -1 });
   }
 
   renderEventCard() {

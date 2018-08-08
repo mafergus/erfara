@@ -1,11 +1,12 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { Col } from 'fluid-react';
+import Grid from '@material-ui/core/Grid';
 
 const ITEM_STYLE = {
   position: "relative",
   height: 160,
-  marginBottom: 19,
+  marginBottom: 6,
   display: "inline-block",
 };
 
@@ -21,7 +22,7 @@ const CONTAINER_STYLE = {
 };
 
 export default function UserCategoryItem({ categoryImage, categoryName, onClick, userImage, username, style }) {
-  return <Col
+  return <Grid item
     onClick={() => onClick()}
     className="hover-opacity"
     style={{ ...ITEM_STYLE, ...style }}
@@ -38,7 +39,7 @@ export default function UserCategoryItem({ categoryImage, categoryName, onClick,
         <h4 style={{ color: "white", display: "inline-block" }}>{username}</h4>
       </span>
     </div>
-  </Col>;
+  </Grid>;
 }
 
 UserCategoryItem.propTypes = {

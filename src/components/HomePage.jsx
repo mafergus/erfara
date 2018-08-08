@@ -56,9 +56,13 @@ export class HomePage extends React.Component {
   }
 
   renderHeaders() {
+    const { selectedTab } = this.state;
+
     return <div style={{ width: "100%", marginBottom: 35 }}>
       <div style={{ width: "100%", marginTop: 10 }}>
-        <h3 style={{ color: erfaraBlack, margin: 0, display: "inline-block" }}>Upcoming events near you</h3>
+        <h3 style={{ color: erfaraBlack, margin: 0, display: "inline-block" }}>
+        {selectedTab === 0 ? 'Upcoming events near you' : 'People near you'}
+        </h3>
         {this.renderTabs()}
       </div>
     </div>;

@@ -69,17 +69,29 @@ export class MapCard extends React.Component {
     // const date = new Moment(event.date);
     const locationString = `hosted by ${user ? user.name : "Deleted User"} \xa0\xa0 \u25CF \xa0\xa0 ${event.geoCoordinates.neighborhood}, ${event.geoCoordinates.city}`;
 
-    return <div style={{ width: "100%", height: 40, marginTop: -5, position: "relative", display: "flex", alignItems: "center", backgroundColor: "white" }}>
-      <DateBox style={{height: 40 }} timestamp={timestamp} />
-      <div style={{ height: "100%", flexGrow: "1", display: "flex", alignItems: "center", paddingLeft: 13 }}>
-        <p style={{ color: "#424242", textAlign: "left" }}>
-          <span style={{ fontSize: "1em" }}>{event.title}</span>
-        </p>
+    return (
+      <div
+        style={{ 
+          width: "100%",
+          height: 40,
+          marginTop: -5,
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          backgroundColor: "white" 
+        }}
+      >
+        <DateBox style={{height: 40 }} timestamp={timestamp} />
+        <div style={{ height: "100%", flexGrow: "1", display: "flex", alignItems: "center", paddingLeft: 13 }}>
+          <p style={{ color: "#424242", textAlign: "left", verticalAlign: "top" }}>
+            <span style={{ fontSize: "1em" }}>{event.title}</span>
+          </p>
+        </div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Attendees attendees={attendees} imageStyle={{ height: 20, width: 20 }} />
+        </div>
       </div>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <Attendees attendees={attendees} imageStyle={{ height: 20, width: 20 }} />
-      </div>
-    </div>;
+    );
   }
 
   render() {

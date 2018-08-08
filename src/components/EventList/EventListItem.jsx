@@ -15,6 +15,7 @@ function mapStateToProps(state, props) {
   return {
     event,
     attendees: event && Object.keys(event.attendees).map(userId => state.users.get(userId)),
+    browser: state.browser,
     user: event && state.users.get(event.userId),
     users: state.users.keySeq().toArray(),
   };
@@ -28,6 +29,7 @@ export class EventListItem extends React.Component {
 
   static propTypes = {
     attendees: PropTypes.array.isRequired,
+    browser: PropTypes.object.isRequired,
     event: PropTypes.object.isRequired,
     eventUid: PropTypes.string.isRequired,
     addUser: PropTypes.func.isRequired,
@@ -56,6 +58,15 @@ export class EventListItem extends React.Component {
     autoBind(this);
   }
 
+  ellipsis = str => {
+    const { browser } = this.props;
+
+    if (str.length > 22 && browser.lessThan.small) {
+      return str.substr(0, 11) + '...' + str.substr(str.length-11, str.length);
+    }
+    return str;
+  }
+
   componentWillMount() {
     const { event, addUser, users } = this.props;
     if (event && !users.includes(event.userId)) {
@@ -78,7 +89,7 @@ export class EventListItem extends React.Component {
       <DateBox style={{height: popUp ? 40 : 70 }} timestamp={timestamp} />
       <div style={{ height: "100%", flexGrow: "1", display: "flex", alignItems: "center", paddingLeft: 13 }}>
         <p style={{ color: "#424242", textAlign: "left" }}>
-          <span style={{ fontSize: "1em" }}>{event.title}</span>
+          <span style={{ fontSize: "1em" }}>{this.ellipsis(event.title)}</span>
           <br />
           <span style={{ fontSize: "0.8em" }}>{locationString}</span>
         </p>

@@ -5,6 +5,7 @@ import autoBind from "react-autobind";
 import { getUserCategories } from "actions/userCategoriesActions";
 import UserCategoryItem from "components/UserCategoryList/UserCategoryItem";
 import { Container, Row } from 'fluid-react';
+import Grid from '@material-ui/core/Grid';
 
 function mapStateToProps(state) {
   return {
@@ -25,26 +26,18 @@ export class UserCategoryList extends React.Component {
 
   render() {
     const { userCategories } = this.props;
-    let rowItems = [];
-    const rows = [];
-
-    userCategories.forEach(userCategory => {
-      if (rowItems.length === 4) {
-        rows.push(<Row key={rows.length} style={{ marginBottom: 15 }}>{rowItems}</Row>);
-        rowItems = [];
-      }
-      rowItems.push(<UserCategoryItem
+    const items = userCategories.map(userCategory => {
+      return <UserCategoryItem
           key={userCategory.id}
           categoryImage={userCategory.category.image}
           categoryName={userCategory.category.name}
           onClick={() => alert("click")}
           userImage={userCategory.user.photo}
           username={userCategory.user.name}
-        />);
+        />;
     });
-    rows.push(<Row key={rows.length}>{rowItems}</Row>);
 
-    return <Container>{rows}</Container>;
+    return <Grid container spacing={8}>{items}</Grid>;
   }
 }
 
